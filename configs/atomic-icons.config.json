@@ -1,0 +1,16 @@
+{
+  "IconSet": {
+    "IconMap": {
+      "dashboard": "https://api.iconify.design/lucide:layout-dashboard.svg",
+      "receive": "https://api.iconify.design/lucide:package-check.svg",
+      "track": "https://api.iconify.design/lucide:search.svg",
+      "report": "https://api.iconify.design/lucide:file-text.svg",
+      "settings": "https://api.iconify.design/lucide:settings.svg",
+      "loading": "https://api.iconify.design/lucide:loader-2.svg",
+      "close": "https://api.iconify.design/lucide:x.svg",
+      "users": "https://api.iconify.design/lucide:users.svg"
+    }
+  },
+  "Generate": false,
+  "SpriteSheet": "/iconset"
+}

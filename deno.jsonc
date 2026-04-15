@@ -1,0 +1,68 @@
+{
+  "name": "@o-industrial/sample-management-runtime",
+  "version": "0.0.1",
+  "exports": {
+    ".": "./main.ts",
+    "./dev": "./dev.ts"
+  },
+  "license": "MIT",
+  "lock": false,
+  "unstable": ["kv", "detect-cjs"],
+  "tasks": {
+    "build": "deno task build:fmt && deno task build:lint && deno task publish:check && deno task test",
+    "build:fmt": "deno fmt",
+    "build:lint": "deno lint",
+    "build:docker": "docker build --no-cache -t oi-sample-mgmt-runtime .",
+    "clean:docker": "docker rm oi-sample-mgmt-runtime",
+    "deploy:docker": "docker run --name oi-sample-mgmt-runtime --env-file .env.docker -dp 127.0.0.1:5418:5418 oi-sample-mgmt-runtime",
+    "dev": "deno run --config ./deno.jsonc -A --watch=apps/,configs/,src/ dev.ts",
+    "network:docker": "echo no network config",
+    "publish:check": "deno publish --dry-run --allow-dirty",
+    "refresh:docker": "npx rimraf cov && deno task build:docker && deno task network:docker && deno task clean:docker && deno task deploy:docker",
+    "start": "deno run -A main.ts",
+    "test": "deno test -A tests/.tests.ts --trace-leaks"
+  },
+  "imports": {
+    "@fathym/atomic": "jsr:@fathym/atomic@0.0.185",
+    "@fathym/atomic-icons": "jsr:@fathym/atomic-icons@0.0.103",
+    "@fathym/common": "jsr:@fathym/common@0.2.310-common-release",
+    "@fathym/eac": "jsr:@fathym/eac@0.2.251-hmis",
+    "@fathym/eac-applications": "jsr:@fathym/eac-applications@0.0.217",
+    "@fathym/eac-deno-kv": "jsr:@fathym/eac-deno-kv@0.0.88-eac-cascade",
+    "@fathym/eac-identity": "jsr:@fathym/eac-identity@0.0.87-eac-cascade",
+    "@fathym/msal": "jsr:@fathym/msal@0.0.106-eac-cascade",
+    "@fathym/ioc": "jsr:@fathym/ioc@0.0.26-ioc-release",
+    "@o-industrial/atomic": "jsr:@o-industrial/atomic@0.0.116",
+    "@o-industrial/common": "jsr:@o-industrial/common@0.0.601",
+    "preact": "npm:preact@10.20.1",
+    "react": "npm:preact@10.20.1/compat",
+    "react-dom": "npm:preact@10.20.1/compat",
+    "react/jsx-runtime": "npm:preact@10.20.1/jsx-runtime",
+    "react/jsx-dev-runtime": "npm:preact@10.20.1/jsx-dev-runtime",
+    "tailwindcss": "npm:tailwindcss@3.4.1",
+    "tailwindcss/": "npm:tailwindcss@3.4.1/"
+  },
+  "exclude": [
+    "**/_eac-runtime/*",
+    "!src/**/.exports.ts",
+    "!dev.ts",
+    "!main.ts",
+    "!configs/*"
+  ],
+  "lint": {
+    "include": ["apps/", "configs/", "src/", "tests/"],
+    "rules": {
+      "tags": ["recommended"],
+      "exclude": ["no-explicit-any"]
+    }
+  },
+  "fmt": {
+    "include": ["apps/", "configs/", "src/", "tests/"],
+    "indentWidth": 2,
+    "singleQuote": true
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
+  }
+}

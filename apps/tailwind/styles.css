@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === OI Dark-Neon (default) === */
+:root, [data-theme="oi"] {
+  --sm-surface: #0A0F1E;
+  --sm-surface-card: rgba(23, 23, 23, 0.5);
+  --sm-surface-elevated: #1C1C1C;
+  --sm-surface-inset: rgba(28, 28, 28, 0.5);
+  --sm-text: #FAFAFA;
+  --sm-text-secondary: #A3A3A3;
+  --sm-text-muted: #737373;
+  --sm-text-on-primary: #FFFFFF;
+  --sm-border: #262626;
+  --sm-border-input: #404040;
+  --sm-border-subtle: rgba(38, 38, 38, 0.5);
+  --sm-primary: #22D3EE;
+  --sm-primary-hover: #67E8F9;
+  --sm-secondary: #34D399;
+  --sm-secondary-hover: #6EE7B7;
+  --sm-focus-ring: #22D3EE;
+  --sm-link: #93C5FD;
+  --sm-status-ready: #10B981;
+  --sm-status-ready-bg: rgba(16, 185, 129, 0.1);
+  --sm-status-ready-text: #6EE7B7;
+  --sm-status-attention: #F59E0B;
+  --sm-status-attention-bg: rgba(245, 158, 11, 0.1);
+  --sm-status-attention-text: #FDE68A;
+  --sm-status-hold: #3B82F6;
+  --sm-status-hold-bg: rgba(59, 130, 246, 0.1);
+  --sm-status-hold-text: #93C5FD;
+  --sm-status-problem: #EF4444;
+  --sm-status-problem-bg: rgba(239, 68, 68, 0.1);
+  --sm-status-problem-text: #FCA5A5;
+  --sm-font-sans: 'Sora', sans-serif;
+}
+
+/* === GSK Branded === */
+[data-theme="gsk"] {
+  --sm-surface: #F8F9FA;
+  --sm-surface-card: #FFFFFF;
+  --sm-surface-elevated: #FFFFFF;
+  --sm-surface-inset: #F1F3F5;
+  --sm-text: #212529;
+  --sm-text-secondary: #6C757D;
+  --sm-text-muted: #ADB5BD;
+  --sm-text-on-primary: #FFFFFF;
+  --sm-border: #DEE2E6;
+  --sm-border-input: #CED4DA;
+  --sm-border-subtle: #F1F3F5;
+  --sm-primary: #F36633;
+  --sm-primary-hover: #E05525;
+  --sm-secondary: #2E7D32;
+  --sm-secondary-hover: #1B5E20;
+  --sm-focus-ring: #F36633;
+  --sm-link: #F36633;
+  --sm-status-ready: #16A34A;
+  --sm-status-ready-bg: #F0FDF4;
+  --sm-status-ready-text: #15803D;
+  --sm-status-attention: #D97706;
+  --sm-status-attention-bg: #FFFBEB;
+  --sm-status-attention-text: #B45309;
+  --sm-status-hold: #2563EB;
+  --sm-status-hold-bg: #EFF6FF;
+  --sm-status-hold-text: #1D4ED8;
+  --sm-status-problem: #DC2626;
+  --sm-status-problem-bg: #FEF2F2;
+  --sm-status-problem-text: #B91C1C;
+  --sm-font-sans: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* === Fathym Light === */
+[data-theme="fathym-light"] {
+  --sm-surface: #F9FAFB;
+  --sm-surface-card: #FFFFFF;
+  --sm-surface-elevated: #FFFFFF;
+  --sm-surface-inset: #F9FAFB;
+  --sm-text: #111827;
+  --sm-text-secondary: #6B7280;
+  --sm-text-muted: #9CA3AF;
+  --sm-text-on-primary: #FFFFFF;
+  --sm-border: #E5E7EB;
+  --sm-border-input: #D1D5DB;
+  --sm-border-subtle: #F3F4F6;
+  --sm-primary: #2563EB;
+  --sm-primary-hover: #1D4ED8;
+  --sm-secondary: #059669;
+  --sm-secondary-hover: #047857;
+  --sm-focus-ring: #3B82F6;
+  --sm-link: #2563EB;
+  --sm-status-ready: #16A34A;
+  --sm-status-ready-bg: #F0FDF4;
+  --sm-status-ready-text: #15803D;
+  --sm-status-attention: #D97706;
+  --sm-status-attention-bg: #FFFBEB;
+  --sm-status-attention-text: #B45309;
+  --sm-status-hold: #2563EB;
+  --sm-status-hold-bg: #EFF6FF;
+  --sm-status-hold-text: #1D4ED8;
+  --sm-status-problem: #DC2626;
+  --sm-status-problem-bg: #FEF2F2;
+  --sm-status-problem-text: #B91C1C;
+  --sm-font-sans: 'Sora', sans-serif;
+}
+
+/* === Base Resets === */
+html {
+  scroll-behavior: smooth;
+}
+
+html, body {
+  overscroll-behavior: contain;
+}
+
+:focus-visible {
+  outline: 2px solid var(--sm-focus-ring);
+  outline-offset: 2px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
