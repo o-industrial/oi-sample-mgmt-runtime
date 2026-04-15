@@ -64,6 +64,16 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 Hostname: '127.0.0.1',
                 Port: port,
               },
+              'host.docker.internal': {
+                Hostname: 'host.docker.internal',
+                Port: port,
+              },
+              'oi-sample-mgmt-runtime.azurewebsites.net': {
+                Hostname: 'oi-sample-mgmt-runtime.azurewebsites.net',
+              },
+              'sm-demo.openindustrial.co': {
+                Hostname: 'sm-demo.openindustrial.co',
+              },
             },
             ModifierResolvers: {
               baseHref: {
