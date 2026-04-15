@@ -1,6 +1,6 @@
 # OI Sample Management Runtime
 
-GSK Human Biological Sample Management — Deno EaC runtime with Preact + Tailwind.
+Human Biological Sample Management — Deno EaC runtime with Preact + Tailwind.
 
 ## Getting Started
 
