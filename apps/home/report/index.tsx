@@ -22,8 +22,8 @@ export const handler: EaCRuntimeHandlerSet<OISampleMgmtWebState, ReportData> = {
 export default function Report({ Data }: PageProps<ReportData>) {
   return (
     <div>
-      <h1 class="text-xl font-bold text-primary mb-2">{Data!.Heading}</h1>
-      <p class="text-on-surface-secondary">{Data!.Placeholder}</p>
+      <h1 class='text-xl font-bold text-primary mb-2'>{Data!.Heading}</h1>
+      <p class='text-on-surface-secondary'>{Data!.Placeholder}</p>
     </div>
   );
 }

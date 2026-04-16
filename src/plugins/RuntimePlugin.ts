@@ -1,7 +1,10 @@
 import { EaCAtomicIconsProcessor } from '@fathym/atomic-icons';
 import { FathymAtomicIconsPlugin } from '@fathym/atomic-icons/plugin';
 import { IoCContainer } from '@fathym/ioc';
-import { EaCRuntimeConfig, EaCRuntimePluginConfig } from '@fathym/eac/runtime/config';
+import {
+  EaCRuntimeConfig,
+  EaCRuntimePluginConfig,
+} from '@fathym/eac/runtime/config';
 import { EaCRuntimePlugin } from '@fathym/eac/runtime/plugins';
 import { EverythingAsCode } from '@fathym/eac';
 import { EverythingAsCodeApplications } from '@fathym/eac-applications';

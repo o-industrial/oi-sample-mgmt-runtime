@@ -60,23 +60,23 @@ export default function HomeLayout({
   return (
     <html data-theme={Data!.Theme}>
       <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset='utf-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
         <title>{Data!.AppTitle}</title>
         <link
-          rel="stylesheet"
+          rel='stylesheet'
           href={`/tailwind/styles.css?Revision=${Revision}`}
           data-eac-bypass-base
         />
       </head>
-      <body class="bg-surface text-on-surface min-h-screen flex flex-col md:flex-row">
+      <body class='bg-surface text-on-surface min-h-screen flex flex-col md:flex-row'>
         <SidebarNav
           links={Data!.NavLinks}
           brand={Data!.Brand}
           locales={Data!.Locales}
         />
 
-        <main class="flex-1 overflow-y-auto p-6">
+        <main class='flex-1 overflow-y-auto p-6'>
           <Component />
         </main>
       </body>

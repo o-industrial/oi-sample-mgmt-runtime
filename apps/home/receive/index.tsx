@@ -25,8 +25,8 @@ export const handler: EaCRuntimeHandlerSet<
 export default function Receive({ Data }: PageProps<ReceiveData>) {
   return (
     <div>
-      <h1 class="text-xl font-bold text-primary mb-2">{Data!.Heading}</h1>
-      <p class="text-on-surface-secondary">{Data!.Placeholder}</p>
+      <h1 class='text-xl font-bold text-primary mb-2'>{Data!.Heading}</h1>
+      <p class='text-on-surface-secondary'>{Data!.Placeholder}</p>
     </div>
   );
 }

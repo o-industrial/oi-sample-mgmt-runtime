@@ -127,10 +127,9 @@ export const handler: EaCRuntimeHandlerSet<
     const { t } = useTranslation(ctx.State.Strings);
 
     // Management overlay gating
-    const showFullOverlay =
-      rights.includes('admin:access') || rights.includes('config:admin');
-    const showEffortOnly =
-      rights.includes('study:view') && !showFullOverlay;
+    const showFullOverlay = rights.includes('admin:access') ||
+      rights.includes('config:admin');
+    const showEffortOnly = rights.includes('study:view') && !showFullOverlay;
     const showOverlay = showFullOverlay || showEffortOnly;
 
     const panes: PaneViewData[] = [
@@ -266,14 +265,16 @@ export const handler: EaCRuntimeHandlerSet<
 
 // --- Component ---
 
-function StatusDot({ status }: { status: 'online' | 'connecting' | 'offline' }) {
+function StatusDot(
+  { status }: { status: 'online' | 'connecting' | 'offline' },
+) {
   if (status === 'online') {
-    return <span class="text-status-ready">●</span>;
+    return <span class='text-status-ready'>●</span>;
   }
   if (status === 'connecting') {
-    return <span class="text-status-attention">◌</span>;
+    return <span class='text-status-attention'>◌</span>;
   }
-  return <span class="text-on-surface-muted">●</span>;
+  return <span class='text-on-surface-muted'>●</span>;
 }
 
 function StatusLabel({ status, onlineLabel, connectingLabel }: {
@@ -290,11 +291,11 @@ export default function Dashboard({ Data }: PageProps<DashboardData>) {
   const d = Data!;
 
   return (
-    <div class="space-y-6">
+    <div class='space-y-6'>
       {/* Header */}
       <div>
-        <h1 class="text-xl font-bold text-primary">{d.Heading}</h1>
-        <p class="text-sm text-on-surface-secondary">
+        <h1 class='text-xl font-bold text-primary'>{d.Heading}</h1>
+        <p class='text-sm text-on-surface-secondary'>
           {d.UserName} — {d.UserRole}
         </p>
       </div>
@@ -340,21 +341,21 @@ export default function Dashboard({ Data }: PageProps<DashboardData>) {
       )}
 
       {/* Bottom panels */}
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
         {/* System Status */}
-        <div class="rounded-lg border border-border bg-surface-card p-4">
-          <h3 class="text-sm font-semibold text-on-surface mb-3">
+        <div class='rounded-lg border border-border bg-surface-card p-4'>
+          <h3 class='text-sm font-semibold text-on-surface mb-3'>
             {d.SystemHeading}
           </h3>
-          <div class="space-y-2 text-sm">
+          <div class='space-y-2 text-sm'>
             {d.SystemStatus.map((item) => (
-              <div key={item.Label} class="flex justify-between items-center">
-                <span class="text-on-surface-secondary">{item.Label}</span>
-                <span class="flex items-center gap-1">
+              <div key={item.Label} class='flex justify-between items-center'>
+                <span class='text-on-surface-secondary'>{item.Label}</span>
+                <span class='flex items-center gap-1'>
                   <StatusDot status={item.Status} />
                   {item.Note
                     ? (
-                      <span class="text-on-surface-muted text-xs">
+                      <span class='text-on-surface-muted text-xs'>
                         {item.Note}
                       </span>
                     )
@@ -372,14 +373,14 @@ export default function Dashboard({ Data }: PageProps<DashboardData>) {
         </div>
 
         {/* Compliance Status */}
-        <div class="rounded-lg border border-border bg-surface-card p-4">
-          <h3 class="text-sm font-semibold text-on-surface mb-3">
+        <div class='rounded-lg border border-border bg-surface-card p-4'>
+          <h3 class='text-sm font-semibold text-on-surface mb-3'>
             {d.ComplianceHeading}
           </h3>
-          <div class="space-y-2 text-sm">
+          <div class='space-y-2 text-sm'>
             {d.ComplianceStatus.map((item) => (
-              <div key={item.Label} class="flex justify-between items-center">
-                <span class="text-on-surface-secondary">{item.Label}</span>
+              <div key={item.Label} class='flex justify-between items-center'>
+                <span class='text-on-surface-secondary'>{item.Label}</span>
                 <span
                   class={`font-medium ${
                     item.Compliant
@@ -387,8 +388,7 @@ export default function Dashboard({ Data }: PageProps<DashboardData>) {
                       : 'text-status-problem-text'
                   }`}
                 >
-                  {item.ComplianceLabel}{' '}
-                  {item.Compliant ? '✓' : '✗'}
+                  {item.ComplianceLabel} {item.Compliant ? '✓' : '✗'}
                 </span>
               </div>
             ))}

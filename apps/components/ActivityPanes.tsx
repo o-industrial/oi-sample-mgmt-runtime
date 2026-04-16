@@ -1,4 +1,4 @@
-import TurboTaxStatus from './TurboTaxStatus.tsx';
+import StatusBar from './StatusBar.tsx';
 
 export const IsIsland = true;
 
@@ -23,12 +23,37 @@ type ActivityPanesProps = {
   temporalPriority: string | null;
 };
 
-export default function ActivityPanes({
-  panes,
-  temporalPriority,
-}: ActivityPanesProps) {
+function StatusSlot(
+  { count, label, colorClass }: {
+    count: number;
+    label: string;
+    colorClass: string;
+  },
+) {
+  const isZero = count === 0;
+
   return (
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+    <div
+      class={`flex items-center gap-1.5 text-xs ${
+        isZero ? 'text-on-surface-muted' : ''
+      }`}
+    >
+      <span
+        class={`inline-block w-2 h-2 rounded-full ${
+          isZero ? 'bg-surface-inset' : colorClass
+        }`}
+      />
+      <span class={isZero ? '' : 'font-medium'}>{count}</span>
+      <span class={isZero ? '' : 'text-on-surface-secondary'}>{label}</span>
+    </div>
+  );
+}
+
+export default function ActivityPanes(
+  { panes, temporalPriority }: ActivityPanesProps,
+) {
+  return (
+    <div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4'>
       {panes.map((pane) => {
         const isEmphasized = pane.id === temporalPriority;
 
@@ -43,7 +68,8 @@ export default function ActivityPanes({
                 : 'border-border bg-surface-card'
             }`}
           >
-            <div class="flex items-center justify-between mb-3">
+            {/* Header: name + total */}
+            <div class='flex items-center justify-between mb-3'>
               <h3
                 class={`text-sm font-semibold ${
                   isEmphasized ? 'text-primary' : 'text-on-surface'
@@ -51,43 +77,47 @@ export default function ActivityPanes({
               >
                 {pane.name}
               </h3>
-              <span class="text-2xl font-bold text-on-surface">
+              <span class='text-2xl font-bold text-on-surface'>
                 {pane.total}
               </span>
             </div>
 
-            <div class="flex flex-wrap gap-1 mb-3">
-              {pane.ready > 0 && (
-                <TurboTaxStatus
-                  status="ready"
-                  label={pane.readyLabel}
-                  count={pane.ready}
-                />
-              )}
-              {pane.attention > 0 && (
-                <TurboTaxStatus
-                  status="attention"
-                  label={pane.attentionLabel}
-                  count={pane.attention}
-                />
-              )}
-              {pane.volumeHold > 0 && (
-                <TurboTaxStatus
-                  status="volume-hold"
-                  label={pane.volumeHoldLabel}
-                  count={pane.volumeHold}
-                />
-              )}
-              {pane.problem > 0 && (
-                <TurboTaxStatus
-                  status="problem"
-                  label={pane.problemLabel}
-                  count={pane.problem}
-                />
-              )}
+            {/* Stacked status bar */}
+            <div class='mb-3'>
+              <StatusBar
+                ready={pane.ready}
+                attention={pane.attention}
+                volumeHold={pane.volumeHold}
+                problem={pane.problem}
+                total={pane.total}
+              />
             </div>
 
-            <span class="text-xs text-link hover:underline">
+            {/* Fixed 2x2 status grid */}
+            <div class='grid grid-cols-2 gap-x-2 gap-y-1 mb-3'>
+              <StatusSlot
+                count={pane.ready}
+                label={pane.readyLabel}
+                colorClass='bg-status-ready'
+              />
+              <StatusSlot
+                count={pane.attention}
+                label={pane.attentionLabel}
+                colorClass='bg-status-attention'
+              />
+              <StatusSlot
+                count={pane.volumeHold}
+                label={pane.volumeHoldLabel}
+                colorClass='bg-status-hold'
+              />
+              <StatusSlot
+                count={pane.problem}
+                label={pane.problemLabel}
+                colorClass='bg-status-problem'
+              />
+            </div>
+
+            <span class='text-xs text-link hover:underline'>
               {pane.viewAllLabel} →
             </span>
           </a>

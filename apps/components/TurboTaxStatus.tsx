@@ -9,7 +9,8 @@ const STATUS_CLASSES: Record<string, string> = {
   attention:
     'bg-status-attention-bg border-status-attention text-status-attention-text',
   'volume-hold': 'bg-status-hold-bg border-status-hold text-status-hold-text',
-  problem: 'bg-status-problem-bg border-status-problem text-status-problem-text',
+  problem:
+    'bg-status-problem-bg border-status-problem text-status-problem-text',
 };
 
 export default function TurboTaxStatus({
@@ -19,9 +20,11 @@ export default function TurboTaxStatus({
 }: TurboTaxStatusProps) {
   return (
     <span
-      class={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium border ${STATUS_CLASSES[status]}`}
+      class={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium border ${
+        STATUS_CLASSES[status]
+      }`}
     >
-      {count !== undefined && <span class="font-bold">{count}</span>}
+      {count !== undefined && <span class='font-bold'>{count}</span>}
       {label}
     </span>
   );

@@ -22,10 +22,10 @@ export const handler: EaCRuntimeHandlerSet<OISampleMgmtWebState, HomeData> = {
 export default function Home({ Data }: PageProps<HomeData>) {
   return (
     <div>
-      <h1 class="text-2xl font-bold text-primary mb-4">
+      <h1 class='text-2xl font-bold text-primary mb-4'>
         {Data!.Heading}
       </h1>
-      <p class="text-on-surface-secondary">
+      <p class='text-on-surface-secondary'>
         {Data!.Welcome}
       </p>
     </div>
