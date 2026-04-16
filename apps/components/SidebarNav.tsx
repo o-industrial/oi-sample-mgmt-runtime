@@ -7,16 +7,24 @@ type NavLink = {
   label: string;
 };
 
-type SidebarNavProps = {
-  links: NavLink[];
+type LocaleOption = {
+  code: string;
+  label: string;
+  active: boolean;
 };
 
-export default function SidebarNav({ links }: SidebarNavProps) {
+type SidebarNavProps = {
+  links: NavLink[];
+  brand: string;
+  locales: LocaleOption[];
+};
+
+export default function SidebarNav({ links, brand, locales }: SidebarNavProps) {
   const [open, setOpen] = useState(false);
 
   const navContent = (
     <>
-      <div class="text-lg font-bold text-primary mb-6">Sample Mgmt</div>
+      <div class="text-lg font-bold text-primary mb-6">{brand}</div>
       {links.map((link) => (
         <a
           key={link.href}
@@ -28,19 +36,37 @@ export default function SidebarNav({ links }: SidebarNavProps) {
           {link.label}
         </a>
       ))}
+
+      {/* Locale switcher */}
+      <div class="mt-auto pt-4 border-t border-border flex gap-2">
+        {locales.map((loc) => (
+          <a
+            key={loc.code}
+            href={`?setLocale=${loc.code}`}
+            class={`px-2 py-1 rounded text-xs ${
+              loc.active
+                ? 'bg-primary text-on-primary font-bold'
+                : 'text-on-surface-secondary hover:bg-surface-card'
+            }`}
+            data-eac-bypass-base
+          >
+            {loc.label}
+          </a>
+        ))}
+      </div>
     </>
   );
 
   return (
     <>
       {/* Desktop sidebar */}
-      <nav class="hidden md:flex w-56 shrink-0 border-r border-border bg-surface-elevated flex-col p-4 gap-1">
+      <nav class="hidden md:flex w-56 shrink-0 border-r border-border bg-surface-elevated flex-col p-4 gap-1 h-screen">
         {navContent}
       </nav>
 
       {/* Mobile top bar */}
       <div class="md:hidden flex items-center justify-between border-b border-border bg-surface-elevated px-4 py-3">
-        <span class="text-lg font-bold text-primary">Sample Mgmt</span>
+        <span class="text-lg font-bold text-primary">{brand}</span>
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}

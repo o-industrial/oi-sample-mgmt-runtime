@@ -15,7 +15,7 @@
     "build:docker": "docker build --no-cache -t oi-sample-mgmt-runtime .",
     "clean:docker": "docker rm oi-sample-mgmt-runtime",
     "deploy:docker": "docker run --name oi-sample-mgmt-runtime --env-file .env.docker -dp 127.0.0.1:5418:5418 oi-sample-mgmt-runtime",
-    "dev": "deno run --config ./deno.jsonc -A --watch=apps/,configs/,src/ dev.ts",
+    "dev": "deno run --config ./deno.jsonc -A --watch=apps/,configs/,src/,locales/ dev.ts",
     "network:docker": "echo no network config",
     "publish:check": "deno publish --dry-run --allow-dirty",
     "refresh:docker": "npx rimraf cov && deno task build:docker && deno task network:docker && deno task clean:docker && deno task deploy:docker",

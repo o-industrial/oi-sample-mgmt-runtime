@@ -1,0 +1,22 @@
+{
+  "app.title": "Human Biological Sample Management",
+  "nav.home": "Home",
+  "nav.dashboard": "Dashboard",
+  "nav.receive": "Receive",
+  "nav.track": "Track",
+  "nav.report": "Report",
+  "nav.brand": "Sample Mgmt",
+  "nav.toggleLabel": "Toggle navigation",
+  "locale.switchTo.fr": "Français",
+  "locale.switchTo.en": "English",
+  "home.heading": "GSK Sample Management",
+  "home.welcome": "Welcome. Select a section from the sidebar to get started.",
+  "dashboard.heading": "Dashboard",
+  "dashboard.placeholder": "5-pane overview — coming soon.",
+  "receive.heading": "Receive",
+  "receive.placeholder": "Manifest intake and barcode scanning — coming soon.",
+  "track.heading": "Track",
+  "track.placeholder": "Sample status, search, and lifecycle — coming soon.",
+  "report.heading": "Report",
+  "report.placeholder": "ALCOA+ audit trail and ethics approval — coming soon."
+}

@@ -1,0 +1,22 @@
+{
+  "app.title": "Gestion des Échantillons Biologiques Humains",
+  "nav.home": "Accueil",
+  "nav.dashboard": "Tableau de bord",
+  "nav.receive": "Réception",
+  "nav.track": "Suivi",
+  "nav.report": "Rapports",
+  "nav.brand": "Gestion Éch.",
+  "nav.toggleLabel": "Basculer la navigation",
+  "locale.switchTo.fr": "Français",
+  "locale.switchTo.en": "English",
+  "home.heading": "GSK — Gestion des échantillons",
+  "home.welcome": "Bienvenue. Sélectionnez une section dans le menu pour commencer.",
+  "dashboard.heading": "Tableau de bord",
+  "dashboard.placeholder": "Vue d'ensemble en 5 volets — bientôt disponible.",
+  "receive.heading": "Réception",
+  "receive.placeholder": "Saisie de manifeste et lecture de codes-barres — bientôt disponible.",
+  "track.heading": "Suivi",
+  "track.placeholder": "Statut, recherche et cycle de vie des échantillons — bientôt disponible.",
+  "report.heading": "Rapports",
+  "report.placeholder": "Piste d'audit ALCOA+ et approbation éthique — bientôt disponible."
+}
