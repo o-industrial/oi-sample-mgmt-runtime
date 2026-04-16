@@ -34,16 +34,16 @@ function StatusSlot(
 
   return (
     <div
-      class={`flex items-center gap-1.5 text-xs ${
+      class={`flex items-center gap-1.5 text-sm ${
         isZero ? 'text-on-surface-muted' : ''
       }`}
     >
       <span
-        class={`inline-block w-2 h-2 rounded-full ${
+        class={`inline-block w-2.5 h-2.5 rounded-full ${
           isZero ? 'bg-surface-inset' : colorClass
         }`}
       />
-      <span class={isZero ? '' : 'font-medium'}>{count}</span>
+      <span class={isZero ? '' : 'font-semibold'}>{count}</span>
       <span class={isZero ? '' : 'text-on-surface-secondary'}>{label}</span>
     </div>
   );
@@ -95,7 +95,7 @@ export default function ActivityPanes(
             </div>
 
             {/* Fixed 2x2 status grid */}
-            <div class='grid grid-cols-2 gap-x-2 gap-y-1 mb-3'>
+            <div class='grid grid-cols-2 gap-x-2 gap-y-2 mb-3'>
               <StatusSlot
                 count={pane.ready}
                 label={pane.readyLabel}
