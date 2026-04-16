@@ -53,16 +53,17 @@ export default function ActivityPanes(
   { panes, temporalPriority }: ActivityPanesProps,
 ) {
   return (
-    <div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4'>
-      {panes.map((pane) => {
+    <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4'>
+      {panes.map((pane, i) => {
         const isEmphasized = pane.id === temporalPriority;
+        const spanClass = i < 3 ? 'lg:col-span-2' : 'lg:col-span-3';
 
         return (
           <a
             key={pane.id}
             href={pane.route}
             data-eac-bypass-base
-            class={`block rounded-lg border p-4 transition-all hover:border-primary ${
+            class={`block rounded-lg border p-4 transition-all hover:border-primary ${spanClass} ${
               isEmphasized
                 ? 'border-primary bg-surface-elevated shadow-lg scale-[1.02]'
                 : 'border-border bg-surface-card'
