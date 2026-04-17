@@ -99,6 +99,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 IsPrivate: true,
                 IsTriggerSignIn: true,
               },
+              pilot: {
+                PathPattern: '/pilot*',
+                Priority: 200,
+              },
               assets: { PathPattern: '/assets*', Priority: 500 },
               icons: { PathPattern: '/icons*', Priority: 500 },
               tailwind: { PathPattern: '/tailwind*', Priority: 500 },
@@ -170,6 +174,22 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ],
             } as EaCPreactAppProcessor,
           },
+          pilot: {
+            Details: {
+              Name: 'Pilot',
+              Description: 'GSK pilot one-pager and deck',
+            },
+            ModifierResolvers: {
+              baseHref: { Priority: 10000 },
+            },
+            Processor: {
+              Type: 'PreactApp',
+              AppDFSLookup: 'local:apps/pilot',
+              ComponentDFSLookups: [
+                ['local:apps/pilot', ['tsx']],
+              ],
+            } as EaCPreactAppProcessor,
+          },
           assets: {
             Details: { Name: 'Assets' },
             ModifierResolvers: {},
@@ -203,6 +223,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               DFSLookups: [
                 'local:apps/components',
                 'local:apps/home',
+                'local:apps/pilot',
                 'jsr:@o-industrial/atomic',
               ],
               ConfigPath: './tailwind.config.ts',
@@ -228,6 +249,14 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'Local',
               FileRoot: './apps/home/',
+              DefaultFile: 'index.tsx',
+              Extensions: ['tsx'],
+            } as EaCLocalDistributedFileSystemDetails,
+          },
+          'local:apps/pilot': {
+            Details: {
+              Type: 'Local',
+              FileRoot: './apps/pilot/',
               DefaultFile: 'index.tsx',
               Extensions: ['tsx'],
             } as EaCLocalDistributedFileSystemDetails,

@@ -1,0 +1,96 @@
+/* Reveal.js Variable Overrides - OI Theme */
+:root {
+  --r-background-color: #050713;
+  --r-main-color: rgba(255, 255, 255, 0.7);
+  --r-heading-color: #ffffff;
+  --r-link-color: #60a5fa;
+  --r-link-color-hover: #93c5fd;
+  --r-selection-background-color: rgba(139, 92, 246, 0.4);
+  --r-heading-font: system-ui, -apple-system, sans-serif;
+  --r-main-font: system-ui, -apple-system, sans-serif;
+  --r-heading-text-transform: none;
+  --r-heading-font-weight: 600;
+}
+
+/* Ensure reveal container takes full viewport - override site shell */
+html, body {
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Hide site navigation and footer for deck */
+header, nav, footer, .site-header, .site-nav, .site-footer {
+  display: none !important;
+}
+
+/* Main content area should have no padding */
+main, #__next, #app, .app-shell, [data-layout] {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100vh !important;
+  max-width: none !important;
+}
+
+.reveal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 100vh !important;
+  width: 100vw !important;
+  z-index: 9999 !important;
+}
+
+/* Force slides to fill available space */
+.reveal .slides {
+  height: 100% !important;
+}
+
+.reveal .slides section {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: 2rem !important;
+  box-sizing: border-box !important;
+}
+
+/* Slide background gradient */
+.reveal .slides section {
+  background: linear-gradient(to bottom right, #050713, #0c1030, #04060f);
+}
+
+/* Navigation controls */
+.reveal .controls {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Progress bar */
+.reveal .progress {
+  background: rgba(255, 255, 255, 0.1);
+  height: 3px;
+}
+
+.reveal .progress span {
+  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+}
+
+/* Slide numbers */
+.reveal .slide-number {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+}
+
+/* Print styles */
+@media print {
+  .reveal .slides section {
+    background: white !important;
+  }
+
+  .reveal .slides section * {
+    color: #1a1a1a !important;
+  }
+}
