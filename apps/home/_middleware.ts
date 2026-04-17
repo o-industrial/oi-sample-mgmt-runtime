@@ -1,7 +1,6 @@
 import { EaCRuntimeHandler } from '@fathym/eac/runtime/pipelines';
 import { EaCApplicationsRuntimeContext } from '@fathym/eac-applications/runtime';
 import { OISampleMgmtWebState } from '../../src/state/OISampleMgmtWebState.ts';
-import { resolveAccessRights } from '../../src/utils/demoAccess.ts';
 import { resolveTheme } from '../../src/utils/resolveTheme.ts';
 import { isValidLocale, resolveLocale } from '../../src/utils/resolveLocale.ts';
 import { loadStrings } from '../../src/utils/loadStrings.ts';
@@ -26,13 +25,9 @@ export default [
     const appCtx = ctx as unknown as EaCApplicationsRuntimeContext<
       OISampleMgmtWebState
     >;
-    const runtimeRights =
-      (appCtx.Runtime?.AccessRights as string[] | undefined) || [];
 
-    ctx.State.AccessRights = resolveAccessRights(
-      req,
-      runtimeRights.length > 0 ? runtimeRights : undefined,
-    );
+    ctx.State.AccessRights =
+      (appCtx.Runtime?.AccessRights as string[]) || [];
     ctx.State.Theme = resolveTheme(req);
     ctx.State.Locale = resolveLocale(req);
     ctx.State.Strings = await loadStrings(ctx.State.Locale);
