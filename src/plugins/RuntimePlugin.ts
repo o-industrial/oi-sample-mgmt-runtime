@@ -32,6 +32,7 @@ import { EaCMSALProcessor } from '@fathym/msal';
 import {
   OpenIndustrialLicensingPlugin,
   OpenIndustrialMSALPlugin,
+  resolveAccessRights,
 } from '@o-industrial/common/runtimes';
 import { DefaultMyCoreProcessorHandlerResolver } from './DefaultMyCoreProcessorHandlerResolver.ts';
 
@@ -364,6 +365,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
 
     pluginConfig.IoC!.Register(DefaultMyCoreProcessorHandlerResolver, {
       Type: pluginConfig.IoC!.Symbol('ProcessorHandlerResolver'),
+    });
+
+    pluginConfig.IoC!.Register(() => resolveAccessRights, {
+      Type: pluginConfig.IoC!.Symbol('AccessRightsResolver'),
     });
 
     return Promise.resolve(pluginConfig);
