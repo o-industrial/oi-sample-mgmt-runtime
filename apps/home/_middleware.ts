@@ -1,6 +1,5 @@
 import { loadJwtConfig } from '@fathym/common';
 import { EaCRuntimeHandler } from '@fathym/eac/runtime/pipelines';
-import type { EverythingAsCodeIdentity } from '@fathym/eac-identity';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 import { OpenIndustrialJWTPayload } from '@o-industrial/common/types';
 import { OISampleMgmtWebState } from '../../src/state/OISampleMgmtWebState.ts';
@@ -52,23 +51,8 @@ export default [
 
           const wsClient = new OpenIndustrialAPIClient(apiBaseUrl, wsJwt);
 
-          const [cards, workspace] = await Promise.all([
-            wsClient.Workspaces.ListUserAccessCards(username),
-            wsClient.Workspaces.Get(),
-          ]);
-
-          if (cards?.length > 0 && workspace) {
-            const acDefs = (workspace as unknown as EverythingAsCodeIdentity)
-              ?.AccessConfigurations || {};
-            const rights = new Set<string>();
-
-            for (const card of cards) {
-              const cfg = acDefs[card.AccessConfigurationLookup];
-              for (const r of cfg?.AccessRightLookups || []) rights.add(r);
-            }
-
-            ctx.State.AccessRights = [...rights];
-          }
+          ctx.State.AccessRights = await wsClient.Workspaces
+            .ResolveUserAccessRights(username);
         }
       } catch (_err) {
         // Workspace access rights resolution failed — continue with empty rights
