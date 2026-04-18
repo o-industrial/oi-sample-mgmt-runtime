@@ -61,7 +61,7 @@ export default [
 
     ctx.State.Theme = resolveTheme(req);
     ctx.State.Locale = resolveLocale(req);
-    ctx.State.Strings = await loadStrings(ctx.State.Locale);
+    ctx.State.Strings = await loadStrings(ctx.State.Locale as 'en' | 'fr');
     return ctx.Next();
   },
 ] as EaCRuntimeHandler<OISampleMgmtWebState>[];

@@ -18,6 +18,8 @@ export default {
         transfers: 'GET /api/transfers',
         returns: 'GET /api/returns',
         reconciliations: 'GET /api/reconciliations',
+        dispositions: 'GET /api/dispositions',
+        reviews: 'GET /api/reviews, POST /api/reviews (decide)',
       },
     });
   },

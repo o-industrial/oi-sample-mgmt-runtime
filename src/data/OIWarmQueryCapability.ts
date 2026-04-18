@@ -1,14 +1,13 @@
 import { Capability } from '@fathym/steward/capabilities';
 import { z } from 'zod';
-import type {
-  SampleRecord,
-  SampleStatus,
-  ManifestRecord,
-  StudyRecord,
-  TurboTaxStatus,
-  ManagerEffortEntry,
-  CapacityForecast,
-} from './types/mod.ts';
+import type { SampleRecord } from './types/SampleRecord.ts';
+import type { SampleStatus } from './types/SampleStatus.ts';
+import type { ManifestRecord } from './types/ManifestRecord.ts';
+import type { StudyRecord } from './types/StudyRecord.ts';
+import type { EthicsApprovalRecord } from './types/EthicsApprovalRecord.ts';
+import type { TurboTaxStatus } from './types/TurboTaxStatus.ts';
+import type { ManagerEffortEntry } from './types/ManagerEffortEntry.ts';
+import type { CapacityForecast } from './types/CapacityForecast.ts';
 import { seedOIData } from './seed.ts';
 
 export type OIWarmQueryHooks = {
@@ -17,6 +16,7 @@ export type OIWarmQueryHooks = {
   AllBarcodes(): Promise<SampleRecord[]>;
   LatestManifest(): Promise<ManifestRecord[]>;
   ListStudies(): Promise<StudyRecord[]>;
+  ListEthicsApprovals(): Promise<EthicsApprovalRecord[]>;
   EffortTracking(): Promise<ManagerEffortEntry[]>;
   CapacityForecasting(): Promise<CapacityForecast>;
   CreateSample(data: Omit<SampleRecord, 'SampleId'>): Promise<SampleRecord>;
@@ -59,6 +59,10 @@ export function OIWarmQueryCapability() {
 
         async ListStudies() {
           return listAll<StudyRecord>('Studies');
+        },
+
+        async ListEthicsApprovals() {
+          return listAll<EthicsApprovalRecord>('EthicsApprovals');
         },
 
         async EffortTracking() {

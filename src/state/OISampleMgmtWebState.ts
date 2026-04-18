@@ -3,4 +3,5 @@ export type OISampleMgmtWebState = {
   Theme: string;
   Locale: string;
   Strings: Record<string, string>;
+  Username?: string;
 };

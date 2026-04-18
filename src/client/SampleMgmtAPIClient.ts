@@ -1,16 +1,16 @@
 import { EaCBaseClient } from '@fathym/eac/steward/clients';
-import type {
-  SampleRecord,
-  ManifestRecord,
-  StudyRecord,
-  AuditEventRecord,
-  EthicsApprovalRecord,
-  TransferRecord,
-  ReturnRecord,
-  ReconciliationRecord,
-  PaneViewData,
-  ManagementOverlayData,
-} from '../data/types/mod.ts';
+import type { SampleRecord } from '../data/types/SampleRecord.ts';
+import type { ManifestRecord } from '../data/types/ManifestRecord.ts';
+import type { StudyRecord } from '../data/types/StudyRecord.ts';
+import type { AuditEventRecord } from '../data/types/AuditEventRecord.ts';
+import type { EthicsApprovalRecord } from '../data/types/EthicsApprovalRecord.ts';
+import type { TransferRecord } from '../data/types/TransferRecord.ts';
+import type { ReturnRecord } from '../data/types/ReturnRecord.ts';
+import type { ReconciliationRecord } from '../data/types/ReconciliationRecord.ts';
+import type { DispositionRecord } from '../data/types/DispositionRecord.ts';
+import type { ReviewRecord } from '../data/types/ReviewRecord.ts';
+import type { PaneViewData } from '../data/types/PaneViewData.ts';
+import type { ManagementOverlayData } from '../data/types/ManagementOverlayData.ts';
 
 export interface SampleMgmtClientOptions {
   apiToken?: string;
@@ -153,6 +153,54 @@ export class SampleMgmtAPIClient extends EaCBaseClient {
       List: async (): Promise<ReconciliationRecord[]> => {
         const res = await fetch(this.loadClientUrl('/api/reconciliations'), {
           headers: this.loadHeaders(),
+        });
+        return this.json(res);
+      },
+    };
+  }
+
+  public get Dispositions() {
+    return {
+      List: async (): Promise<DispositionRecord[]> => {
+        const res = await fetch(this.loadClientUrl('/api/dispositions'), {
+          headers: this.loadHeaders(),
+        });
+        return this.json(res);
+      },
+    };
+  }
+
+  public get Reviews() {
+    return {
+      List: async (
+        filter?: { Status?: string },
+      ): Promise<ReviewRecord[]> => {
+        const params = new URLSearchParams();
+        if (filter?.Status) params.set('status', filter.Status);
+        const qs = params.toString();
+        const path = qs ? `/api/reviews?${qs}` : '/api/reviews';
+        const res = await fetch(this.loadClientUrl(path), {
+          headers: this.loadHeaders(),
+        });
+        return this.json(res);
+      },
+      Decide: async (
+        reviewId: string,
+        decision: string,
+        userId: string,
+        reason?: string,
+      ): Promise<ReviewRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/reviews'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            ReviewId: reviewId,
+            Decision: decision,
+            UserId: userId,
+            Reason: reason,
+          }),
         });
         return this.json(res);
       },

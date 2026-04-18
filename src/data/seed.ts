@@ -1,13 +1,13 @@
-import type {
-  SampleRecord,
-  ManifestRecord,
-  StudyRecord,
-  AuditEventRecord,
-  EthicsApprovalRecord,
-  TransferRecord,
-  ReturnRecord,
-  ReconciliationRecord,
-} from './types/mod.ts';
+import type { SampleRecord } from './types/SampleRecord.ts';
+import type { ManifestRecord } from './types/ManifestRecord.ts';
+import type { StudyRecord } from './types/StudyRecord.ts';
+import type { EthicsApprovalRecord } from './types/EthicsApprovalRecord.ts';
+import type { AuditEventRecord } from './types/AuditEventRecord.ts';
+import type { TransferRecord } from './types/TransferRecord.ts';
+import type { ReturnRecord } from './types/ReturnRecord.ts';
+import type { ReconciliationRecord } from './types/ReconciliationRecord.ts';
+import type { DispositionRecord } from './types/DispositionRecord.ts';
+import type { ReviewRecord } from './types/ReviewRecord.ts';
 
 // ── OI-sourced seed data (13 records) ──────────────────────────────────
 
@@ -33,7 +33,13 @@ const STUDIES: StudyRecord[] = [
   { StudyId: 'ATLAS-7', Label: 'ATLAS-7 Phase I' },
 ];
 
-// ── Web-app-owned seed data (15 records) ───────────────────────────────
+const ETHICS_APPROVALS: EthicsApprovalRecord[] = [
+  { StudyId: 'ONCO-2024-03', Protocol: 'Phase III Oncology -- Biospecimen Collection', ApprovalDate: '2024-03-15', ExpiryDate: '2026-04-23', Status: 'expiring', DaysUntilExpiry: 7 },
+  { StudyId: 'BEACON-3', Protocol: 'Phase III -- Circulating Tumor DNA Analysis', ApprovalDate: '2025-09-01', ExpiryDate: '2027-09-01', Status: 'active', DaysUntilExpiry: 503 },
+  { StudyId: 'LEGACY-2023-01', Protocol: 'Phase II -- Archived Biobank Study', ApprovalDate: '2023-01-10', ExpiryDate: '2025-01-10', Status: 'expired', DaysUntilExpiry: 0 },
+];
+
+// ── Web-app-owned seed data ───────────────────────────────────────────
 
 const AUDIT_EVENTS: AuditEventRecord[] = [
   { EventId: 'EVT-0001', Timestamp: '2026-04-16 09:15:22', UserId: 'elena.martinez', ActionType: 'Scan', EntityType: 'Sample', EntityId: 'SMP-2026-88421-001', AlcoaPrinciple: 'Contemporaneous', Status: 'success' },
@@ -42,12 +48,6 @@ const AUDIT_EVENTS: AuditEventRecord[] = [
   { EventId: 'EVT-0004', Timestamp: '2026-04-15 16:30:11', UserId: 'sarah.chen', ActionType: 'Approve', EntityType: 'EthicsApproval', EntityId: 'BEACON-3', AlcoaPrinciple: 'Attributable', Status: 'success' },
   { EventId: 'EVT-0005', Timestamp: '2026-04-15 14:22:33', UserId: 'james.wilson', ActionType: 'Approve', EntityType: 'Transfer', EntityId: 'TRF-2026-0087', AlcoaPrinciple: 'Attributable', Status: 'success' },
   { EventId: 'EVT-0006', Timestamp: '2026-04-15 11:05:47', UserId: 'system', ActionType: 'Update', EntityType: 'Manifest', EntityId: 'MAN-2026-0409', AlcoaPrinciple: 'Accurate', Status: 'failed' },
-];
-
-const ETHICS_APPROVALS: EthicsApprovalRecord[] = [
-  { StudyId: 'ONCO-2024-03', Protocol: 'Phase III Oncology -- Biospecimen Collection', ApprovalDate: '2024-03-15', ExpiryDate: '2026-04-23', Status: 'expiring', DaysUntilExpiry: 7 },
-  { StudyId: 'BEACON-3', Protocol: 'Phase III -- Circulating Tumor DNA Analysis', ApprovalDate: '2025-09-01', ExpiryDate: '2027-09-01', Status: 'active', DaysUntilExpiry: 503 },
-  { StudyId: 'LEGACY-2023-01', Protocol: 'Phase II -- Archived Biobank Study', ApprovalDate: '2023-01-10', ExpiryDate: '2025-01-10', Status: 'expired', DaysUntilExpiry: 0 },
 ];
 
 const TRANSFERS: TransferRecord[] = [
@@ -75,6 +75,22 @@ const RECONCILIATIONS: ReconciliationRecord[] = [
   { ReconciliationId: 'REC-2026-0005', ManifestId: 'MAN-2026-0412', DiscrepancyType: 'count-mismatch', ExpectedCount: 48, ActualCount: 47, MissingFields: [], Status: 'attention', SlaDeadline: '2026-04-18 17:00', LastAction: '1 unlabeled tube under investigation' },
 ];
 
+const DISPOSITIONS: DispositionRecord[] = [
+  { DispositionId: 'DSP-2026-0001', SampleId: 'SMP-2026-83100-001', Decision: 'destroy', Status: 'ready', FinalReportDate: '2026-01-15', DispositionDeadline: '2026-04-15 17:00', TreatmentStatus: 'unblinded', CustodianSignoff: { SignedBy: 'dr.sarah.kumar', SignedAt: '2026-04-10 14:00' }, TwoPersonAuth: { ScannedBy: 'elena.martinez', VerifiedBy: 'james.wilson', At: '2026-04-10 14:15' }, EvidenceDocuments: [{ Name: 'Destruction Certificate', Url: '/docs/DSP-2026-0001-cert.pdf' }], LastAction: 'Disposed -- two-person auth complete' },
+  { DispositionId: 'DSP-2026-0002', SampleId: 'SMP-2026-87102-001', Decision: 'retain', Status: 'attention', FinalReportDate: '2026-03-01', DispositionDeadline: '2026-06-01 17:00', TreatmentStatus: 'unblinded', EvidenceDocuments: [], LastAction: 'Awaiting custodian approval for biobank routing' },
+  { DispositionId: 'DSP-2026-0003', SampleId: 'SMP-2026-83100-002', Decision: 'deplete', Status: 'ready', FinalReportDate: '2026-02-20', DispositionDeadline: '2026-05-20 17:00', EvidenceDocuments: [{ Name: 'Scientist Attestation', Url: '/docs/DSP-2026-0003-attest.pdf' }], LastAction: 'Depletion attested -- ctDNA extraction for MERIDIAN-1' },
+  { DispositionId: 'DSP-2026-0004', SampleId: 'SMP-2026-85200-003', Decision: 'pending', Status: 'volume-hold', FinalReportDate: '2026-04-01', DispositionDeadline: '2026-07-01 17:00', TreatmentStatus: 'blinded', EvidenceDocuments: [], LastAction: 'Queued -- disposition batch not yet scheduled' },
+  { DispositionId: 'DSP-2026-0005', SampleId: 'SMP-2026-88421-002', Decision: 'destroy', Status: 'problem', FinalReportDate: '2026-02-01', DispositionDeadline: '2026-05-01 17:00', TreatmentStatus: 'unblinded', EvidenceDocuments: [], LastAction: 'Overdue -- destruction deadline approaching without custodian signoff' },
+];
+
+const REVIEWS: ReviewRecord[] = [
+  { ReviewId: 'REV-2026-0001', Type: 'reception', EntityId: 'SMP-2026-83100-001', Status: 'pending', ValidationResult: 'warnings', ExceptionFlags: ['Temperature deviation logged'], SubmittedBy: 'elena.martinez', SubmittedAt: '2026-04-16 09:30', LastAction: 'System validation flagged temperature deviation' },
+  { ReviewId: 'REV-2026-0002', Type: 'reconciliation', EntityId: 'REC-2026-0001', Status: 'pending', ValidationResult: 'failed', ExceptionFlags: ['Count mismatch: expected 5, found 4', 'Barcode scan failed'], SubmittedBy: 'elena.martinez', SubmittedAt: '2026-04-14 14:00', LastAction: 'System validation failed — multiple exceptions' },
+  { ReviewId: 'REV-2026-0003', Type: 'disposition', EntityId: 'DSP-2026-0002', Status: 'approved', ValidationResult: 'warnings', ExceptionFlags: ['Approaching retention deadline'], SubmittedBy: 'james.wilson', SubmittedAt: '2026-04-13 10:00', ReviewedBy: 'elena.martinez', ReviewedAt: '2026-04-13 14:30', Decision: 'approved', LastAction: 'Approved by elena.martinez' },
+  { ReviewId: 'REV-2026-0004', Type: 'reception', EntityId: 'SMP-2026-87102-001', Status: 'rejected', ValidationResult: 'failed', ExceptionFlags: ['Missing chain-of-custody form'], SubmittedBy: 'sarah.chen', SubmittedAt: '2026-04-12 11:00', ReviewedBy: 'elena.martinez', ReviewedAt: '2026-04-12 16:00', Decision: 'rejected', LastAction: 'Rejected by elena.martinez — incomplete documentation' },
+  { ReviewId: 'REV-2026-0005', Type: 'reconciliation', EntityId: 'REC-2026-0003', Status: 'escalated', ValidationResult: 'failed', ExceptionFlags: ['Duplicate barcode detected', 'Study protocol mismatch'], SubmittedBy: 'james.wilson', SubmittedAt: '2026-04-11 09:00', ReviewedBy: 'elena.martinez', ReviewedAt: '2026-04-11 15:00', Decision: 'escalated', LastAction: 'Escalated by elena.martinez — requires CSV Group Head review' },
+];
+
 // ── Seed functions ─────────────────────────────────────────────────────
 
 export async function seedOIData(kv: Deno.Kv): Promise<number> {
@@ -95,6 +111,11 @@ export async function seedOIData(kv: Deno.Kv): Promise<number> {
     count++;
   }
 
+  for (const approval of ETHICS_APPROVALS) {
+    await kv.set(['EthicsApprovals', approval.StudyId], approval);
+    count++;
+  }
+
   return count;
 }
 
@@ -103,11 +124,6 @@ export async function seedWorkflowData(kv: Deno.Kv): Promise<number> {
 
   for (const event of AUDIT_EVENTS) {
     await kv.set(['AuditEvents', event.EventId], event);
-    count++;
-  }
-
-  for (const approval of ETHICS_APPROVALS) {
-    await kv.set(['EthicsApprovals', approval.StudyId], approval);
     count++;
   }
 
@@ -123,6 +139,16 @@ export async function seedWorkflowData(kv: Deno.Kv): Promise<number> {
 
   for (const rec of RECONCILIATIONS) {
     await kv.set(['Reconciliations', rec.ReconciliationId], rec);
+    count++;
+  }
+
+  for (const disp of DISPOSITIONS) {
+    await kv.set(['Dispositions', disp.DispositionId], disp);
+    count++;
+  }
+
+  for (const review of REVIEWS) {
+    await kv.set(['Reviews', review.ReviewId], review);
     count++;
   }
 

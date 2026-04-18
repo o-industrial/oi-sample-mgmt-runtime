@@ -1,26 +1,23 @@
 import { Capability } from '@fathym/steward/capabilities';
 import { z } from 'zod';
-import type {
-  AuditEventRecord,
-  EthicsApprovalRecord,
-  TransferRecord,
-  ReturnRecord,
-  ReconciliationRecord,
-  DispositionRecord,
-  ReviewRecord,
-  NotificationRecord,
-} from './types/mod.ts';
+import type { AuditEventRecord } from './types/AuditEventRecord.ts';
+import type { TransferRecord } from './types/TransferRecord.ts';
+import type { ReturnRecord } from './types/ReturnRecord.ts';
+import type { ReconciliationRecord } from './types/ReconciliationRecord.ts';
+import type { DispositionRecord } from './types/DispositionRecord.ts';
+import type { ReviewRecord } from './types/ReviewRecord.ts';
+import type { NotificationRecord } from './types/NotificationRecord.ts';
 import { seedWorkflowData } from './seed.ts';
 
 export type SampleMgmtHooks = {
   ListAuditEvents(filter?: { UserId?: string; ActionType?: string }): Promise<AuditEventRecord[]>;
   CreateAuditEvent(data: Omit<AuditEventRecord, 'EventId'>): Promise<AuditEventRecord>;
-  ListEthicsApprovals(): Promise<EthicsApprovalRecord[]>;
   ListTransfers(filter?: { Type?: string; Status?: string }): Promise<TransferRecord[]>;
   ListReturns(): Promise<ReturnRecord[]>;
   ListReconciliations(): Promise<ReconciliationRecord[]>;
   ListDispositions(): Promise<DispositionRecord[]>;
   ListReviews(filter?: { Status?: string }): Promise<ReviewRecord[]>;
+  DecideReview(reviewId: string, decision: 'approved' | 'rejected' | 'escalated', userId: string, reason?: string): Promise<ReviewRecord>;
   ListNotifications(userId: string): Promise<NotificationRecord[]>;
   Seed(): Promise<{ Seeded: number }>;
 };
@@ -56,10 +53,6 @@ export function SampleMgmtCapability() {
           return record;
         },
 
-        async ListEthicsApprovals() {
-          return listAll<EthicsApprovalRecord>('EthicsApprovals');
-        },
-
         async ListTransfers(filter?) {
           const all = await listAll<TransferRecord>('Transfers');
           if (!filter) return all;
@@ -89,6 +82,31 @@ export function SampleMgmtCapability() {
             if (filter.Status && r.Status !== filter.Status) return false;
             return true;
           });
+        },
+
+        async DecideReview(
+          reviewId: string,
+          decision: 'approved' | 'rejected' | 'escalated',
+          userId: string,
+          reason?: string,
+        ) {
+          const entry = await kv.get<ReviewRecord>(['Reviews', reviewId]);
+          if (!entry.value) throw new Error(`Review ${reviewId} not found`);
+          const now = new Date().toISOString();
+          let lastAction = `${decision} by ${userId}`;
+          if (decision === 'rejected' && reason) {
+            lastAction += ` — ${reason}`;
+          }
+          const updated: ReviewRecord = {
+            ...entry.value,
+            Status: decision,
+            Decision: decision,
+            ReviewedBy: userId,
+            ReviewedAt: now,
+            LastAction: lastAction,
+          };
+          await kv.set(['Reviews', reviewId], updated);
+          return updated;
         },
 
         async ListNotifications(userId: string) {

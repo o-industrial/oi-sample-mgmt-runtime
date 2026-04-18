@@ -36,7 +36,7 @@ export default function PilotLayout(
               Deck
             </a>
             <a
-              href='/dashboard'
+              href='/'
               data-eac-bypass-base
               class='px-3 py-1 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700 transition-colors'
             >

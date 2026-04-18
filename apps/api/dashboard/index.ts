@@ -1,11 +1,9 @@
 import { EaCRuntimeHandlers } from '@fathym/eac/runtime/pipelines';
 import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
 import { getOIHooks, getWorkflowHooks } from '../../../src/data/hooks.ts';
-import type {
-  TurboTaxStatus,
-  PaneViewData,
-  ManagementOverlayData,
-} from '../../../src/data/types/mod.ts';
+import type { TurboTaxStatus } from '../../../src/data/types/TurboTaxStatus.ts';
+import type { PaneViewData } from '../../../src/data/types/PaneViewData.ts';
+import type { ManagementOverlayData } from '../../../src/data/types/ManagementOverlayData.ts';
 
 function countByStatus(
   items: Array<{ Status: TurboTaxStatus }>,

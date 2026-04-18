@@ -8,6 +8,7 @@
   "license": "MIT",
   "lock": false,
   "unstable": ["kv", "detect-cjs"],
+  "nodeModulesDir": "none",
   "tasks": {
     "build": "deno task build:fmt && deno task build:lint && deno task publish:check && deno task test",
     "build:fmt": "deno fmt",
@@ -25,8 +26,8 @@
   "imports": {
     "@fathym/atomic": "jsr:@fathym/atomic@0.0.185",
     "@fathym/atomic-icons": "jsr:@fathym/atomic-icons@0.0.103",
-    "@fathym/common": "jsr:@fathym/common@0.2.310-common-release",
-    "@fathym/eac": "jsr:@fathym/eac@0.2.251-hmis",
+    "@fathym/common": "jsr:@fathym/common@0.2.274",
+    "@fathym/eac": "jsr:@fathym/eac@0.2.131",
     "@fathym/eac-applications": "jsr:@fathym/eac-applications@0.0.217",
     "@fathym/eac-deno-kv": "jsr:@fathym/eac-deno-kv@0.0.88-eac-cascade",
     "@fathym/eac-identity": "jsr:@fathym/eac-identity@0.0.87-eac-cascade",

@@ -77,11 +77,21 @@ export const handler: EaCRuntimeHandlerSet<
   ReconciliationPageData
 > = {
   GET: async (req, ctx) => {
+    console.log('[TRACE] Reconciliation handler START');
     const { t } = useTranslation(ctx.State.Strings);
     const rights = ctx.State.AccessRights;
+    console.log('[TRACE] Creating client...');
 
-    const client = await createClientFromRequest(req);
-    const rawReconciliations = await client.Reconciliations.List();
+    let rawReconciliations;
+    try {
+      const client = await createClientFromRequest(req);
+      console.log('[TRACE] Client created, fetching reconciliations...');
+      rawReconciliations = await client.Reconciliations.List();
+      console.log('[TRACE] Got reconciliations:', rawReconciliations.length);
+    } catch (err) {
+      console.error('[TRACE] Reconciliation handler ERROR:', err);
+      throw err;
+    }
 
     const reconciliations: ReconciliationItem[] = rawReconciliations.map(
       (r) => ({
