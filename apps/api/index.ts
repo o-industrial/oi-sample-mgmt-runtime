@@ -6,6 +6,19 @@ export default {
     return Response.json({
       name: 'OI Sample Management API',
       version: '0.0.1',
+      dataLayer: 'active',
+      endpoints: {
+        seed: 'POST /api/seed',
+        dashboard: 'GET /api/dashboard',
+        samples: 'GET /api/samples',
+        manifests: 'GET /api/manifests',
+        studies: 'GET /api/studies',
+        auditEvents: 'GET /api/audit-events',
+        ethicsApprovals: 'GET /api/ethics-approvals',
+        transfers: 'GET /api/transfers',
+        returns: 'GET /api/returns',
+        reconciliations: 'GET /api/reconciliations',
+      },
     });
   },
 } as EaCRuntimeHandlers<OISampleMgmtWebState>;

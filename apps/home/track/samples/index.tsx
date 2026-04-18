@@ -3,6 +3,7 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { OISampleMgmtWebState } from '../../../../src/state/OISampleMgmtWebState.ts';
 import { useTranslation } from '../../../../src/utils/useTranslation.ts';
 import SampleTrackingTable from '../../../components/SampleTrackingTable.tsx';
+import { createClientFromRequest } from '../../../../src/client/mod.ts';
 
 // --- Types (TitleCase for server data — C4) ---
 
@@ -54,72 +55,21 @@ export const handler: EaCRuntimeHandlerSet<
   OISampleMgmtWebState,
   SampleTrackingData
 > = {
-  GET: (_req, ctx) => {
+  GET: async (req, ctx) => {
     const { t } = useTranslation(ctx.State.Strings);
     const rights = ctx.State.AccessRights;
 
-    const samples: SampleRecord[] = [
-      {
-        SampleId: 'SMP-2026-88421-001',
-        StudyId: 'BEACON-3',
-        OriginSite: 'London Clinical Lab',
-        ReceivedAt: '2026-04-16 09:15',
-        Status: 'received',
-        StatusLabel: t('track.samples.status.received'),
-        StorageLocation: 'Freezer A / Shelf 2 / Rack 3 / Box 7 / Pos 12',
-        LastAction: 'Barcode scanned at receipt',
-      },
-      {
-        SampleId: 'SMP-2026-88421-002',
-        StudyId: 'BEACON-3',
-        OriginSite: 'London Clinical Lab',
-        ReceivedAt: '2026-04-16 09:15',
-        Status: 'processing',
-        StatusLabel: t('track.samples.status.processing'),
-        StorageLocation: 'Lab Bench 4',
-        LastAction: 'Aliquot in progress',
-      },
-      {
-        SampleId: 'SMP-2026-87102-001',
-        StudyId: 'MERIDIAN-1',
-        OriginSite: 'GSK Stevenage',
-        ReceivedAt: '2026-04-11 14:30',
-        Status: 'in-storage',
-        StatusLabel: t('track.samples.status.inStorage'),
-        StorageLocation: 'Freezer B / Shelf 1 / Rack 5 / Box 2 / Pos 8',
-        LastAction: 'Stored after processing',
-      },
-      {
-        SampleId: 'SMP-2026-85200-003',
-        StudyId: 'ATLAS-7',
-        OriginSite: 'Philadelphia Research Center',
-        ReceivedAt: '2026-04-05 10:00',
-        Status: 'transferred',
-        StatusLabel: t('track.samples.status.transferred'),
-        StorageLocation: '',
-        LastAction: 'Transferred to GSK Ware',
-      },
-      {
-        SampleId: 'SMP-2026-83100-001',
-        StudyId: 'BEACON-3',
-        OriginSite: 'London Clinical Lab',
-        ReceivedAt: '2026-03-20 08:45',
-        Status: 'disposed',
-        StatusLabel: t('track.samples.status.disposed'),
-        StorageLocation: '',
-        LastAction: 'Disposed — HBSM custodian approved',
-      },
-      {
-        SampleId: 'SMP-2026-83100-002',
-        StudyId: 'MERIDIAN-1',
-        OriginSite: 'GSK Stevenage',
-        ReceivedAt: '2026-03-18 11:20',
-        Status: 'depleted',
-        StatusLabel: t('track.samples.status.depleted'),
-        StorageLocation: '',
-        LastAction: 'Depleted — scientist attestation',
-      },
-    ];
+    const client = await createClientFromRequest(req);
+    const rawSamples = await client.Samples.List();
+
+    const samples: SampleRecord[] = rawSamples.map((s) => ({
+      ...s,
+      StatusLabel: t(
+        `track.samples.status.${
+          s.Status === 'in-storage' ? 'inStorage' : s.Status
+        }`,
+      ),
+    }));
 
     const statusCounts = {
       received: samples.filter((s) => s.Status === 'received').length,

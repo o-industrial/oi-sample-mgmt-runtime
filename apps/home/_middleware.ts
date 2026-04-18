@@ -1,4 +1,4 @@
-import { loadJwtConfig } from '@fathym/common';
+import { loadJwtConfig } from '@fathym/common/jwt';
 import { EaCRuntimeHandler } from '@fathym/eac/runtime/pipelines';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 import { OpenIndustrialJWTPayload } from '@o-industrial/common/types';

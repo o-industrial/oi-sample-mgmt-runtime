@@ -292,6 +292,14 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               DenoKVPath: Deno.env.get('OAUTH_DENO_KV_PATH') || undefined,
             } as EaCDenoKVDetails,
           },
+          data: {
+            Details: {
+              Type: 'DenoKV',
+              Name: 'Sample Management Data',
+              Description: 'Deno KV backing sample management domain data.',
+              DenoKVPath: Deno.env.get('DATA_DENO_KV_PATH') || undefined,
+            } as EaCDenoKVDetails,
+          },
         },
         Modifiers: {
           baseHref: {

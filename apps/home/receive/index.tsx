@@ -3,6 +3,7 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
 import { useTranslation } from '../../../src/utils/useTranslation.ts';
 import ReceptionTabs from '../../components/ReceptionTabs.tsx';
+import { createClientFromRequest } from '../../../src/client/mod.ts';
 
 // --- Types (TitleCase for server data) ---
 
@@ -84,8 +85,14 @@ export const handler: EaCRuntimeHandlerSet<
   OISampleMgmtWebState,
   ReceiveData
 > = {
-  GET: (_req, ctx) => {
+  GET: async (req, ctx) => {
     const { t } = useTranslation(ctx.State.Strings);
+
+    const client = await createClientFromRequest(req);
+    const [studies, manifests] = await Promise.all([
+      client.Studies.List(),
+      client.Manifests.List(),
+    ]);
 
     return ctx.Render({
       ...ctx.Data,
@@ -103,11 +110,10 @@ export const handler: EaCRuntimeHandlerSet<
         ManifestIdPlaceholder: t('receive.form.manifestIdPlaceholder'),
         StudyLabel: t('receive.form.study'),
         StudyPlaceholder: t('receive.form.studyPlaceholder'),
-        StudyOptions: [
-          { Value: 'study-001', Label: 'BEACON-3 Phase III' },
-          { Value: 'study-002', Label: 'MERIDIAN-1 Phase II' },
-          { Value: 'study-003', Label: 'ATLAS-7 Phase I' },
-        ],
+        StudyOptions: studies.map((s) => ({
+          Value: s.StudyId,
+          Label: s.Label,
+        })),
         ShipmentIdLabel: t('receive.form.shipmentId'),
         ShipmentIdPlaceholder: t('receive.form.shipmentIdPlaceholder'),
         ExpectedSamplesLabel: t('receive.form.expectedSamples'),
@@ -131,44 +137,19 @@ export const handler: EaCRuntimeHandlerSet<
 
       RecentManifests: {
         Heading: t('receive.recentManifests.heading'),
-        Items: [
-          {
-            ManifestId: 'MAN-2026-0412',
-            Study: 'BEACON-3',
-            ExpectedSamples: 48,
-            Status: 'ready' as GateStatus,
-            StatusLabel: t('receive.status.ready'),
-            ReceivedAt: '2026-04-12 09:15',
-            SamplesLabel: t('receive.recentManifests.samples'),
-          },
-          {
-            ManifestId: 'MAN-2026-0411',
-            Study: 'MERIDIAN-1',
-            ExpectedSamples: 24,
-            Status: 'attention' as GateStatus,
-            StatusLabel: t('receive.status.attention'),
-            ReceivedAt: '2026-04-11 14:30',
-            SamplesLabel: t('receive.recentManifests.samples'),
-          },
-          {
-            ManifestId: 'MAN-2026-0410',
-            Study: 'ATLAS-7',
-            ExpectedSamples: 12,
-            Status: 'volume-hold' as GateStatus,
-            StatusLabel: t('receive.status.volumeHold'),
-            ReceivedAt: '2026-04-10 11:00',
-            SamplesLabel: t('receive.recentManifests.samples'),
-          },
-          {
-            ManifestId: 'MAN-2026-0409',
-            Study: 'BEACON-3',
-            ExpectedSamples: 36,
-            Status: 'problem' as GateStatus,
-            StatusLabel: t('receive.status.problem'),
-            ReceivedAt: '2026-04-09 16:45',
-            SamplesLabel: t('receive.recentManifests.samples'),
-          },
-        ],
+        Items: manifests.map((m) => ({
+          ManifestId: m.ManifestId,
+          Study: m.StudyId,
+          ExpectedSamples: m.ExpectedSamples,
+          Status: m.Status as GateStatus,
+          StatusLabel: t(
+            `receive.status.${
+              m.Status === 'volume-hold' ? 'volumeHold' : m.Status
+            }`,
+          ),
+          ReceivedAt: m.ReceivedAt,
+          SamplesLabel: t('receive.recentManifests.samples'),
+        })),
         EmptyLabel: t('receive.recentManifests.empty'),
       },
 

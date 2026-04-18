@@ -2,6 +2,7 @@ import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { OISampleMgmtWebState } from '../../../../src/state/OISampleMgmtWebState.ts';
 import { useTranslation } from '../../../../src/utils/useTranslation.ts';
+import { createClientFromRequest } from '../../../../src/client/mod.ts';
 
 // --- Types (TitleCase for server data) ---
 
@@ -53,7 +54,7 @@ export const handler: EaCRuntimeHandlerSet<
   OISampleMgmtWebState,
   EthicsApprovalData
 > = {
-  GET: (_req, ctx) => {
+  GET: async (req, ctx) => {
     const { t } = useTranslation(ctx.State.Strings);
 
     const buildStatusLabel = (
@@ -68,39 +69,8 @@ export const handler: EaCRuntimeHandlerSet<
       return t(`report.ethics.status.${status}`);
     };
 
-    const rawApprovals: Array<{
-      StudyId: string;
-      Protocol: string;
-      ApprovalDate: string;
-      ExpiryDate: string;
-      Status: EthicsStatus;
-      DaysUntilExpiry: number;
-    }> = [
-      {
-        StudyId: 'ONCO-2024-03',
-        Protocol: 'Phase III Oncology — Biospecimen Collection',
-        ApprovalDate: '2024-03-15',
-        ExpiryDate: '2026-04-23',
-        Status: 'expiring',
-        DaysUntilExpiry: 7,
-      },
-      {
-        StudyId: 'BEACON-3',
-        Protocol: 'Phase III — Circulating Tumor DNA Analysis',
-        ApprovalDate: '2025-09-01',
-        ExpiryDate: '2027-09-01',
-        Status: 'active',
-        DaysUntilExpiry: 503,
-      },
-      {
-        StudyId: 'LEGACY-2023-01',
-        Protocol: 'Phase II — Archived Biobank Study',
-        ApprovalDate: '2023-01-10',
-        ExpiryDate: '2025-01-10',
-        Status: 'expired',
-        DaysUntilExpiry: 0,
-      },
-    ];
+    const client = await createClientFromRequest(req);
+    const rawApprovals = await client.EthicsApprovals.List();
 
     return ctx.Render({
       ...ctx.Data,

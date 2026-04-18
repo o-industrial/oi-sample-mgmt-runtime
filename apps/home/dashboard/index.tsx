@@ -5,6 +5,7 @@ import { useTranslation } from '../../../src/utils/useTranslation.ts';
 import { getTemporalPriority } from '../../../src/utils/getTemporalPriority.ts';
 import ActivityPanes from '../../components/ActivityPanes.tsx';
 import ManagementOverlay from '../../components/ManagementOverlay.tsx';
+import { createClientFromRequest } from '../../../src/client/mod.ts';
 
 // --- Types ---
 
@@ -71,7 +72,7 @@ export const handler: EaCRuntimeHandlerSet<
   OISampleMgmtWebState,
   DashboardData
 > = {
-  GET: (_req, ctx) => {
+  GET: async (req, ctx) => {
     const rights = ctx.State.AccessRights;
 
     // --- Role-aware routing (REVISED 9-role table) ---
@@ -132,58 +133,22 @@ export const handler: EaCRuntimeHandlerSet<
     const showEffortOnly = rights.includes('study:view') && !showFullOverlay;
     const showOverlay = showFullOverlay || showEffortOnly;
 
-    const panes: PaneViewData[] = [
-      {
-        Id: 'incoming',
-        Name: t('dashboard.pane.incoming'),
-        Total: 3,
-        Ready: 1,
-        Attention: 1,
-        VolumeHold: 0,
-        Problem: 1,
-        Route: '/receive',
-      },
-      {
-        Id: 'transfers',
-        Name: t('dashboard.pane.transfers'),
-        Total: 5,
-        Ready: 3,
-        Attention: 1,
-        VolumeHold: 1,
-        Problem: 0,
-        Route: '/transfer',
-      },
-      {
-        Id: 'returns',
-        Name: t('dashboard.pane.returns'),
-        Total: 2,
-        Ready: 1,
-        Attention: 1,
-        VolumeHold: 0,
-        Problem: 0,
-        Route: '/return',
-      },
-      {
-        Id: 'reconciliations',
-        Name: t('dashboard.pane.reconciliations'),
-        Total: 1,
-        Ready: 0,
-        Attention: 1,
-        VolumeHold: 0,
-        Problem: 0,
-        Route: '/reconciliation',
-      },
-      {
-        Id: 'dispositions',
-        Name: t('dashboard.pane.dispositions'),
-        Total: 4,
-        Ready: 2,
-        Attention: 0,
-        VolumeHold: 1,
-        Problem: 1,
-        Route: '/disposition',
-      },
-    ];
+    const client = await createClientFromRequest(req);
+    const dashboardData = await client.Dashboard.Load();
+
+    const paneRoutes: Record<string, string> = {
+      incoming: '/receive',
+      transfers: '/transfer',
+      returns: '/return',
+      reconciliations: '/reconciliation',
+      dispositions: '/disposition',
+    };
+
+    const panes: PaneViewData[] = dashboardData.Panes.map((p) => ({
+      ...p,
+      Name: t(`dashboard.pane.${p.Id}`),
+      Route: paneRoutes[p.Id] ?? '/',
+    }));
 
     return ctx.Render({
       ...ctx.Data,
@@ -233,15 +198,7 @@ export const handler: EaCRuntimeHandlerSet<
       ],
       ComplianceHeading: t('dashboard.compliance.heading'),
       ManagementOverlay: showOverlay
-        ? {
-          EffortData: [
-            { Manager: 'Dr. Martinez', Count: 24 },
-            { Manager: 'J. Thompson', Count: 18 },
-            { Manager: 'R. Patel', Count: 31 },
-            { Manager: 'S. Kim', Count: 12 },
-          ],
-          CapacityData: { Current: 85, Projected: 120, Breakpoint: 100 },
-        }
+        ? dashboardData.ManagementOverlay
         : null,
       StatusLabels: {
         Ready: t('dashboard.status.ready'),

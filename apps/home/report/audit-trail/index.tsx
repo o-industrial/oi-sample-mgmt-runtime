@@ -2,6 +2,7 @@ import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { OISampleMgmtWebState } from '../../../../src/state/OISampleMgmtWebState.ts';
 import { useTranslation } from '../../../../src/utils/useTranslation.ts';
+import { createClientFromRequest } from '../../../../src/client/mod.ts';
 
 // --- Types (TitleCase for server data) ---
 
@@ -48,77 +49,16 @@ export const handler: EaCRuntimeHandlerSet<
   OISampleMgmtWebState,
   AuditTrailData
 > = {
-  GET: (_req, ctx) => {
+  GET: async (req, ctx) => {
     const { t } = useTranslation(ctx.State.Strings);
 
-    const events: AuditEvent[] = [
-      {
-        EventId: 'EVT-0001',
-        Timestamp: '2026-04-16 09:15:22',
-        UserId: 'elena.martinez',
-        ActionType: 'Scan',
-        EntityType: 'Sample',
-        EntityId: 'SMP-2026-88421-001',
-        AlcoaPrinciple: 'Contemporaneous',
-        Status: 'success',
-        StatusLabel: t('report.auditTrail.status.success'),
-      },
-      {
-        EventId: 'EVT-0002',
-        Timestamp: '2026-04-16 09:12:05',
-        UserId: 'elena.martinez',
-        ActionType: 'Create',
-        EntityType: 'Manifest',
-        EntityId: 'MAN-2026-0412',
-        AlcoaPrinciple: 'Original',
-        Status: 'success',
-        StatusLabel: t('report.auditTrail.status.success'),
-      },
-      {
-        EventId: 'EVT-0003',
-        Timestamp: '2026-04-16 09:10:00',
-        UserId: 'system',
-        ActionType: 'Create',
-        EntityType: 'TemperatureLog',
-        EntityId: 'TMP-SENSOR-04-2026-0416',
-        AlcoaPrinciple: 'Contemporaneous',
-        Status: 'success',
-        StatusLabel: t('report.auditTrail.status.success'),
-      },
-      {
-        EventId: 'EVT-0004',
-        Timestamp: '2026-04-15 16:30:11',
-        UserId: 'sarah.chen',
-        ActionType: 'Approve',
-        EntityType: 'EthicsApproval',
-        EntityId: 'BEACON-3',
-        AlcoaPrinciple: 'Attributable',
-        Status: 'success',
-        StatusLabel: t('report.auditTrail.status.success'),
-      },
-      {
-        EventId: 'EVT-0005',
-        Timestamp: '2026-04-15 14:22:33',
-        UserId: 'james.wilson',
-        ActionType: 'Approve',
-        EntityType: 'Transfer',
-        EntityId: 'TRF-2026-0087',
-        AlcoaPrinciple: 'Attributable',
-        Status: 'success',
-        StatusLabel: t('report.auditTrail.status.success'),
-      },
-      {
-        EventId: 'EVT-0006',
-        Timestamp: '2026-04-15 11:05:47',
-        UserId: 'system',
-        ActionType: 'Update',
-        EntityType: 'Manifest',
-        EntityId: 'MAN-2026-0409',
-        AlcoaPrinciple: 'Accurate',
-        Status: 'failed',
-        StatusLabel: t('report.auditTrail.status.failed'),
-      },
-    ];
+    const client = await createClientFromRequest(req);
+    const rawEvents = await client.AuditEvents.List();
+
+    const events: AuditEvent[] = rawEvents.map((e) => ({
+      ...e,
+      StatusLabel: t(`report.auditTrail.status.${e.Status}`),
+    }));
 
     return ctx.Render({
       ...ctx.Data,
