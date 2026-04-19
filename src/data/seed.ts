@@ -8,6 +8,7 @@ import type { ReturnRecord } from './types/ReturnRecord.ts';
 import type { ReconciliationRecord } from './types/ReconciliationRecord.ts';
 import type { DispositionRecord } from './types/DispositionRecord.ts';
 import type { ReviewRecord } from './types/ReviewRecord.ts';
+import type { NotificationRecord } from './types/NotificationRecord.ts';
 
 // ── OI-sourced seed data (13 records) ──────────────────────────────────
 
@@ -91,6 +92,15 @@ const REVIEWS: ReviewRecord[] = [
   { ReviewId: 'REV-2026-0005', Type: 'reconciliation', EntityId: 'REC-2026-0003', Status: 'escalated', ValidationResult: 'failed', ExceptionFlags: ['Duplicate barcode detected', 'Study protocol mismatch'], SubmittedBy: 'james.wilson', SubmittedAt: '2026-04-11 09:00', ReviewedBy: 'elena.martinez', ReviewedAt: '2026-04-11 15:00', Decision: 'escalated', LastAction: 'Escalated by elena.martinez — requires CSV Group Head review' },
 ];
 
+const NOTIFICATIONS: NotificationRecord[] = [
+  { NotificationId: 'NTF-0001', UserId: 'elena.martinez', Type: 'approval-request', EntityType: 'Review', EntityId: 'REV-2026-0001', Message: 'Review REV-2026-0001 requires your approval — temperature deviation flagged', Read: false, CreatedAt: '2026-04-16 10:00', ActionUrl: '/review' },
+  { NotificationId: 'NTF-0002', UserId: 'elena.martinez', Type: 'deadline-approaching', EntityType: 'Disposition', EntityId: 'DSP-2026-0005', Message: 'Disposition DSP-2026-0005 deadline approaching — destruction overdue', Read: false, CreatedAt: '2026-04-16 08:00', ActionUrl: '/disposition' },
+  { NotificationId: 'NTF-0003', UserId: 'elena.martinez', Type: 'status-change', EntityType: 'Transfer', EntityId: 'TRF-2026-0090', Message: 'Transfer TRF-2026-0090 escalated — SLA breached', Read: true, CreatedAt: '2026-04-15 17:00', ActionUrl: '/transfer' },
+  { NotificationId: 'NTF-0004', UserId: 'elena.martinez', Type: 'escalation', EntityType: 'Reconciliation', EntityId: 'REC-2026-0003', Message: 'Reconciliation REC-2026-0003 escalated — duplicate barcode requires CSV Group Head review', Read: false, CreatedAt: '2026-04-15 12:00', ActionUrl: '/reconciliation' },
+  { NotificationId: 'NTF-0005', UserId: 'james.wilson', Type: 'approval-request', EntityType: 'Review', EntityId: 'REV-2026-0002', Message: 'Review REV-2026-0002 requires your approval — count mismatch and barcode scan failure', Read: false, CreatedAt: '2026-04-14 15:00', ActionUrl: '/review' },
+  { NotificationId: 'NTF-0006', UserId: 'james.wilson', Type: 'status-change', EntityType: 'Review', EntityId: 'REV-2026-0003', Message: 'Review REV-2026-0003 approved by elena.martinez', Read: true, CreatedAt: '2026-04-13 14:30', ActionUrl: '/review' },
+];
+
 // ── Seed functions ─────────────────────────────────────────────────────
 
 export async function seedOIData(kv: Deno.Kv): Promise<number> {
@@ -149,6 +159,11 @@ export async function seedWorkflowData(kv: Deno.Kv): Promise<number> {
 
   for (const review of REVIEWS) {
     await kv.set(['Reviews', review.ReviewId], review);
+    count++;
+  }
+
+  for (const notification of NOTIFICATIONS) {
+    await kv.set(['Notifications', notification.NotificationId], notification);
     count++;
   }
 

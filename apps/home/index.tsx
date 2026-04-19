@@ -6,7 +6,7 @@ import { getTemporalPriority } from '../../src/utils/getTemporalPriority.ts';
 import ActivityPanes from '../components/ActivityPanes.tsx';
 import ManagementOverlay from '../components/ManagementOverlay.tsx';
 import ReviewQueue from '../components/ReviewQueue.tsx';
-import { createClientFromRequest } from '../../src/client/mod.ts';
+import { createClientFromRequest } from '../../src/client/createClientFromRequest.ts';
 import type { ManagementOverlayData } from '../../src/data/types/ManagementOverlayData.ts';
 import type { PaneViewData } from '../../src/data/types/PaneViewData.ts';
 

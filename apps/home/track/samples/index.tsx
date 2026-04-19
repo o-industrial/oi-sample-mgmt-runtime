@@ -3,7 +3,7 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { OISampleMgmtWebState } from '../../../../src/state/OISampleMgmtWebState.ts';
 import { useTranslation } from '../../../../src/utils/useTranslation.ts';
 import SampleTrackingTable from '../../../components/SampleTrackingTable.tsx';
-import { createClientFromRequest } from '../../../../src/client/mod.ts';
+import { createClientFromRequest } from '../../../../src/client/createClientFromRequest.ts';
 
 // --- Types (TitleCase for server data — C4) ---
 
@@ -44,6 +44,7 @@ type SampleTrackingData = {
   Samples: SampleRecord[];
   TotalCount: number;
   UpdateLabel: string;
+  ViewReportLabel: string;
   EmptyNoSamples: string;
   EmptyNoMatch: string;
   CanReceive: boolean;
@@ -114,6 +115,7 @@ export const handler: EaCRuntimeHandlerSet<
       Samples: samples,
       TotalCount: samples.length,
       UpdateLabel: t('track.samples.update'),
+      ViewReportLabel: t('track.samples.viewReport'),
       EmptyNoSamples: t('track.samples.emptyNoSamples'),
       EmptyNoMatch: t('track.samples.emptyNoMatch'),
       CanReceive: rights.includes('samples:receive'),
@@ -174,6 +176,7 @@ export default function SampleTracking(
           actions: d.ColumnHeaders.Actions,
         }}
         updateLabel={d.UpdateLabel}
+        viewReportLabel={d.ViewReportLabel}
         emptyNoSamples={d.EmptyNoSamples}
         emptyNoMatch={d.EmptyNoMatch}
         canReceive={d.CanReceive}

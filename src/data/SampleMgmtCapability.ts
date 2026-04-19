@@ -19,6 +19,8 @@ export type SampleMgmtHooks = {
   ListReviews(filter?: { Status?: string }): Promise<ReviewRecord[]>;
   DecideReview(reviewId: string, decision: 'approved' | 'rejected' | 'escalated', userId: string, reason?: string): Promise<ReviewRecord>;
   ListNotifications(userId: string): Promise<NotificationRecord[]>;
+  MarkNotificationAsRead(notificationId: string): Promise<NotificationRecord>;
+  CreateNotification(data: Omit<NotificationRecord, 'NotificationId'>): Promise<NotificationRecord>;
   Seed(): Promise<{ Seeded: number }>;
 };
 
@@ -106,12 +108,55 @@ export function SampleMgmtCapability() {
             LastAction: lastAction,
           };
           await kv.set(['Reviews', reviewId], updated);
+
+          // ALCOA+ audit event for every review decision (Attributable + Contemporaneous)
+          const auditId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
+          await kv.set(['AuditEvents', auditId], {
+            EventId: auditId,
+            Timestamp: now,
+            UserId: userId,
+            ActionType: 'Approve',
+            EntityType: 'Review',
+            EntityId: reviewId,
+            AlcoaPrinciple: 'Attributable',
+            Status: 'success',
+          } as AuditEventRecord);
+
+          // Notify the review submitter that their review was decided
+          const ntfId = `NTF-${crypto.randomUUID().slice(0, 8)}`;
+          await kv.set(['Notifications', ntfId], {
+            NotificationId: ntfId,
+            UserId: entry.value.SubmittedBy,
+            Type: 'status-change',
+            EntityType: 'Review',
+            EntityId: reviewId,
+            Message: `Review ${reviewId} ${decision} by ${userId}`,
+            Read: false,
+            CreatedAt: now,
+            ActionUrl: '/review',
+          } as NotificationRecord);
+
           return updated;
         },
 
         async ListNotifications(userId: string) {
           const all = await listAll<NotificationRecord>('Notifications');
           return all.filter((n) => n.UserId === userId);
+        },
+
+        async MarkNotificationAsRead(notificationId: string) {
+          const entry = await kv.get<NotificationRecord>(['Notifications', notificationId]);
+          if (!entry.value) throw new Error(`Notification ${notificationId} not found`);
+          const updated: NotificationRecord = { ...entry.value, Read: true };
+          await kv.set(['Notifications', notificationId], updated);
+          return updated;
+        },
+
+        async CreateNotification(data: Omit<NotificationRecord, 'NotificationId'>) {
+          const NotificationId = `NTF-${crypto.randomUUID().slice(0, 8)}`;
+          const record: NotificationRecord = { NotificationId, ...data };
+          await kv.set(['Notifications', NotificationId], record);
+          return record;
         },
 
         async Seed() {

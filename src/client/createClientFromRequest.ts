@@ -1,6 +1,5 @@
 import { loadJwtConfig } from '@fathym/common/jwt';
-import { createSampleMgmtClient } from './mod.ts';
-import type { SampleMgmtAPIClient } from './SampleMgmtAPIClient.ts';
+import { SampleMgmtAPIClient } from './SampleMgmtAPIClient.ts';
 
 export async function createClientFromRequest(
   req: Request,
@@ -10,7 +9,7 @@ export async function createClientFromRequest(
     Username: username ?? 'system',
   });
 
-  return createSampleMgmtClient({
+  return new SampleMgmtAPIClient({
     baseUrl: new URL(req.url).origin,
     apiToken: jwt,
   });

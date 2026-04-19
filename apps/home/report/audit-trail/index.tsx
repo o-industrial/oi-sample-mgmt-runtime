@@ -2,7 +2,7 @@ import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { OISampleMgmtWebState } from '../../../../src/state/OISampleMgmtWebState.ts';
 import { useTranslation } from '../../../../src/utils/useTranslation.ts';
-import { createClientFromRequest } from '../../../../src/client/mod.ts';
+import { createClientFromRequest } from '../../../../src/client/createClientFromRequest.ts';
 
 // --- Types (TitleCase for server data) ---
 
@@ -23,7 +23,7 @@ type AuditEvent = {
 type AuditTrailData = {
   Heading: string;
   Subtitle: string;
-  SubNavLabels: { AuditTrail: string; EthicsApproval: string };
+  SubNavLabels: { AuditTrail: string; EthicsApproval: string; Custody: string };
   FilterLabels: {
     AllUsers: string;
     AllActions: string;
@@ -67,6 +67,7 @@ export const handler: EaCRuntimeHandlerSet<
       SubNavLabels: {
         AuditTrail: t('report.auditTrail.heading'),
         EthicsApproval: t('report.ethics.heading'),
+        Custody: t('report.custody.heading'),
       },
       FilterLabels: {
         AllUsers: t('report.auditTrail.filter.allUsers'),
@@ -125,6 +126,13 @@ export default function AuditTrail({ Data }: PageProps<AuditTrailData>) {
           class='px-4 py-2 rounded-md text-sm font-medium text-on-surface-secondary hover:bg-surface-card transition-colors'
         >
           {d.SubNavLabels.EthicsApproval}
+        </a>
+        <a
+          href='/report/custody'
+          data-eac-bypass-base
+          class='px-4 py-2 rounded-md text-sm font-medium text-on-surface-secondary hover:bg-surface-card transition-colors'
+        >
+          {d.SubNavLabels.Custody}
         </a>
       </div>
 

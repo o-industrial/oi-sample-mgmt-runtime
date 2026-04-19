@@ -38,6 +38,7 @@ type SampleTrackingTableProps = {
     actions: string;
   };
   updateLabel: string;
+  viewReportLabel: string;
   emptyNoSamples: string;
   emptyNoMatch: string;
   canReceive: boolean;
@@ -62,6 +63,7 @@ export default function SampleTrackingTable({
   searchPlaceholder,
   columnHeaders,
   updateLabel,
+  viewReportLabel,
   emptyNoSamples,
   emptyNoMatch,
   canReceive,
@@ -101,9 +103,7 @@ export default function SampleTrackingTable({
               <th class='px-4 py-3 font-medium'>{columnHeaders.status}</th>
               <th class='px-4 py-3 font-medium'>{columnHeaders.storage}</th>
               <th class='px-4 py-3 font-medium'>{columnHeaders.lastAction}</th>
-              {canReceive && (
-                <th class='px-4 py-3 font-medium'>{columnHeaders.actions}</th>
-              )}
+              <th class='px-4 py-3 font-medium'>{columnHeaders.actions}</th>
             </tr>
           </thead>
           <tbody class='divide-y divide-border-subtle'>
@@ -111,7 +111,7 @@ export default function SampleTrackingTable({
               ? (
                 <tr>
                   <td
-                    colSpan={canReceive ? 8 : 7}
+                    colSpan={8}
                     class='px-4 py-8 text-center text-on-surface-muted'
                   >
                     {totalCount === 0 ? emptyNoSamples : emptyNoMatch}
@@ -148,16 +148,27 @@ export default function SampleTrackingTable({
                   <td class='px-4 py-3 text-xs text-on-surface-muted'>
                     {s.lastAction}
                   </td>
-                  {canReceive && (
-                    <td class='px-4 py-3'>
-                      <button
-                        type='button'
-                        class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors'
+                  <td class='px-4 py-3'>
+                    <div class='flex gap-1'>
+                      {canReceive && (
+                        <button
+                          type='button'
+                          class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors'
+                        >
+                          {updateLabel}
+                        </button>
+                      )}
+                      <a
+                        href={`/report/custody?sampleId=${
+                          encodeURIComponent(s.sampleId)
+                        }`}
+                        data-eac-bypass-base
+                        class='px-3 py-1 border border-border rounded text-xs text-link hover:bg-surface-elevated transition-colors'
                       >
-                        {updateLabel}
-                      </button>
-                    </td>
-                  )}
+                        {viewReportLabel}
+                      </a>
+                    </div>
+                  </td>
                 </tr>
               ))}
           </tbody>

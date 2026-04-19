@@ -9,6 +9,8 @@ import type { ReturnRecord } from '../data/types/ReturnRecord.ts';
 import type { ReconciliationRecord } from '../data/types/ReconciliationRecord.ts';
 import type { DispositionRecord } from '../data/types/DispositionRecord.ts';
 import type { ReviewRecord } from '../data/types/ReviewRecord.ts';
+import type { CustodyTimelineRecord } from '../data/types/CustodyTimelineRecord.ts';
+import type { NotificationRecord } from '../data/types/NotificationRecord.ts';
 import type { PaneViewData } from '../data/types/PaneViewData.ts';
 import type { ManagementOverlayData } from '../data/types/ManagementOverlayData.ts';
 
@@ -200,6 +202,54 @@ export class SampleMgmtAPIClient extends EaCBaseClient {
             Decision: decision,
             UserId: userId,
             Reason: reason,
+          }),
+        });
+        return this.json(res);
+      },
+    };
+  }
+
+  public get Custody() {
+    return {
+      Get: async (
+        sampleId: string,
+      ): Promise<CustodyTimelineRecord | null> => {
+        const res = await fetch(
+          this.loadClientUrl(
+            `/api/custody?sampleId=${encodeURIComponent(sampleId)}`,
+          ),
+          { headers: this.loadHeaders() },
+        );
+
+        if (res.status === 404) return null;
+
+        return this.json(res);
+      },
+    };
+  }
+
+  public get Notifications() {
+    return {
+      List: async (userId: string): Promise<NotificationRecord[]> => {
+        const res = await fetch(
+          this.loadClientUrl(
+            `/api/notifications?userId=${encodeURIComponent(userId)}`,
+          ),
+          { headers: this.loadHeaders() },
+        );
+        return this.json(res);
+      },
+      MarkRead: async (
+        notificationId: string,
+      ): Promise<NotificationRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/notifications'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            action: 'mark-read',
+            NotificationId: notificationId,
           }),
         });
         return this.json(res);

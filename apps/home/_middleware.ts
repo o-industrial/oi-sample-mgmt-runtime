@@ -59,6 +59,11 @@ export default [
       }
     }
 
+    // Default pilot username when no upstream auth provides one
+    if (!ctx.State.Username) {
+      ctx.State.Username = 'elena.martinez';
+    }
+
     ctx.State.Theme = resolveTheme(req);
     ctx.State.Locale = resolveLocale(req);
     ctx.State.Strings = await loadStrings(ctx.State.Locale as 'en' | 'fr');

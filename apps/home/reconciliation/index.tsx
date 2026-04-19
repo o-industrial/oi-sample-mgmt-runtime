@@ -3,7 +3,7 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
 import { useTranslation } from '../../../src/utils/useTranslation.ts';
 import ReconciliationTable from '../../components/ReconciliationTable.tsx';
-import { createClientFromRequest } from '../../../src/client/mod.ts';
+import { createClientFromRequest } from '../../../src/client/createClientFromRequest.ts';
 
 // --- Types (TitleCase for server data — C4) ---
 
