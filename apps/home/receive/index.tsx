@@ -166,7 +166,7 @@ export const handler: EaCRuntimeHandlerSet<
         ],
         ConfirmReceiptLabel: t('receive.parcel.confirmReceipt'),
         ScannedByLabel: t('receive.parcel.scannedBy'),
-        ScannedByValue: 'Dr. Elena Martinez',
+        ScannedByValue: 'Dr. Liora Vasquez',
         VerifiedByLabel: t('receive.parcel.verifiedBy'),
         VerifiedByPlaceholder: t('receive.parcel.verifiedByPlaceholder'),
       },

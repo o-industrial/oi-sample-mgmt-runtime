@@ -2,7 +2,7 @@
 /**
  * 14.10: CSV Group Head — "The System Architect Reviews"
  *
- * Persona: dr.richard.hayes / config:admin + review:approve
+ * Persona: dr.emile.kowalczyk / config:admin + review:approve
  * Landing: / (dashboard — config:admin stays)
  * Scenes: dashboard landing, escalation review queue,
  *         system & compliance authority, notification triage with ActionUrl
@@ -23,8 +23,8 @@ test.describe('CSV Group Head — The System Architect Reviews', () => {
     // CSV Group Head stays on dashboard (config:admin)
     await expect(page).toHaveURL(/^[^?]*\/$/);
 
-    // User info shows "Dr. Richard Hayes"
-    await expect(page.getByText(/richard hayes/i)).toBeVisible();
+    // User info shows "Dr. Emile Kowalczyk"
+    await expect(page.getByText(/emile kowalczyk/i)).toBeVisible();
 
     // 5 activity panes visible with TurboTax status bars
     await page.waitForTimeout(500);

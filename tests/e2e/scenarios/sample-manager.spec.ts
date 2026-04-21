@@ -1,7 +1,7 @@
 /**
  * 14.3: Sample Manager — "Morning at the Bench"
  *
- * Persona: elena.martinez / samples:receive
+ * Persona: liora.vasquez / samples:receive
  * Landing: /receive (redirected from /)
  * Scenes: notification triage, manifest upload, temperature logs,
  *         parcel reception, barcode scanning, reconciliation check
@@ -20,7 +20,7 @@ const test = personaTest('elena');
 test.describe('Sample Manager — Morning at the Bench', () => {
   // Scene 1: Notification Triage
   test('Scene 1: Notification triage', async ({ personaPage: page }) => {
-    // Elena lands on /receive
+    // Liora lands on /receive
     await expect(page).toHaveURL(/\/receive/);
 
     // Notification bell visible in header
@@ -149,7 +149,7 @@ test.describe('Sample Manager — Morning at the Bench', () => {
     // Note two-person auth fields
     const verifiedByField = page.getByLabel(/verified/i).first();
     if (await verifiedByField.isVisible().catch(() => false)) {
-      await verifiedByField.fill('James Wilson');
+      await verifiedByField.fill('Declan Okafor');
     }
 
     // Click Confirm Receipt

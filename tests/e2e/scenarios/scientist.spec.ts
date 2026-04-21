@@ -1,7 +1,7 @@
 /**
  * 14.5: Scientist — "Scientist Needs Samples Back"
  *
- * Persona: dr.james.chen / scientist:request
+ * Persona: dr.tobias.nakamura / scientist:request
  * Landing: /return (redirected from /)
  * Scenes: role redirect, return requests, navigation constraint, notification check
  */
@@ -72,7 +72,7 @@ test.describe('Scientist — Scientist Needs Samples Back', () => {
     await expect(bell).toBeVisible();
     await bell.click();
 
-    // Panel opens (may be empty for dr.james.chen)
+    // Panel opens (may be empty for dr.tobias.nakamura)
     const panel = page.locator(NOTIFICATION_PANEL);
     await expect(panel).toBeVisible();
     await page.waitForTimeout(1000);

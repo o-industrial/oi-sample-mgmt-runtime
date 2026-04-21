@@ -2,7 +2,7 @@
 /**
  * 14.4: Lab Manager — "Manager's Morning Briefing"
  *
- * Persona: dr.sarah.chen / admin:access + review:approve
+ * Persona: dr.priya.lindqvist / admin:access + review:approve
  * Landing: / (dashboard — admin stays)
  * Scenes: dashboard overview, review queue actions, management overlay,
  *         system & compliance status, transfer page, escalation handoff
@@ -23,8 +23,8 @@ test.describe('Lab Manager — Morning Briefing', () => {
     // Lab Manager stays on dashboard (admin:access)
     await expect(page).toHaveURL(/^[^?]*\/$/);
 
-    // User info shows "Dr. Sarah Chen"
-    await expect(page.getByText('Dr. Sarah Chen')).toBeVisible();
+    // User info shows "Dr. Priya Lindqvist"
+    await expect(page.getByText('Dr. Priya Lindqvist')).toBeVisible();
 
     // 5 activity panes visible
     await page.waitForTimeout(500);

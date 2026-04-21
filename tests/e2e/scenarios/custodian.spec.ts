@@ -1,7 +1,7 @@
 /**
  * 14.6: HBSM Custodian — "Custodian Reviews Dispositions"
  *
- * Persona: james.wilson / custody:approve
+ * Persona: declan.okafor / custody:approve
  * Landing: /disposition (redirected from /)
  * Scenes: disposition landing, disposition review, return approval,
  *         custody report drill-through, notification check
@@ -137,7 +137,7 @@ test.describe('Custodian — Custodian Reviews Dispositions', () => {
     const panel = page.locator(NOTIFICATION_PANEL);
     await expect(panel).toBeVisible();
 
-    // james.wilson has NTF-0005 (unread) and NTF-0006 (read)
+    // declan.okafor has NTF-0005 (unread) and NTF-0006 (read)
     await expect(page.locator(notificationItem('NTF-0005'))).toBeVisible();
     await expect(page.locator(notificationItem('NTF-0006'))).toBeVisible();
 

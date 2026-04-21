@@ -77,10 +77,10 @@ export function OIWarmQueryCapability() {
 
         async EffortTracking() {
           return [
-            { Manager: 'Dr. Martinez', Count: 24 },
-            { Manager: 'J. Thompson', Count: 18 },
-            { Manager: 'R. Patel', Count: 31 },
-            { Manager: 'S. Kim', Count: 12 },
+            { Manager: 'Dr. Vasquez', Count: 24 },
+            { Manager: 'N. Ferreira', Count: 18 },
+            { Manager: 'A. Desrosiers', Count: 31 },
+            { Manager: 'T. Lindberg', Count: 12 },
           ] as ManagerEffortEntry[];
         },
 

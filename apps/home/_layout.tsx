@@ -48,7 +48,7 @@ export const handler: EaCRuntimeHandlerSet<
       Theme: ctx.State.Theme ?? 'oi',
       AppTitle: t('app.title'),
       Brand: t('nav.brand'),
-      Username: ctx.State.Username ?? 'elena.martinez',
+      Username: ctx.State.Username ?? 'liora.vasquez',
       ApiBase: new URL(req.url).origin,
       NotificationLabels: {
         AriaLabel: t('notification.bell.ariaLabel'),

@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('smoke: homepage loads and redirects', async ({ page }) => {
   await page.goto('/');
 
-  // The default dev user (elena.martinez / samples:receive) redirects to /receive
+  // The default dev user (liora.vasquez / samples:receive) redirects to /receive
   await page.waitForURL('**/receive');
   await expect(page).toHaveURL(/\/receive/);
 });

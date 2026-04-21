@@ -2,7 +2,7 @@
 /**
  * 14.8: QA Auditor — "Compliance Deep Dive"
  *
- * Persona: sarah.patel / compliance:export
+ * Persona: annika.desrosiers / compliance:export
  * Landing: /report/audit-trail (redirected from /)
  * Scenes: audit trail landing, ALCOA+ filtering, failed event investigation,
  *         CSV export, ethics approval + renewal, custody report

@@ -39,31 +39,31 @@ export default [
         { username: string; rights: string[] }
       > = {
         elena: {
-          username: 'elena.martinez',
+          username: 'liora.vasquez',
           rights: ['samples:receive'],
         },
         labManager: {
-          username: 'dr.sarah.chen',
+          username: 'dr.priya.lindqvist',
           rights: ['admin:access', 'review:approve'],
         },
         scientist: {
-          username: 'dr.james.chen',
+          username: 'dr.tobias.nakamura',
           rights: ['scientist:request'],
         },
         custodian: {
-          username: 'james.wilson',
+          username: 'declan.okafor',
           rights: ['custody:approve'],
         },
         qaAuditor: {
-          username: 'sarah.patel',
+          username: 'annika.desrosiers',
           rights: ['compliance:export'],
         },
         studyCoordinator: {
-          username: 'maria.garcia',
+          username: 'renata.solberg',
           rights: ['study:view'],
         },
         csvGroupHead: {
-          username: 'dr.richard.hayes',
+          username: 'dr.emile.kowalczyk',
           rights: ['config:admin', 'review:approve'],
         },
       };
@@ -112,7 +112,7 @@ export default [
 
     // Default pilot username when no upstream auth provides one
     if (!ctx.State.Username) {
-      ctx.State.Username = 'elena.martinez';
+      ctx.State.Username = 'liora.vasquez';
     }
 
     ctx.State.Theme = resolveTheme(req);

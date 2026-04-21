@@ -1,7 +1,7 @@
 /**
  * 14.9: Study Coordinator — "Tracking My Studies"
  *
- * Persona: maria.garcia / study:view
+ * Persona: renata.solberg / study:view
  * Landing: /track/samples (redirected from /)
  * Scenes: sample tracking landing, study-specific filtering,
  *         custody report drill-through, ethics check, no dashboard access
@@ -128,7 +128,7 @@ test.describe('Study Coordinator — Tracking My Studies', () => {
     const panel = page.locator(NOTIFICATION_PANEL);
     await expect(panel).toBeVisible();
 
-    // NTF-0008 should be visible (maria.garcia, status-change)
+    // NTF-0008 should be visible (renata.solberg, status-change)
     await expect(page.locator(notificationItem('NTF-0008'))).toBeVisible();
     await page.waitForTimeout(1000);
   });

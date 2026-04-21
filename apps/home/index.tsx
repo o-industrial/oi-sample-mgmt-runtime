@@ -191,20 +191,20 @@ export const handler: EaCRuntimeHandlerSet<
     }
 
     const PERSONA_DISPLAY: Record<string, { name: string; role: string }> = {
-      'elena.martinez': { name: 'Dr. Elena Martinez', role: 'Sample Manager' },
-      'dr.sarah.chen': { name: 'Dr. Sarah Chen', role: 'Lab Manager' },
-      'dr.james.chen': { name: 'Dr. James Chen', role: 'Scientist' },
-      'james.wilson': { name: 'James Wilson', role: 'HBSM Custodian' },
-      'sarah.patel': { name: 'Sarah Patel', role: 'QA Auditor' },
-      'maria.garcia': { name: 'Maria Garcia', role: 'Study Coordinator' },
-      'dr.richard.hayes': {
-        name: 'Dr. Richard Hayes',
+      'liora.vasquez': { name: 'Dr. Liora Vasquez', role: 'Sample Manager' },
+      'dr.priya.lindqvist': { name: 'Dr. Priya Lindqvist', role: 'Lab Manager' },
+      'dr.tobias.nakamura': { name: 'Dr. Tobias Nakamura', role: 'Scientist' },
+      'declan.okafor': { name: 'Declan Okafor', role: 'HBSM Custodian' },
+      'annika.desrosiers': { name: 'Annika Desrosiers', role: 'QA Auditor' },
+      'renata.solberg': { name: 'Renata Solberg', role: 'Study Coordinator' },
+      'dr.emile.kowalczyk': {
+        name: 'Dr. Emile Kowalczyk',
         role: 'CSV Group Head',
       },
     };
     const personaInfo: { name: string; role: string } =
       (ctx.State.Username ? PERSONA_DISPLAY[ctx.State.Username] : undefined) ??
-        { name: 'Dr. Elena Martinez', role: 'Sample Manager' };
+        { name: 'Dr. Liora Vasquez', role: 'Sample Manager' };
 
     return ctx.Render({
       ...ctx.Data,

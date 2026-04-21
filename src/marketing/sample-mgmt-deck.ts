@@ -155,7 +155,7 @@ export const sampleMgmtDeck = {
   webApp: {
     headline: 'The app is the surface — OI is the infrastructure',
     description:
-      'Dr. Elena Martinez, Sample Manager, sees the GSK Human Biological Sample Management app. Behind it: the OI graph workspace with Azi, surfaces, connections, warm queries, and the ALCOA+ governance pack.',
+      'Dr. Liora Vasquez, Sample Manager, sees the GSK Human Biological Sample Management app. Behind it: the OI graph workspace with Azi, surfaces, connections, warm queries, and the ALCOA+ governance pack.',
     screens: [
       {
         name: 'Dashboard',

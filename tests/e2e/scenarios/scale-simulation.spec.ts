@@ -1,7 +1,7 @@
 /**
  * 14.7: Scale Simulation — "48-Sample Manifest Arrives"
  *
- * Persona: elena.martinez / samples:receive
+ * Persona: liora.vasquez / samples:receive
  * Landing: /receive
  * Scenes: large manifest registration, batch scanning at speed,
  *         reconciliation at volume
