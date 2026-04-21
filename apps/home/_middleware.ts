@@ -27,6 +27,57 @@ export default [
     // Resolve workspace-scoped access rights
     ctx.State.AccessRights = [];
 
+    // Dev-mode persona override for Playwright demos
+    const devMode = Deno.env.get('EAC_RUNTIME_DEV') === 'true';
+    const demoCookie = req.headers.get('cookie')?.match(
+      /demo_persona=([^;]+)/,
+    )?.[1];
+
+    if (devMode && demoCookie) {
+      const PERSONA_MAP: Record<
+        string,
+        { username: string; rights: string[] }
+      > = {
+        elena: {
+          username: 'elena.martinez',
+          rights: ['samples:receive'],
+        },
+        labManager: {
+          username: 'dr.sarah.chen',
+          rights: ['admin:access', 'review:approve'],
+        },
+        scientist: {
+          username: 'dr.james.chen',
+          rights: ['scientist:request'],
+        },
+        custodian: {
+          username: 'james.wilson',
+          rights: ['custody:approve'],
+        },
+        qaAuditor: {
+          username: 'sarah.patel',
+          rights: ['compliance:export'],
+        },
+        studyCoordinator: {
+          username: 'maria.garcia',
+          rights: ['study:view'],
+        },
+        csvGroupHead: {
+          username: 'dr.richard.hayes',
+          rights: ['config:admin', 'review:approve'],
+        },
+      };
+      const persona = PERSONA_MAP[demoCookie];
+      if (persona) {
+        ctx.State.Username = persona.username;
+        ctx.State.AccessRights = persona.rights;
+        ctx.State.Theme = resolveTheme(req);
+        ctx.State.Locale = resolveLocale(req);
+        ctx.State.Strings = await loadStrings(ctx.State.Locale as 'en' | 'fr');
+        return ctx.Next();
+      }
+    }
+
     const username = ctx.State.Username;
 
     if (username) {

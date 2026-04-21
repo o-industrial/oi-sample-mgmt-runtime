@@ -137,9 +137,11 @@ export default function HomeLayout({
               viewLabel={Data!.NotificationLabels.ViewLabel}
               unreadLabel={Data!.NotificationLabels.UnreadLabel}
               typeLabels={{
-                approvalRequest: Data!.NotificationLabels.TypeLabels.ApprovalRequest,
+                approvalRequest:
+                  Data!.NotificationLabels.TypeLabels.ApprovalRequest,
                 statusChange: Data!.NotificationLabels.TypeLabels.StatusChange,
-                deadlineApproaching: Data!.NotificationLabels.TypeLabels.DeadlineApproaching,
+                deadlineApproaching:
+                  Data!.NotificationLabels.TypeLabels.DeadlineApproaching,
                 escalation: Data!.NotificationLabels.TypeLabels.Escalation,
               }}
               timeAgoLabels={{

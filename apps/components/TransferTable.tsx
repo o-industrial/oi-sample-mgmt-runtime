@@ -117,8 +117,7 @@ export default function TransferTable({
         />
         <select
           value={typeFilter}
-          onChange={(e) =>
-            setTypeFilter((e.target as HTMLSelectElement).value)}
+          onChange={(e) => setTypeFilter((e.target as HTMLSelectElement).value)}
           class='border border-border-input bg-surface rounded-md px-3 py-2 text-sm text-on-surface'
         >
           <option value=''>{filterLabels.allTypes}</option>

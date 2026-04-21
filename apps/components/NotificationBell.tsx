@@ -92,10 +92,9 @@ export default function NotificationBell({
             data.map((n: any) => ({
               notificationId: n.NotificationId as string,
               type: n.Type as string,
-              typeLabel:
-                typeLabels[
-                  TYPE_KEY_MAP[n.Type as string] as keyof typeof typeLabels
-                ] ?? (n.Type as string),
+              typeLabel: typeLabels[
+                TYPE_KEY_MAP[n.Type as string] as keyof typeof typeLabels
+              ] ?? (n.Type as string),
               message: n.Message as string,
               createdAt: n.CreatedAt as string,
               read: n.Read as boolean,
@@ -169,7 +168,10 @@ export default function NotificationBell({
             class='fixed inset-0 z-40'
             onClick={() => setOpen(false)}
           />
-          <div class='absolute right-0 top-full mt-1 z-50 w-80 max-h-96 overflow-y-auto rounded-lg border border-border bg-surface-elevated shadow-xl'>
+          <div
+            data-testid='notification-panel'
+            class='absolute right-0 top-full mt-1 z-50 w-80 max-h-96 overflow-y-auto rounded-lg border border-border bg-surface-elevated shadow-xl'
+          >
             {/* Panel header */}
             <div class='flex items-center justify-between px-4 py-3 border-b border-border'>
               <h3 class='text-sm font-semibold text-on-surface'>
@@ -194,6 +196,7 @@ export default function NotificationBell({
                   {notifications.map((n) => (
                     <div
                       key={n.notificationId}
+                      data-testid={`notification-${n.notificationId}`}
                       class={`px-4 py-3 ${
                         n.read ? 'opacity-60' : 'bg-surface-card/30'
                       }`}
@@ -232,8 +235,7 @@ export default function NotificationBell({
                             {!n.read && (
                               <button
                                 type='button'
-                                onClick={() =>
-                                  handleMarkRead(n.notificationId)}
+                                onClick={() => handleMarkRead(n.notificationId)}
                                 class='text-xs text-on-surface-muted hover:text-on-surface'
                               >
                                 {markReadLabel}

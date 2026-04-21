@@ -21,7 +21,8 @@ export default {
         dispositions: 'GET /api/dispositions',
         reviews: 'GET /api/reviews, POST /api/reviews (decide)',
         custody: 'GET /api/custody?sampleId=X (composite timeline)',
-        notifications: 'GET /api/notifications?userId=X, POST /api/notifications (mark-read)',
+        notifications:
+          'GET /api/notifications?userId=X, POST /api/notifications (mark-read)',
       },
     });
   },

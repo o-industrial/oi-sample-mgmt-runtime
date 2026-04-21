@@ -15,7 +15,9 @@ export const ReturnRecordSchema = z.object({
   Status: TurboTaxStatusSchema.describe('Current TurboTax triage state'),
   PackagingInstructions: z.string().describe('Packaging requirements'),
   Outcome: z.string().optional().describe('Return outcome if completed'),
-  DepletionContext: z.string().optional().describe('Depletion context if sample consumed'),
+  DepletionContext: z.string().optional().describe(
+    'Depletion context if sample consumed',
+  ),
   LastAction: z.string().describe('Most recent action description'),
 });
 

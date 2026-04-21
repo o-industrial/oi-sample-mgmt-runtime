@@ -190,11 +190,27 @@ export const handler: EaCRuntimeHandlerSet<
       }));
     }
 
+    const PERSONA_DISPLAY: Record<string, { name: string; role: string }> = {
+      'elena.martinez': { name: 'Dr. Elena Martinez', role: 'Sample Manager' },
+      'dr.sarah.chen': { name: 'Dr. Sarah Chen', role: 'Lab Manager' },
+      'dr.james.chen': { name: 'Dr. James Chen', role: 'Scientist' },
+      'james.wilson': { name: 'James Wilson', role: 'HBSM Custodian' },
+      'sarah.patel': { name: 'Sarah Patel', role: 'QA Auditor' },
+      'maria.garcia': { name: 'Maria Garcia', role: 'Study Coordinator' },
+      'dr.richard.hayes': {
+        name: 'Dr. Richard Hayes',
+        role: 'CSV Group Head',
+      },
+    };
+    const personaInfo: { name: string; role: string } =
+      (ctx.State.Username ? PERSONA_DISPLAY[ctx.State.Username] : undefined) ??
+        { name: 'Dr. Elena Martinez', role: 'Sample Manager' };
+
     return ctx.Render({
       ...ctx.Data,
       Heading: t('dashboard.heading'),
-      UserName: 'Dr. Elena Martinez',
-      UserRole: 'Sample Manager',
+      UserName: personaInfo.name,
+      UserRole: personaInfo.role,
       Panes: panes,
       TemporalPriority: getTemporalPriority(),
       SystemStatus: [
@@ -242,9 +258,7 @@ export const handler: EaCRuntimeHandlerSet<
       ],
       ComplianceHeading: t('dashboard.compliance.heading'),
       ComplianceLabel: t('dashboard.compliance.compliant'),
-      ManagementOverlay: showOverlay
-        ? dashboardData.ManagementOverlay
-        : null,
+      ManagementOverlay: showOverlay ? dashboardData.ManagementOverlay : null,
       StatusLabels: {
         Ready: t('dashboard.status.ready'),
         Attention: t('dashboard.status.attention'),

@@ -71,7 +71,8 @@ export default {
           EventId: `custody-transfer-${t.TransferId}`,
           Timestamp: t.RequestedAt,
           EventType: 'transferred',
-          Description: `${t.Type} transfer: ${t.Source} \u2192 ${t.Destination}`,
+          Description:
+            `${t.Type} transfer: ${t.Source} \u2192 ${t.Destination}`,
           PerformedBy: t.RequestedBy,
           EvidenceLinks: [],
           AlcoaPrinciples: ['Attributable', 'Contemporaneous'],

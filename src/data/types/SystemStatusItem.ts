@@ -6,7 +6,9 @@ import { z } from 'zod';
 export const SystemStatusItemSchema = z.object({
   ComponentId: z.string().describe('Component identifier'),
   Label: z.string().describe('Display label'),
-  Status: z.enum(['online', 'connecting', 'offline']).describe('Current status'),
+  Status: z.enum(['online', 'connecting', 'offline']).describe(
+    'Current status',
+  ),
   Note: z.string().optional().describe('Optional status note'),
 });
 

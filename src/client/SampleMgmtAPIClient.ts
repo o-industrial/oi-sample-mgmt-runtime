@@ -42,7 +42,9 @@ export class SampleMgmtAPIClient extends EaCBaseClient {
     super(baseUrl, options.apiToken ?? '');
   }
 
-  public async Seed(): Promise<{ Seeded: number; OI: number; Workflow: number }> {
+  public async Seed(): Promise<
+    { Seeded: number; OI: number; Workflow: number }
+  > {
     const res = await fetch(this.loadClientUrl('/api/seed'), {
       method: 'POST',
       headers: this.loadHeaders(),

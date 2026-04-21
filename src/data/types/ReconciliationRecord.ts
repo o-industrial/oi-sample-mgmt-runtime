@@ -16,7 +16,9 @@ export const ReconciliationRecordSchema = z.object({
   Resolution: z.string().optional().describe('How discrepancy was resolved'),
   ResolvedBy: z.string().optional().describe('User who resolved'),
   ResolvedAt: z.string().optional().describe('Resolution timestamp'),
-  CorrectionReason: z.string().optional().describe('Reason-for-change (GxP requirement)'),
+  CorrectionReason: z.string().optional().describe(
+    'Reason-for-change (GxP requirement)',
+  ),
   SlaDeadline: z.string().describe('SLA deadline for resolution'),
   LastAction: z.string().describe('Most recent action description'),
 });

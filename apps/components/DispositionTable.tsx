@@ -97,7 +97,9 @@ export default function DispositionTable({
     return true;
   });
 
-  const deadlineState = (deadline: string): 'overdue' | 'approaching' | 'ok' => {
+  const deadlineState = (
+    deadline: string,
+  ): 'overdue' | 'approaching' | 'ok' => {
     try {
       const dl = new Date(deadline);
       const now = new Date();
@@ -186,91 +188,89 @@ export default function DispositionTable({
                     colSpan={colCount}
                     class='px-4 py-8 text-center text-on-surface-muted'
                   >
-                    {totalCount === 0
-                      ? emptyNoDispositions
-                      : emptyNoMatch}
+                    {totalCount === 0 ? emptyNoDispositions : emptyNoMatch}
                   </td>
                 </tr>
               )
               : filtered.map((d) => {
-                  const dlState = deadlineState(d.dispositionDeadline);
-                  return (
-                    <tr
-                      key={d.dispositionId}
-                      class='hover:bg-surface-elevated'
-                    >
-                      <td class='px-4 py-3 font-mono text-xs font-medium text-on-surface'>
-                        {d.dispositionId}
-                      </td>
-                      <td class='px-4 py-3 font-mono text-xs text-on-surface-secondary'>
-                        {d.sampleId}
-                      </td>
-                      <td class='px-4 py-3'>
-                        <span
-                          class={`px-2 py-1 rounded text-xs font-medium ${
-                            DECISION_CLASSES[d.decision] ??
-                              'bg-surface-inset text-on-surface-muted'
-                          }`}
-                        >
-                          {d.decisionLabel}
-                        </span>
-                      </td>
-                      <td class='px-4 py-3'>
-                        <span
-                          class={`px-2 py-1 rounded text-xs font-semibold ${
-                            STATUS_CLASSES[d.status] ??
-                              'bg-surface-inset text-on-surface-muted'
-                          }`}
-                          title={d.lastAction}
-                        >
-                          {d.statusLabel}
-                        </span>
-                      </td>
-                      <td
-                        class={`px-4 py-3 font-mono text-xs ${
-                          dlState === 'overdue'
-                            ? 'text-status-problem-text font-semibold'
-                            : dlState === 'approaching'
-                            ? 'text-status-attention-text font-medium'
-                            : 'text-on-surface-muted'
+                const dlState = deadlineState(d.dispositionDeadline);
+                return (
+                  <tr
+                    key={d.dispositionId}
+                    class='hover:bg-surface-elevated'
+                  >
+                    <td class='px-4 py-3 font-mono text-xs font-medium text-on-surface'>
+                      {d.dispositionId}
+                    </td>
+                    <td class='px-4 py-3 font-mono text-xs text-on-surface-secondary'>
+                      {d.sampleId}
+                    </td>
+                    <td class='px-4 py-3'>
+                      <span
+                        class={`px-2 py-1 rounded text-xs font-medium ${
+                          DECISION_CLASSES[d.decision] ??
+                            'bg-surface-inset text-on-surface-muted'
                         }`}
                       >
-                        {d.dispositionDeadline}
-                      </td>
-                      <td class='px-4 py-3'>
-                        {d.treatment
-                          ? (
-                            <span
-                              class={`px-2 py-1 rounded text-xs font-medium ${
-                                TREATMENT_CLASSES[d.treatment] ??
-                                  'bg-surface-inset text-on-surface-muted'
-                              }`}
-                            >
-                              {d.treatmentLabel}
-                            </span>
-                          )
-                          : (
-                            <span class='text-on-surface-muted'>
-                              {'\u2014'}
-                            </span>
-                          )}
-                      </td>
-                      <td class='px-4 py-3 text-right text-on-surface tabular-nums'>
-                        {d.evidenceCount}
-                      </td>
-                      {canApprove && (
-                        <td class='px-4 py-3'>
-                          <button
-                            type='button'
-                            class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors'
+                        {d.decisionLabel}
+                      </span>
+                    </td>
+                    <td class='px-4 py-3'>
+                      <span
+                        class={`px-2 py-1 rounded text-xs font-semibold ${
+                          STATUS_CLASSES[d.status] ??
+                            'bg-surface-inset text-on-surface-muted'
+                        }`}
+                        title={d.lastAction}
+                      >
+                        {d.statusLabel}
+                      </span>
+                    </td>
+                    <td
+                      class={`px-4 py-3 font-mono text-xs ${
+                        dlState === 'overdue'
+                          ? 'text-status-problem-text font-semibold'
+                          : dlState === 'approaching'
+                          ? 'text-status-attention-text font-medium'
+                          : 'text-on-surface-muted'
+                      }`}
+                    >
+                      {d.dispositionDeadline}
+                    </td>
+                    <td class='px-4 py-3'>
+                      {d.treatment
+                        ? (
+                          <span
+                            class={`px-2 py-1 rounded text-xs font-medium ${
+                              TREATMENT_CLASSES[d.treatment] ??
+                                'bg-surface-inset text-on-surface-muted'
+                            }`}
                           >
-                            {approveLabel}
-                          </button>
-                        </td>
-                      )}
-                    </tr>
-                  );
-                })}
+                            {d.treatmentLabel}
+                          </span>
+                        )
+                        : (
+                          <span class='text-on-surface-muted'>
+                            {'\u2014'}
+                          </span>
+                        )}
+                    </td>
+                    <td class='px-4 py-3 text-right text-on-surface tabular-nums'>
+                      {d.evidenceCount}
+                    </td>
+                    {canApprove && (
+                      <td class='px-4 py-3'>
+                        <button
+                          type='button'
+                          class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors'
+                        >
+                          {approveLabel}
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>

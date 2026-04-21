@@ -8,7 +8,9 @@ export const EthicsApprovalRecordSchema = z.object({
   Protocol: z.string().describe('Protocol description'),
   ApprovalDate: z.string().describe('Date approval was granted'),
   ExpiryDate: z.string().describe('Date approval expires'),
-  Status: z.enum(['active', 'expiring', 'expired']).describe('Current approval status'),
+  Status: z.enum(['active', 'expiring', 'expired']).describe(
+    'Current approval status',
+  ),
   DaysUntilExpiry: z.number().describe('Days remaining until expiry'),
 });
 

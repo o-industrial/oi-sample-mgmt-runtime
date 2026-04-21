@@ -1,3 +1,4 @@
+// deno-lint-ignore-file require-await
 import { Capability } from '@fathym/steward/capabilities';
 import { z } from 'zod';
 import type { AuditEventRecord } from './types/AuditEventRecord.ts';
@@ -10,17 +11,30 @@ import type { NotificationRecord } from './types/NotificationRecord.ts';
 import { seedWorkflowData } from './seed.ts';
 
 export type SampleMgmtHooks = {
-  ListAuditEvents(filter?: { UserId?: string; ActionType?: string }): Promise<AuditEventRecord[]>;
-  CreateAuditEvent(data: Omit<AuditEventRecord, 'EventId'>): Promise<AuditEventRecord>;
-  ListTransfers(filter?: { Type?: string; Status?: string }): Promise<TransferRecord[]>;
+  ListAuditEvents(
+    filter?: { UserId?: string; ActionType?: string },
+  ): Promise<AuditEventRecord[]>;
+  CreateAuditEvent(
+    data: Omit<AuditEventRecord, 'EventId'>,
+  ): Promise<AuditEventRecord>;
+  ListTransfers(
+    filter?: { Type?: string; Status?: string },
+  ): Promise<TransferRecord[]>;
   ListReturns(): Promise<ReturnRecord[]>;
   ListReconciliations(): Promise<ReconciliationRecord[]>;
   ListDispositions(): Promise<DispositionRecord[]>;
   ListReviews(filter?: { Status?: string }): Promise<ReviewRecord[]>;
-  DecideReview(reviewId: string, decision: 'approved' | 'rejected' | 'escalated', userId: string, reason?: string): Promise<ReviewRecord>;
+  DecideReview(
+    reviewId: string,
+    decision: 'approved' | 'rejected' | 'escalated',
+    userId: string,
+    reason?: string,
+  ): Promise<ReviewRecord>;
   ListNotifications(userId: string): Promise<NotificationRecord[]>;
   MarkNotificationAsRead(notificationId: string): Promise<NotificationRecord>;
-  CreateNotification(data: Omit<NotificationRecord, 'NotificationId'>): Promise<NotificationRecord>;
+  CreateNotification(
+    data: Omit<NotificationRecord, 'NotificationId'>,
+  ): Promise<NotificationRecord>;
   Seed(): Promise<{ Seeded: number }>;
 };
 
@@ -43,7 +57,9 @@ export function SampleMgmtCapability() {
           if (!filter) return all;
           return all.filter((e) => {
             if (filter.UserId && e.UserId !== filter.UserId) return false;
-            if (filter.ActionType && e.ActionType !== filter.ActionType) return false;
+            if (filter.ActionType && e.ActionType !== filter.ActionType) {
+              return false;
+            }
             return true;
           });
         },
@@ -145,14 +161,21 @@ export function SampleMgmtCapability() {
         },
 
         async MarkNotificationAsRead(notificationId: string) {
-          const entry = await kv.get<NotificationRecord>(['Notifications', notificationId]);
-          if (!entry.value) throw new Error(`Notification ${notificationId} not found`);
+          const entry = await kv.get<NotificationRecord>([
+            'Notifications',
+            notificationId,
+          ]);
+          if (!entry.value) {
+            throw new Error(`Notification ${notificationId} not found`);
+          }
           const updated: NotificationRecord = { ...entry.value, Read: true };
           await kv.set(['Notifications', notificationId], updated);
           return updated;
         },
 
-        async CreateNotification(data: Omit<NotificationRecord, 'NotificationId'>) {
+        async CreateNotification(
+          data: Omit<NotificationRecord, 'NotificationId'>,
+        ) {
           const NotificationId = `NTF-${crypto.randomUUID().slice(0, 8)}`;
           const record: NotificationRecord = { NotificationId, ...data };
           await kv.set(['Notifications', NotificationId], record);

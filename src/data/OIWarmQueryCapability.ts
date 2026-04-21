@@ -1,3 +1,4 @@
+// deno-lint-ignore-file require-await
 import { Capability } from '@fathym/steward/capabilities';
 import { z } from 'zod';
 import type { SampleRecord } from './types/SampleRecord.ts';
@@ -20,9 +21,18 @@ export type OIWarmQueryHooks = {
   EffortTracking(): Promise<ManagerEffortEntry[]>;
   CapacityForecasting(): Promise<CapacityForecast>;
   CreateSample(data: Omit<SampleRecord, 'SampleId'>): Promise<SampleRecord>;
-  UpdateSampleStatus(id: string, status: SampleStatus, lastAction: string): Promise<SampleRecord>;
-  CreateManifest(data: Omit<ManifestRecord, 'ManifestId'>): Promise<ManifestRecord>;
-  UpdateManifestStatus(id: string, status: TurboTaxStatus): Promise<ManifestRecord>;
+  UpdateSampleStatus(
+    id: string,
+    status: SampleStatus,
+    lastAction: string,
+  ): Promise<SampleRecord>;
+  CreateManifest(
+    data: Omit<ManifestRecord, 'ManifestId'>,
+  ): Promise<ManifestRecord>;
+  UpdateManifestStatus(
+    id: string,
+    status: TurboTaxStatus,
+  ): Promise<ManifestRecord>;
   Seed(): Promise<{ Seeded: number }>;
 };
 
@@ -75,7 +85,11 @@ export function OIWarmQueryCapability() {
         },
 
         async CapacityForecasting() {
-          return { Current: 85, Projected: 120, Breakpoint: 100 } as CapacityForecast;
+          return {
+            Current: 85,
+            Projected: 120,
+            Breakpoint: 100,
+          } as CapacityForecast;
         },
 
         async CreateSample(data: Omit<SampleRecord, 'SampleId'>) {
@@ -85,10 +99,18 @@ export function OIWarmQueryCapability() {
           return record;
         },
 
-        async UpdateSampleStatus(id: string, status: SampleStatus, lastAction: string) {
+        async UpdateSampleStatus(
+          id: string,
+          status: SampleStatus,
+          lastAction: string,
+        ) {
           const entry = await kv.get<SampleRecord>(['Samples', id]);
           if (!entry.value) throw new Error(`Sample ${id} not found`);
-          const updated: SampleRecord = { ...entry.value, Status: status, LastAction: lastAction };
+          const updated: SampleRecord = {
+            ...entry.value,
+            Status: status,
+            LastAction: lastAction,
+          };
           await kv.set(['Samples', id], updated);
           return updated;
         },

@@ -6,7 +6,9 @@ import { SampleStatusSchema } from './SampleStatus.ts';
  * Tricoded (1D, 2D, human-readable). Storage uses 8-level freezer hierarchy.
  */
 export const SampleRecordSchema = z.object({
-  SampleId: z.string().describe('Unique sample identifier (e.g. SMP-2026-88421-001)'),
+  SampleId: z.string().describe(
+    'Unique sample identifier (e.g. SMP-2026-88421-001)',
+  ),
   StudyId: z.string().describe('Study this sample belongs to'),
   OriginSite: z.string().describe('Site where sample originated'),
   ReceivedAt: z.string().describe('Timestamp of receipt'),

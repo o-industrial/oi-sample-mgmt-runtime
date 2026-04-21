@@ -116,8 +116,7 @@ export default function ReconciliationTable({
         />
         <select
           value={typeFilter}
-          onChange={(e) =>
-            setTypeFilter((e.target as HTMLSelectElement).value)}
+          onChange={(e) => setTypeFilter((e.target as HTMLSelectElement).value)}
           class='border border-border-input bg-surface rounded-md px-3 py-2 text-sm text-on-surface'
         >
           <option value=''>{filterLabels.allTypes}</option>
@@ -180,86 +179,84 @@ export default function ReconciliationTable({
                     colSpan={colCount}
                     class='px-4 py-8 text-center text-on-surface-muted'
                   >
-                    {totalCount === 0
-                      ? emptyNoReconciliations
-                      : emptyNoMatch}
+                    {totalCount === 0 ? emptyNoReconciliations : emptyNoMatch}
                   </td>
                 </tr>
               )
               : filtered.map((r) => {
-                  const delta = r.actualCount - r.expectedCount;
-                  return (
-                    <tr
-                      key={r.reconciliationId}
-                      class='hover:bg-surface-elevated'
+                const delta = r.actualCount - r.expectedCount;
+                return (
+                  <tr
+                    key={r.reconciliationId}
+                    class='hover:bg-surface-elevated'
+                  >
+                    <td class='px-4 py-3 font-mono text-xs font-medium text-on-surface'>
+                      {r.reconciliationId}
+                    </td>
+                    <td class='px-4 py-3 font-mono text-xs text-on-surface-secondary'>
+                      {r.manifestId}
+                    </td>
+                    <td class='px-4 py-3'>
+                      <span
+                        class={`px-2 py-1 rounded text-xs font-medium ${
+                          DISCREPANCY_CLASSES[r.discrepancyType] ??
+                            'bg-surface-inset text-on-surface-muted'
+                        }`}
+                      >
+                        {r.discrepancyLabel}
+                      </span>
+                    </td>
+                    <td class='px-4 py-3 text-right text-on-surface tabular-nums'>
+                      {r.expectedCount}
+                    </td>
+                    <td
+                      class={`px-4 py-3 text-right tabular-nums font-medium ${
+                        delta !== 0
+                          ? 'text-status-problem-text'
+                          : 'text-on-surface'
+                      }`}
                     >
-                      <td class='px-4 py-3 font-mono text-xs font-medium text-on-surface'>
-                        {r.reconciliationId}
-                      </td>
-                      <td class='px-4 py-3 font-mono text-xs text-on-surface-secondary'>
-                        {r.manifestId}
-                      </td>
-                      <td class='px-4 py-3'>
-                        <span
-                          class={`px-2 py-1 rounded text-xs font-medium ${
-                            DISCREPANCY_CLASSES[r.discrepancyType] ??
-                              'bg-surface-inset text-on-surface-muted'
-                          }`}
-                        >
-                          {r.discrepancyLabel}
-                        </span>
-                      </td>
-                      <td class='px-4 py-3 text-right text-on-surface tabular-nums'>
-                        {r.expectedCount}
-                      </td>
-                      <td
-                        class={`px-4 py-3 text-right tabular-nums font-medium ${
-                          delta !== 0
-                            ? 'text-status-problem-text'
-                            : 'text-on-surface'
-                        }`}
-                      >
-                        {r.actualCount}
-                        {delta !== 0 && (
-                          <span class='ml-1 text-xs'>({delta})</span>
-                        )}
-                      </td>
-                      <td class='px-4 py-3 text-xs text-on-surface-muted max-w-[160px] truncate'>
-                        {r.missingFieldsLabel || '\u2014'}
-                      </td>
-                      <td class='px-4 py-3'>
-                        <span
-                          class={`px-2 py-1 rounded text-xs font-semibold ${
-                            STATUS_CLASSES[r.status] ??
-                              'bg-surface-inset text-on-surface-muted'
-                          }`}
-                          title={r.lastAction}
-                        >
-                          {r.statusLabel}
-                        </span>
-                      </td>
-                      <td
-                        class={`px-4 py-3 font-mono text-xs ${
-                          isOverdue(r.slaDeadline)
-                            ? 'text-status-problem-text font-semibold'
-                            : 'text-on-surface-muted'
-                        }`}
-                      >
-                        {r.slaDeadline}
-                      </td>
-                      {canResolve && (
-                        <td class='px-4 py-3'>
-                          <button
-                            type='button'
-                            class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors'
-                          >
-                            {resolveLabel}
-                          </button>
-                        </td>
+                      {r.actualCount}
+                      {delta !== 0 && (
+                        <span class='ml-1 text-xs'>({delta})</span>
                       )}
-                    </tr>
-                  );
-                })}
+                    </td>
+                    <td class='px-4 py-3 text-xs text-on-surface-muted max-w-[160px] truncate'>
+                      {r.missingFieldsLabel || '\u2014'}
+                    </td>
+                    <td class='px-4 py-3'>
+                      <span
+                        class={`px-2 py-1 rounded text-xs font-semibold ${
+                          STATUS_CLASSES[r.status] ??
+                            'bg-surface-inset text-on-surface-muted'
+                        }`}
+                        title={r.lastAction}
+                      >
+                        {r.statusLabel}
+                      </span>
+                    </td>
+                    <td
+                      class={`px-4 py-3 font-mono text-xs ${
+                        isOverdue(r.slaDeadline)
+                          ? 'text-status-problem-text font-semibold'
+                          : 'text-on-surface-muted'
+                      }`}
+                    >
+                      {r.slaDeadline}
+                    </td>
+                    {canResolve && (
+                      <td class='px-4 py-3'>
+                        <button
+                          type='button'
+                          class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors'
+                        >
+                          {resolveLabel}
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>

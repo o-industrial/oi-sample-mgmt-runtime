@@ -6,7 +6,9 @@ import { CapacityForecastSchema } from './CapacityForecast.ts';
  * Management overlay data — effort tracking + capacity forecasting.
  */
 export const ManagementOverlayDataSchema = z.object({
-  EffortData: z.array(ManagerEffortEntrySchema).describe('Manager effort distribution'),
+  EffortData: z.array(ManagerEffortEntrySchema).describe(
+    'Manager effort distribution',
+  ),
   CapacityData: CapacityForecastSchema.describe('Capacity forecast'),
 });
 

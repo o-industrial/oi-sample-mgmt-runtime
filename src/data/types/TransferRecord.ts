@@ -6,9 +6,15 @@ import { TurboTaxStatusSchema } from './TurboTaxStatus.ts';
  * Approval chain + SLA deadline.
  */
 export const TransferRecordSchema = z.object({
-  TransferId: z.string().describe('Unique transfer identifier (e.g. TRF-2026-0087)'),
-  Type: z.enum(['inter-freezer', 'inter-site', 'inter-study']).describe('Transfer type'),
-  SampleIds: z.array(z.string()).describe('Sample IDs included in this transfer'),
+  TransferId: z.string().describe(
+    'Unique transfer identifier (e.g. TRF-2026-0087)',
+  ),
+  Type: z.enum(['inter-freezer', 'inter-site', 'inter-study']).describe(
+    'Transfer type',
+  ),
+  SampleIds: z.array(z.string()).describe(
+    'Sample IDs included in this transfer',
+  ),
   Source: z.string().describe('Source location or study'),
   Destination: z.string().describe('Destination location or study'),
   RequestedBy: z.string().describe('User who requested the transfer'),

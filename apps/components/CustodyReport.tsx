@@ -112,9 +112,7 @@ export default function CustodyReport({
           {events.map((evt, i) => (
             <div
               key={evt.eventId}
-              class={`relative pb-6 ${
-                i === events.length - 1 ? 'pb-0' : ''
-              }`}
+              class={`relative pb-6 ${i === events.length - 1 ? 'pb-0' : ''}`}
             >
               {/* Dot */}
               <div

@@ -6,8 +6,15 @@ import { z } from 'zod';
 export const NotificationRecordSchema = z.object({
   NotificationId: z.string().describe('Unique notification identifier'),
   UserId: z.string().describe('Target user'),
-  Type: z.enum(['approval-request', 'status-change', 'deadline-approaching', 'escalation']).describe('Notification type'),
-  EntityType: z.string().describe('Type of entity this notification relates to'),
+  Type: z.enum([
+    'approval-request',
+    'status-change',
+    'deadline-approaching',
+    'escalation',
+  ]).describe('Notification type'),
+  EntityType: z.string().describe(
+    'Type of entity this notification relates to',
+  ),
   EntityId: z.string().describe('ID of the related entity'),
   Message: z.string().describe('Notification message'),
   Read: z.boolean().describe('Whether notification has been read'),
