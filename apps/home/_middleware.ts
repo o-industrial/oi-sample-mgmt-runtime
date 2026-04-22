@@ -59,6 +59,22 @@ export default [
       }
     }
 
+    // TODO(T13-Phase5): Remove this fallback once OI API auth is released.
+    // Grants all rights when resolution returns empty so the demo is functional.
+    if (ctx.State.AccessRights.length === 0) {
+      ctx.State.AccessRights = [
+        'samples:receive',
+        'samples:view',
+        'compliance:view',
+        'compliance:export',
+        'admin:access',
+        'custody:approve',
+        'study:view',
+        'config:admin',
+        'scientist:request',
+      ];
+    }
+
     // Default pilot username when no upstream auth provides one
     if (!ctx.State.Username) {
       ctx.State.Username = 'liora.vasquez';
