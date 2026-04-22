@@ -94,19 +94,19 @@ export const sampleMgmtDiscoverySummary: DiscoverySummaryContent = {
       persona: 'Dr. Liora Vasquez',
       workflow: 'Morning at the Bench',
       pages: ['/receive', '/reconciliation'],
-      status: 'seeded',
+      status: 'live',
     },
     {
       persona: 'Dr. Priya Lindqvist',
       workflow: "Manager's Morning Briefing",
       pages: ['/ (dashboard)', '/transfer'],
-      status: 'seeded',
+      status: 'live',
     },
     {
       persona: 'Dr. Tobias Nakamura',
       workflow: 'Scientist Needs Samples Back',
       pages: ['/return'],
-      status: 'seeded',
+      status: 'live',
     },
     {
       persona: 'Declan Okafor',

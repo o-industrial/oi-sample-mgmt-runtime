@@ -86,6 +86,10 @@ export const handler: EaCRuntimeHandlerSet<
   ReceiveData
 > = {
   GET: async (req, ctx) => {
+    if (!ctx.State.AccessRights.includes('samples:receive')) {
+      return new Response('Forbidden', { status: 403 });
+    }
+
     const { t } = useTranslation(ctx.State.Strings);
 
     const client = await createClientFromRequest(req);

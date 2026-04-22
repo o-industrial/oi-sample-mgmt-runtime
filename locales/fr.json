@@ -349,5 +349,16 @@
   "notification.timeAgo.daysAgo": "j",
   "notification.unread": "non lu(s)",
   "notification.action.view": "Voir",
-  "layout.notificationLabels": "\u00c9tiquettes de notification"
+  "layout.notificationLabels": "\u00c9tiquettes de notification",
+  "manifestComparison.heading": "Comparaison de manifeste",
+  "manifestComparison.expectedCol": "Attendu",
+  "manifestComparison.actualCol": "R\u00e9el",
+  "manifestComparison.fieldCol": "Champ",
+  "manifestComparison.statusCol": "Statut",
+  "manifestComparison.resolutionLabel": "R\u00e9solution",
+  "manifestComparison.reasonLabel": "Raison de correction (BPx)",
+  "manifestComparison.submitLabel": "R\u00e9soudre",
+  "manifestComparison.matchLabel": "Correspondance",
+  "manifestComparison.mismatchLabel": "Divergence",
+  "manifestComparison.missingLabel": "Manquant"
 }

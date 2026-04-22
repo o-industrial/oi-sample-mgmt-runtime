@@ -44,6 +44,7 @@ type ReturnTableProps = {
   emptyNoReturns: string;
   emptyNoMatch: string;
   canApprove: boolean;
+  apiBase: string;
 };
 
 // --- Status badge semantic token map (C5) ---
@@ -64,7 +65,7 @@ const OUTCOME_CLASSES: Record<string, string> = {
 // --- Component ---
 
 export default function ReturnTable({
-  returns,
+  returns: initialReturns,
   totalCount,
   searchPlaceholder,
   columnHeaders,
@@ -73,9 +74,33 @@ export default function ReturnTable({
   emptyNoReturns,
   emptyNoMatch,
   canApprove,
+  apiBase,
 }: ReturnTableProps) {
+  const [returns, setReturns] = useState(initialReturns);
+  const [acting, setActing] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+
+  async function handleApprove(returnId: string) {
+    setActing(returnId);
+    try {
+      const res = await fetch(`${apiBase}/api/returns`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'update-status',
+          ReturnId: returnId,
+          Status: 'ready',
+          UserId: 'current-user',
+        }),
+      });
+      if (res.ok) {
+        setReturns((prev) => prev.filter((r) => r.returnId !== returnId));
+      }
+    } finally {
+      setActing(null);
+    }
+  }
 
   const filtered = returns.filter((r) => {
     if (statusFilter && r.status !== statusFilter) return false;
@@ -199,7 +224,9 @@ export default function ReturnTable({
                     <td class='px-4 py-3'>
                       <button
                         type='button'
-                        class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors'
+                        disabled={acting === r.returnId}
+                        onClick={() => handleApprove(r.returnId)}
+                        class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors disabled:opacity-50'
                       >
                         {approveLabel}
                       </button>

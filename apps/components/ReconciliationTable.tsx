@@ -45,6 +45,7 @@ type ReconciliationTableProps = {
   emptyNoReconciliations: string;
   emptyNoMatch: string;
   canResolve: boolean;
+  apiBase: string;
 };
 
 // --- Status badge semantic token map (C5) ---
@@ -66,7 +67,7 @@ const DISCREPANCY_CLASSES: Record<string, string> = {
 // --- Component ---
 
 export default function ReconciliationTable({
-  reconciliations,
+  reconciliations: initialReconciliations,
   totalCount,
   searchPlaceholder,
   columnHeaders,
@@ -75,10 +76,48 @@ export default function ReconciliationTable({
   emptyNoReconciliations,
   emptyNoMatch,
   canResolve,
+  apiBase,
 }: ReconciliationTableProps) {
+  const [reconciliations, setReconciliations] = useState(
+    initialReconciliations,
+  );
+  const [acting, setActing] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+
+  async function handleResolve(reconciliationId: string) {
+    const resolution = globalThis.prompt('Resolution:');
+    if (resolution === null) return;
+    const correctionReason = globalThis.prompt(
+      'Correction reason (required for GxP):',
+    );
+    if (correctionReason === null || correctionReason.trim().length === 0) {
+      return;
+    }
+
+    setActing(reconciliationId);
+    try {
+      const res = await fetch(`${apiBase}/api/reconciliations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'resolve',
+          ReconciliationId: reconciliationId,
+          Resolution: resolution,
+          CorrectionReason: correctionReason,
+          UserId: 'current-user',
+        }),
+      });
+      if (res.ok) {
+        setReconciliations((prev) =>
+          prev.filter((r) => r.reconciliationId !== reconciliationId)
+        );
+      }
+    } finally {
+      setActing(null);
+    }
+  }
 
   const filtered = reconciliations.filter((r) => {
     if (typeFilter && r.discrepancyType !== typeFilter) return false;
@@ -248,7 +287,10 @@ export default function ReconciliationTable({
                       <td class='px-4 py-3'>
                         <button
                           type='button'
-                          class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors'
+                          disabled={acting === r.reconciliationId}
+                          onClick={() =>
+                            handleResolve(r.reconciliationId)}
+                          class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors disabled:opacity-50'
                         >
                           {resolveLabel}
                         </button>

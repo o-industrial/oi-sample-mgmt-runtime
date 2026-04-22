@@ -46,6 +46,7 @@ type TransferTableProps = {
   emptyNoTransfers: string;
   emptyNoMatch: string;
   canApprove: boolean;
+  apiBase: string;
 };
 
 // --- Status badge semantic token map (C5) ---
@@ -66,7 +67,7 @@ const TYPE_CLASSES: Record<string, string> = {
 // --- Component ---
 
 export default function TransferTable({
-  transfers,
+  transfers: initialTransfers,
   totalCount,
   searchPlaceholder,
   columnHeaders,
@@ -75,10 +76,37 @@ export default function TransferTable({
   emptyNoTransfers,
   emptyNoMatch,
   canApprove,
+  apiBase,
 }: TransferTableProps) {
+  const [transfers, setTransfers] = useState(initialTransfers);
+  const [acting, setActing] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+
+  async function handleApprove(transferId: string) {
+    setActing(transferId);
+    try {
+      const res = await fetch(`${apiBase}/api/transfers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'update-status',
+          TransferId: transferId,
+          Status: 'ready',
+          StatusReason: 'Approved',
+          UserId: 'current-user',
+        }),
+      });
+      if (res.ok) {
+        setTransfers((prev) =>
+          prev.filter((t) => t.transferId !== transferId)
+        );
+      }
+    } finally {
+      setActing(null);
+    }
+  }
 
   const filtered = transfers.filter((t) => {
     if (typeFilter && t.type !== typeFilter) return false;
@@ -229,7 +257,9 @@ export default function TransferTable({
                     <td class='px-4 py-3'>
                       <button
                         type='button'
-                        class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors'
+                        disabled={acting === tr.transferId}
+                        onClick={() => handleApprove(tr.transferId)}
+                        class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors disabled:opacity-50'
                       >
                         {approveLabel}
                       </button>

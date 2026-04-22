@@ -3,6 +3,7 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
 import { useTranslation } from '../../../src/utils/useTranslation.ts';
 import ReconciliationTable from '../../components/ReconciliationTable.tsx';
+import ManifestComparison from '../../components/ManifestComparison.tsx';
 import { createClientFromRequest } from '../../../src/client/createClientFromRequest.ts';
 
 // --- Types (TitleCase for server data — C4) ---
@@ -51,6 +52,29 @@ type ReconciliationPageData = {
   EmptyNoReconciliations: string;
   EmptyNoMatch: string;
   CanResolve: boolean;
+  ComparisonData: {
+    ReconciliationId: string;
+    ManifestId: string;
+    Fields: Array<{
+      Field: string;
+      Expected: string;
+      Actual: string;
+      Status: 'match' | 'mismatch' | 'missing';
+    }>;
+  } | null;
+  ComparisonLabels: {
+    Heading: string;
+    ExpectedCol: string;
+    ActualCol: string;
+    FieldCol: string;
+    StatusCol: string;
+    ResolutionLabel: string;
+    ReasonLabel: string;
+    SubmitLabel: string;
+    MatchLabel: string;
+    MismatchLabel: string;
+    MissingLabel: string;
+  };
 };
 
 // --- Discrepancy-type-to-i18n key helper ---
@@ -77,21 +101,31 @@ export const handler: EaCRuntimeHandlerSet<
   ReconciliationPageData
 > = {
   GET: async (req, ctx) => {
-    console.log('[TRACE] Reconciliation handler START');
+    if (!ctx.State.AccessRights.includes('samples:receive')) {
+      return new Response('Forbidden', { status: 403 });
+    }
+
     const { t } = useTranslation(ctx.State.Strings);
     const rights = ctx.State.AccessRights;
-    console.log('[TRACE] Creating client...');
 
-    let rawReconciliations;
-    try {
-      const client = await createClientFromRequest(req);
-      console.log('[TRACE] Client created, fetching reconciliations...');
-      rawReconciliations = await client.Reconciliations.List();
-      console.log('[TRACE] Got reconciliations:', rawReconciliations.length);
-    } catch (err) {
-      console.error('[TRACE] Reconciliation handler ERROR:', err);
-      throw err;
-    }
+    const client = await createClientFromRequest(req);
+    const rawReconciliations = await client.Reconciliations.List();
+
+    const unresolvedRec = rawReconciliations.find(
+      (r) => r.Status !== 'ready',
+    );
+    const comparisonData = unresolvedRec
+      ? {
+        ReconciliationId: unresolvedRec.ReconciliationId,
+        ManifestId: unresolvedRec.ManifestId,
+        Fields: unresolvedRec.MissingFields.map((f) => ({
+          Field: f,
+          Expected: String(unresolvedRec.ExpectedCount),
+          Actual: String(unresolvedRec.ActualCount),
+          Status: 'mismatch' as const,
+        })),
+      }
+      : null;
 
     const reconciliations: ReconciliationItem[] = rawReconciliations.map(
       (r) => ({
@@ -203,6 +237,20 @@ export const handler: EaCRuntimeHandlerSet<
       EmptyNoReconciliations: t('reconciliation.emptyNoReconciliations'),
       EmptyNoMatch: t('reconciliation.emptyNoMatch'),
       CanResolve: rights.includes('samples:receive'),
+      ComparisonData: comparisonData,
+      ComparisonLabels: {
+        Heading: t('manifestComparison.heading'),
+        ExpectedCol: t('manifestComparison.expectedCol'),
+        ActualCol: t('manifestComparison.actualCol'),
+        FieldCol: t('manifestComparison.fieldCol'),
+        StatusCol: t('manifestComparison.statusCol'),
+        ResolutionLabel: t('manifestComparison.resolutionLabel'),
+        ReasonLabel: t('manifestComparison.reasonLabel'),
+        SubmitLabel: t('manifestComparison.submitLabel'),
+        MatchLabel: t('manifestComparison.matchLabel'),
+        MismatchLabel: t('manifestComparison.mismatchLabel'),
+        MissingLabel: t('manifestComparison.missingLabel'),
+      },
     });
   },
 };
@@ -281,7 +329,36 @@ export default function Reconciliation(
         emptyNoReconciliations={d.EmptyNoReconciliations}
         emptyNoMatch={d.EmptyNoMatch}
         canResolve={d.CanResolve}
+        apiBase=''
       />
+
+      {d.ComparisonData && (
+        <ManifestComparison
+          reconciliationId={d.ComparisonData.ReconciliationId}
+          manifestId={d.ComparisonData.ManifestId}
+          fields={d.ComparisonData.Fields.map((f) => ({
+            field: f.Field,
+            expected: f.Expected,
+            actual: f.Actual,
+            status: f.Status,
+          }))}
+          labels={{
+            heading: d.ComparisonLabels.Heading,
+            expectedCol: d.ComparisonLabels.ExpectedCol,
+            actualCol: d.ComparisonLabels.ActualCol,
+            fieldCol: d.ComparisonLabels.FieldCol,
+            statusCol: d.ComparisonLabels.StatusCol,
+            resolutionLabel: d.ComparisonLabels.ResolutionLabel,
+            reasonLabel: d.ComparisonLabels.ReasonLabel,
+            submitLabel: d.ComparisonLabels.SubmitLabel,
+            matchLabel: d.ComparisonLabels.MatchLabel,
+            mismatchLabel: d.ComparisonLabels.MismatchLabel,
+            missingLabel: d.ComparisonLabels.MissingLabel,
+          }}
+          apiBase=''
+          canResolve={d.CanResolve}
+        />
+      )}
     </div>
   );
 }

@@ -11,6 +11,8 @@ import type { DispositionRecord } from '../data/types/DispositionRecord.ts';
 import type { ReviewRecord } from '../data/types/ReviewRecord.ts';
 import type { CustodyTimelineRecord } from '../data/types/CustodyTimelineRecord.ts';
 import type { NotificationRecord } from '../data/types/NotificationRecord.ts';
+import type { ApprovalRecord } from '../data/types/ApprovalRecord.ts';
+import type { StudyRoleMappingRecord } from '../data/types/StudyRoleMappingRecord.ts';
 import type { PaneViewData } from '../data/types/PaneViewData.ts';
 import type { ManagementOverlayData } from '../data/types/ManagementOverlayData.ts';
 
@@ -138,6 +140,46 @@ export class SampleMgmtAPIClient extends EaCBaseClient {
         });
         return this.json(res);
       },
+      Create: async (data: {
+        Type: string;
+        SampleIds: string[];
+        Source: string;
+        Destination: string;
+        RequestedBy: string;
+        StudyRef: string;
+        StatusReason?: string;
+        SlaDeadline: string;
+      }): Promise<TransferRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/transfers'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ action: 'create', ...data }),
+        });
+        return this.json(res);
+      },
+      UpdateStatus: async (
+        transferId: string,
+        status: string,
+        statusReason: string,
+        userId: string,
+      ): Promise<TransferRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/transfers'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            action: 'update-status',
+            TransferId: transferId,
+            Status: status,
+            StatusReason: statusReason,
+            UserId: userId,
+          }),
+        });
+        return this.json(res);
+      },
     };
   }
 
@@ -149,6 +191,46 @@ export class SampleMgmtAPIClient extends EaCBaseClient {
         });
         return this.json(res);
       },
+      Create: async (data: {
+        SampleIds: string[];
+        Destination: string;
+        Reason: string;
+        RequestedBy: string;
+        PackagingInstructions: string;
+        StudyRef: string;
+      }): Promise<ReturnRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/returns'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ action: 'create', ...data }),
+        });
+        return this.json(res);
+      },
+      UpdateStatus: async (
+        returnId: string,
+        status: string,
+        userId: string,
+        outcome?: string,
+        depletionContext?: string,
+      ): Promise<ReturnRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/returns'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            action: 'update-status',
+            ReturnId: returnId,
+            Status: status,
+            UserId: userId,
+            Outcome: outcome,
+            DepletionContext: depletionContext,
+          }),
+        });
+        return this.json(res);
+      },
     };
   }
 
@@ -157,6 +239,45 @@ export class SampleMgmtAPIClient extends EaCBaseClient {
       List: async (): Promise<ReconciliationRecord[]> => {
         const res = await fetch(this.loadClientUrl('/api/reconciliations'), {
           headers: this.loadHeaders(),
+        });
+        return this.json(res);
+      },
+      Create: async (data: {
+        ManifestId: string;
+        DiscrepancyType: string;
+        ExpectedCount: number;
+        ActualCount: number;
+        MissingFields?: string[];
+        SlaDeadline: string;
+        UserId: string;
+      }): Promise<ReconciliationRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/reconciliations'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ action: 'create', ...data }),
+        });
+        return this.json(res);
+      },
+      Resolve: async (
+        reconciliationId: string,
+        resolution: string,
+        correctionReason: string,
+        userId: string,
+      ): Promise<ReconciliationRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/reconciliations'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            action: 'resolve',
+            ReconciliationId: reconciliationId,
+            Resolution: resolution,
+            CorrectionReason: correctionReason,
+            UserId: userId,
+          }),
         });
         return this.json(res);
       },
@@ -253,6 +374,79 @@ export class SampleMgmtAPIClient extends EaCBaseClient {
             action: 'mark-read',
             NotificationId: notificationId,
           }),
+        });
+        return this.json(res);
+      },
+    };
+  }
+
+  public get Approvals() {
+    return {
+      List: async (
+        filter?: { status?: string; type?: string },
+      ): Promise<ApprovalRecord[]> => {
+        const params = new URLSearchParams();
+        if (filter?.status) params.set('status', filter.status);
+        if (filter?.type) params.set('type', filter.type);
+        const qs = params.toString();
+        const path = qs ? `/api/approvals?${qs}` : '/api/approvals';
+        const res = await fetch(this.loadClientUrl(path), {
+          headers: this.loadHeaders(),
+        });
+        return this.json(res);
+      },
+      Initiate: async (data: {
+        Type: string;
+        RecordId: string;
+        StudyRef: string;
+        InitiatedBy: string;
+        Context?: Record<string, unknown>;
+      }): Promise<ApprovalRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/approvals'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ action: 'initiate', ...data }),
+        });
+        return this.json(res);
+      },
+      Decide: async (
+        approvalId: string,
+        decision: string,
+        userId: string,
+        reason?: string,
+      ): Promise<ApprovalRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/approvals'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            action: 'decide',
+            ApprovalId: approvalId,
+            Decision: decision,
+            UserId: userId,
+            Reason: reason,
+          }),
+        });
+        return this.json(res);
+      },
+    };
+  }
+
+  public get StudyRoleMappings() {
+    return {
+      List: async (
+        studyId?: string,
+      ): Promise<StudyRoleMappingRecord[]> => {
+        const path = studyId
+          ? `/api/study-role-mappings?studyId=${
+            encodeURIComponent(studyId)
+          }`
+          : '/api/study-role-mappings';
+        const res = await fetch(this.loadClientUrl(path), {
+          headers: this.loadHeaders(),
         });
         return this.json(res);
       },

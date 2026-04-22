@@ -57,6 +57,10 @@ export const handler: EaCRuntimeHandlerSet<
   SampleTrackingData
 > = {
   GET: async (req, ctx) => {
+    if (!ctx.State.AccessRights.includes('samples:view')) {
+      return new Response('Forbidden', { status: 403 });
+    }
+
     const { t } = useTranslation(ctx.State.Strings);
     const rights = ctx.State.AccessRights;
 

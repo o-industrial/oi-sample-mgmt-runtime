@@ -76,6 +76,10 @@ export const handler: EaCRuntimeHandlerSet<
   TransferPageData
 > = {
   GET: async (req, ctx) => {
+    if (!ctx.State.AccessRights.includes('samples:receive')) {
+      return new Response('Forbidden', { status: 403 });
+    }
+
     const { t } = useTranslation(ctx.State.Strings);
     const rights = ctx.State.AccessRights;
 
@@ -241,6 +245,7 @@ export default function Transfer(
         emptyNoTransfers={d.EmptyNoTransfers}
         emptyNoMatch={d.EmptyNoMatch}
         canApprove={d.CanApprove}
+        apiBase=''
       />
     </div>
   );

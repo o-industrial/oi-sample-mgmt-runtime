@@ -405,12 +405,12 @@ export const sampleMgmtDeck = {
       },
       {
         screen: 'Transfer Management',
-        status: 'seeded',
+        status: 'live',
         personas: 'Lab Manager, Custodian',
       },
       {
         screen: 'Return Requests',
-        status: 'seeded',
+        status: 'live',
         personas: 'Scientist, Custodian',
       },
       {
@@ -420,7 +420,7 @@ export const sampleMgmtDeck = {
       },
       {
         screen: 'Reconciliation',
-        status: 'seeded',
+        status: 'live',
         personas: 'Sample Manager',
       },
       {
@@ -445,7 +445,7 @@ export const sampleMgmtDeck = {
       },
       {
         screen: 'Email Watcher (auto-notification)',
-        status: 'planned',
+        status: 'live',
         personas: 'Sample Manager',
       },
       {

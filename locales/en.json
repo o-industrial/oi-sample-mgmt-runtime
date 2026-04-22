@@ -349,5 +349,16 @@
   "notification.timeAgo.daysAgo": "d ago",
   "notification.unread": "unread",
   "notification.action.view": "View",
-  "layout.notificationLabels": "Notification labels"
+  "layout.notificationLabels": "Notification labels",
+  "manifestComparison.heading": "Manifest Comparison",
+  "manifestComparison.expectedCol": "Expected",
+  "manifestComparison.actualCol": "Actual",
+  "manifestComparison.fieldCol": "Field",
+  "manifestComparison.statusCol": "Status",
+  "manifestComparison.resolutionLabel": "Resolution",
+  "manifestComparison.reasonLabel": "Correction Reason (GxP)",
+  "manifestComparison.submitLabel": "Resolve",
+  "manifestComparison.matchLabel": "Match",
+  "manifestComparison.mismatchLabel": "Mismatch",
+  "manifestComparison.missingLabel": "Missing"
 }

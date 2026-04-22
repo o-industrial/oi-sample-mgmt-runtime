@@ -59,6 +59,10 @@ export const handler: EaCRuntimeHandlerSet<
   ReturnPageData
 > = {
   GET: async (req, ctx) => {
+    if (!ctx.State.AccessRights.includes('samples:view')) {
+      return new Response('Forbidden', { status: 403 });
+    }
+
     const { t } = useTranslation(ctx.State.Strings);
     const rights = ctx.State.AccessRights;
 
@@ -215,6 +219,7 @@ export default function Return(
         emptyNoReturns={d.EmptyNoReturns}
         emptyNoMatch={d.EmptyNoMatch}
         canApprove={d.CanApprove}
+        apiBase=''
       />
     </div>
   );

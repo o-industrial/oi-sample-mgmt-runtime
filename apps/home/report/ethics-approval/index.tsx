@@ -55,6 +55,10 @@ export const handler: EaCRuntimeHandlerSet<
   EthicsApprovalData
 > = {
   GET: async (req, ctx) => {
+    if (!ctx.State.AccessRights.includes('compliance:view')) {
+      return new Response('Forbidden', { status: 403 });
+    }
+
     const { t } = useTranslation(ctx.State.Strings);
 
     const buildStatusLabel = (

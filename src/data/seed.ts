@@ -9,6 +9,8 @@ import type { ReconciliationRecord } from './types/ReconciliationRecord.ts';
 import type { DispositionRecord } from './types/DispositionRecord.ts';
 import type { ReviewRecord } from './types/ReviewRecord.ts';
 import type { NotificationRecord } from './types/NotificationRecord.ts';
+import type { ApprovalRecord } from './types/ApprovalRecord.ts';
+import type { StudyRoleMappingRecord } from './types/StudyRoleMappingRecord.ts';
 
 // ── OI-sourced seed data (13 records) ──────────────────────────────────
 
@@ -682,6 +684,122 @@ const NOTIFICATIONS: NotificationRecord[] = [
   },
 ];
 
+const STUDY_ROLE_MAPPINGS: StudyRoleMappingRecord[] = [
+  {
+    MappingId: 'SRM-BEACON3-hbsm_custodian',
+    StudyId: 'BEACON-3',
+    Role: 'hbsm_custodian',
+    UserIds: ['declan.okafor'],
+  },
+  {
+    MappingId: 'SRM-BEACON3-lab_manager',
+    StudyId: 'BEACON-3',
+    Role: 'lab_manager',
+    UserIds: ['priya.lindqvist'],
+  },
+  {
+    MappingId: 'SRM-BEACON3-study_lead',
+    StudyId: 'BEACON-3',
+    Role: 'study_lead',
+    UserIds: ['renata.solberg'],
+  },
+  {
+    MappingId: 'SRM-MERIDIAN1-hbsm_custodian',
+    StudyId: 'MERIDIAN-1',
+    Role: 'hbsm_custodian',
+    UserIds: ['declan.okafor'],
+  },
+  {
+    MappingId: 'SRM-MERIDIAN1-lab_manager',
+    StudyId: 'MERIDIAN-1',
+    Role: 'lab_manager',
+    UserIds: ['priya.lindqvist'],
+  },
+  {
+    MappingId: 'SRM-MERIDIAN1-study_lead',
+    StudyId: 'MERIDIAN-1',
+    Role: 'study_lead',
+    UserIds: ['dr.tobias.nakamura'],
+  },
+  {
+    MappingId: 'SRM-ATLAS7-hbsm_custodian',
+    StudyId: 'ATLAS-7',
+    Role: 'hbsm_custodian',
+    UserIds: ['declan.okafor'],
+  },
+  {
+    MappingId: 'SRM-ATLAS7-lab_manager',
+    StudyId: 'ATLAS-7',
+    Role: 'lab_manager',
+    UserIds: ['priya.lindqvist'],
+  },
+  {
+    MappingId: 'SRM-ATLAS7-study_lead',
+    StudyId: 'ATLAS-7',
+    Role: 'study_lead',
+    UserIds: ['dr.yara.brennan'],
+  },
+];
+
+const APPROVALS: ApprovalRecord[] = [
+  {
+    ApprovalId: 'APR-0001',
+    Type: 'disposition',
+    RecordId: 'DSP-2026-0002',
+    StudyRef: 'MERIDIAN-1',
+    InitiatedBy: 'liora.vasquez',
+    InitiatedAt: '2026-04-15 10:00',
+    AssignedTo: ['declan.okafor'],
+    Status: 'pending',
+    Context: { Decision: 'retain', SampleId: 'SMP-2026-87102-001' },
+  },
+  {
+    ApprovalId: 'APR-0002',
+    Type: 'transfer',
+    RecordId: 'TRF-2026-0088',
+    StudyRef: 'BEACON-3',
+    InitiatedBy: 'liora.vasquez',
+    InitiatedAt: '2026-04-15 14:45',
+    AssignedTo: ['declan.okafor'],
+    Status: 'pending',
+    Context: {
+      Type: 'inter-freezer',
+      Source: 'Freezer A / Shelf 2',
+      Destination: 'Freezer C / Shelf 1',
+    },
+  },
+  {
+    ApprovalId: 'APR-0003',
+    Type: 'disposition',
+    RecordId: 'DSP-2026-0001',
+    StudyRef: 'ATLAS-7',
+    InitiatedBy: 'liora.vasquez',
+    InitiatedAt: '2026-04-09 09:00',
+    AssignedTo: ['declan.okafor'],
+    Status: 'approved',
+    Decision: {
+      DecidedBy: 'declan.okafor',
+      Decision: 'approved',
+      Timestamp: '2026-04-10 14:00',
+    },
+    Context: { Decision: 'destroy', SampleId: 'SMP-2026-83100-001' },
+  },
+  {
+    ApprovalId: 'APR-0004',
+    Type: 'return-confirmation',
+    RecordId: 'RET-2026-0002',
+    StudyRef: 'BEACON-3',
+    InitiatedBy: 'declan.okafor',
+    InitiatedAt: '2026-04-15 09:30',
+    AssignedTo: ['dr.tobias.nakamura'],
+    Status: 'pending',
+    Context: {
+      Destination: 'London Clinical Lab',
+      Reason: 'Additional analysis required',
+    },
+  },
+];
+
 // ── Seed functions ─────────────────────────────────────────────────────
 
 export async function seedOIData(kv: Deno.Kv): Promise<number> {
@@ -745,6 +863,16 @@ export async function seedWorkflowData(kv: Deno.Kv): Promise<number> {
 
   for (const notification of NOTIFICATIONS) {
     await kv.set(['Notifications', notification.NotificationId], notification);
+    count++;
+  }
+
+  for (const mapping of STUDY_ROLE_MAPPINGS) {
+    await kv.set(['StudyRoleMappings', mapping.MappingId], mapping);
+    count++;
+  }
+
+  for (const approval of APPROVALS) {
+    await kv.set(['Approvals', approval.ApprovalId], approval);
     count++;
   }
 

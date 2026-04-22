@@ -24,59 +24,8 @@ export default [
       });
     }
 
-    // Resolve workspace-scoped access rights
+    // Resolve workspace-scoped access rights from OI API
     ctx.State.AccessRights = [];
-
-    // Dev-mode persona override for Playwright demos
-    const devMode = Deno.env.get('EAC_RUNTIME_DEV') === 'true';
-    const demoCookie = req.headers.get('cookie')?.match(
-      /demo_persona=([^;]+)/,
-    )?.[1];
-
-    if (devMode && demoCookie) {
-      const PERSONA_MAP: Record<
-        string,
-        { username: string; rights: string[] }
-      > = {
-        elena: {
-          username: 'liora.vasquez',
-          rights: ['samples:receive'],
-        },
-        labManager: {
-          username: 'dr.priya.lindqvist',
-          rights: ['admin:access', 'review:approve'],
-        },
-        scientist: {
-          username: 'dr.tobias.nakamura',
-          rights: ['scientist:request'],
-        },
-        custodian: {
-          username: 'declan.okafor',
-          rights: ['custody:approve'],
-        },
-        qaAuditor: {
-          username: 'annika.desrosiers',
-          rights: ['compliance:export'],
-        },
-        studyCoordinator: {
-          username: 'renata.solberg',
-          rights: ['study:view'],
-        },
-        csvGroupHead: {
-          username: 'dr.emile.kowalczyk',
-          rights: ['config:admin', 'review:approve'],
-        },
-      };
-      const persona = PERSONA_MAP[demoCookie];
-      if (persona) {
-        ctx.State.Username = persona.username;
-        ctx.State.AccessRights = persona.rights;
-        ctx.State.Theme = resolveTheme(req);
-        ctx.State.Locale = resolveLocale(req);
-        ctx.State.Strings = await loadStrings(ctx.State.Locale as 'en' | 'fr');
-        return ctx.Next();
-      }
-    }
 
     const username = ctx.State.Username;
 

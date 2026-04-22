@@ -59,6 +59,10 @@ export const handler: EaCRuntimeHandlerSet<
   DispositionPageData
 > = {
   GET: async (req, ctx) => {
+    if (!ctx.State.AccessRights.includes('custody:approve')) {
+      return new Response('Forbidden', { status: 403 });
+    }
+
     const { t } = useTranslation(ctx.State.Strings);
     const rights = ctx.State.AccessRights;
 

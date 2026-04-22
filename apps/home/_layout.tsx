@@ -70,16 +70,19 @@ export const handler: EaCRuntimeHandlerSet<
           DaysAgo: t('notification.timeAgo.daysAgo'),
         },
       },
-      NavLinks: [
-        { href: '/', label: t('nav.dashboard') },
-        { href: '/receive', label: t('nav.receive') },
-        { href: '/transfer', label: t('nav.transfer') },
-        { href: '/return', label: t('nav.return') },
-        { href: '/reconciliation', label: t('nav.reconciliation') },
-        { href: '/disposition', label: t('nav.disposition') },
-        { href: '/track', label: t('nav.track') },
-        { href: '/report', label: t('nav.report') },
-      ],
+      NavLinks: ([
+        { href: '/', label: t('nav.home'), right: 'samples:view' },
+        { href: '/dashboard', label: t('nav.dashboard'), right: 'samples:view' },
+        { href: '/receive', label: t('nav.receive'), right: 'samples:receive' },
+        { href: '/transfer', label: t('nav.transfer'), right: 'samples:receive' },
+        { href: '/return', label: t('nav.return'), right: 'samples:view' },
+        { href: '/reconciliation', label: t('nav.reconciliation'), right: 'samples:receive' },
+        { href: '/disposition', label: t('nav.disposition'), right: 'custody:approve' },
+        { href: '/track', label: t('nav.track'), right: 'samples:view' },
+        { href: '/report', label: t('nav.report'), right: 'compliance:view' },
+      ] as { href: string; label: string; right: string }[])
+        .filter((item) => ctx.State.AccessRights.includes(item.right))
+        .map(({ href, label }) => ({ href, label })),
       Locales: [
         {
           code: 'en',
