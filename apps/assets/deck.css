@@ -94,3 +94,42 @@ main, #__next, #app, .app-shell, [data-layout] {
     color: #1a1a1a !important;
   }
 }
+
+/* ── Page link buttons ─────────────────────────────────────── */
+.deck-page-link {
+  display: inline-block;
+  margin: 0.5rem 0.25rem;
+  padding: 0.5rem 1.25rem;
+  background: rgba(0, 255, 200, 0.15);
+  border: 1px solid rgba(0, 255, 200, 0.4);
+  border-radius: 0.375rem;
+  color: #00ffc8;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+
+.deck-page-link:hover {
+  background: rgba(0, 255, 200, 0.25);
+  border-color: rgba(0, 255, 200, 0.7);
+  color: #00ffc8;
+  text-decoration: none;
+}
+
+/* ── Persona section dividers ──────────────────────────────── */
+.persona-divider {
+  display: block;
+  margin: 0.75rem auto;
+  padding: 0.25rem 1rem;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 9999px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: fit-content;
+}

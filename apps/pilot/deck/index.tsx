@@ -57,16 +57,26 @@ export default function SampleMgmtDeckPage(
 
   const {
     title,
-    theShift,
-    stakes,
-    theGap,
-    solution,
-    theLoop,
-    webApp,
-    alternatives,
-    pilot,
-    derisk,
-    cta,
+    personas,
+    absentNotBlocked,
+    sampleManagerWorkflow,
+    receiveScreen,
+    reconciliationScreen,
+    labManagerWorkflow,
+    dashboardScreen,
+    transferScreen,
+    scientistWorkflow,
+    returnScreen,
+    custodianWorkflow,
+    dispositionScreen,
+    qaAuditorWorkflow,
+    auditTrailScreen,
+    studyCoordinatorWorkflow,
+    trackSamplesScreen,
+    csvGroupHeadWorkflow,
+    adminDashboardScreen,
+    builtVsNext,
+    discussion,
   } = sampleMgmtDeck;
 
   return (
@@ -87,290 +97,631 @@ export default function SampleMgmtDeckPage(
         <div class='slides'>
           {/* SLIDE 1: Title */}
           <section data-transition={title.transition}>
-            <div class='flex flex-col items-center justify-center h-full text-center px-8'>
-              <span class='block mb-6 text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-white/60'>
+            <div class='px-8'>
+              <span class='inline-block px-4 py-1 text-xs font-semibold tracking-wider uppercase rounded-full bg-neon-purple-500/20 text-neon-purple-300 mb-6'>
                 {title.badge}
               </span>
-              <h1 class='text-5xl font-semibold tracking-tight mb-8'>
-                <span class='bg-gradient-to-r from-neon-purple-400 to-neon-cyan-400 bg-clip-text text-transparent'>
-                  {title.headline}
-                </span>
+              <h1 class='text-5xl font-bold text-white mb-4'>
+                {title.headline}
               </h1>
-              <p class='text-lg text-white/70 mb-4'>{title.subheadline}</p>
-              <p class='text-sm text-white/40'>{title.tagline}</p>
+              <p class='text-2xl bg-gradient-to-r from-neon-purple-400 to-neon-cyan-400 bg-clip-text text-transparent mb-4'>
+                {title.subheadline}
+              </p>
+              <p class='text-lg text-white/60'>{title.tagline}</p>
             </div>
           </section>
 
-          {/* SLIDE 2: The Shift */}
-          <section data-transition={theShift.transition}>
-            <div class='px-8'>
-              <h2 class='text-4xl font-semibold text-white mb-10'>
-                {theShift.headline}
-              </h2>
-              <div class='grid grid-cols-2 gap-8'>
-                <div class='rounded-xl border border-red-500/30 bg-red-500/10 p-6'>
-                  <h3 class='text-sm font-bold uppercase tracking-wider text-red-400 mb-3'>
-                    Before
-                  </h3>
-                  <p class='text-white/70'>{theShift.before}</p>
-                </div>
-                <div class='rounded-xl border border-neon-cyan-500/30 bg-neon-cyan-500/10 p-6'>
-                  <h3 class='text-sm font-bold uppercase tracking-wider text-neon-cyan-400 mb-3'>
-                    After
-                  </h3>
-                  <p class='text-white/70'>{theShift.after}</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* SLIDE 3: Stakes */}
-          <section data-transition={stakes.transition}>
-            <div class='px-8'>
-              <h2 class='text-4xl font-semibold text-white mb-8'>
-                {stakes.headline}
-              </h2>
-              <div class='grid grid-cols-4 gap-4 mb-8'>
-                {stakes.stats.map((stat) => (
-                  <div
-                    key={stat.label}
-                    class='rounded-xl border border-white/10 bg-white/5 p-4 text-center'
-                  >
-                    <div class='text-2xl font-bold text-neon-purple-400 mb-1'>
-                      {stat.value}
-                    </div>
-                    <div class='text-xs text-white/50'>{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-              <div class='space-y-2'>
-                {stakes.risks.map((risk) => (
-                  <div key={risk} class='flex items-center gap-3'>
-                    <span class='text-red-400'>⚠</span>
-                    <span class='text-white/70 text-sm'>{risk}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* SLIDE 4: The Gap */}
-          <section data-transition={theGap.transition}>
-            <div class='px-8'>
-              <h2 class='text-4xl font-semibold text-white mb-6'>
-                {theGap.headline}
-              </h2>
-              <p class='text-lg text-white/60 mb-8'>{theGap.description}</p>
-              <div class='space-y-3'>
-                {theGap.alcoa.map((item) => (
-                  <div
-                    key={item.principle}
-                    class='flex items-center justify-between p-4 rounded-lg border border-white/10 bg-white/5'
-                  >
-                    <span class='font-semibold text-neon-purple-400'>
-                      {item.principle}
-                    </span>
-                    <span
-                      class={`px-2 py-1 rounded text-xs font-bold ${
-                        item.status === 'VIOLATED'
-                          ? 'bg-red-500/20 text-red-400'
-                          : 'bg-yellow-500/20 text-yellow-400'
-                      }`}
-                    >
-                      {item.status}
-                    </span>
-                    <span class='text-sm text-white/50 max-w-md'>
-                      {item.detail}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* SLIDE 5: Solution */}
-          <section data-transition={solution.transition}>
+          {/* SLIDE 2: Personas */}
+          <section data-transition={personas.transition}>
             <div class='px-8'>
               <h2 class='text-4xl font-semibold text-white mb-4'>
-                {solution.headline}
+                {personas.headline}
               </h2>
-              <p class='text-lg text-white/50 mb-8'>{solution.tagline}</p>
-              <div class='grid grid-cols-2 gap-4'>
-                {solution.points.map((point) => (
-                  <div
-                    key={point.label}
-                    class='rounded-xl border border-white/10 bg-white/5 p-4'
-                  >
-                    <h3 class='font-semibold text-neon-cyan-400 mb-1 text-sm'>
-                      {point.label}
-                    </h3>
-                    <p class='text-white/60 text-sm'>{point.detail}</p>
-                  </div>
-                ))}
-              </div>
+              <p class='text-white/60 mb-8'>{personas.intro}</p>
+              <table class='w-full text-left text-sm'>
+                <thead>
+                  <tr class='border-b border-white/20'>
+                    <th class='py-2 text-neon-purple-300 font-semibold'>
+                      Name
+                    </th>
+                    <th class='py-2 text-neon-purple-300 font-semibold'>
+                      Role
+                    </th>
+                    <th class='py-2 text-neon-purple-300 font-semibold'>
+                      Focus
+                    </th>
+                    <th class='py-2 text-neon-purple-300 font-semibold'>
+                      Landing
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {personas.roles.map((p) => (
+                    <tr class='border-b border-white/10'>
+                      <td class='py-2 text-white font-medium'>{p.name}</td>
+                      <td class='py-2 text-white/70'>{p.role}</td>
+                      <td class='py-2 text-white/60 text-xs'>{p.focus}</td>
+                      <td class='py-2 font-mono text-neon-cyan-400 text-xs'>
+                        {p.landing}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </section>
 
-          {/* SLIDE 6: The Loop */}
-          <section data-transition={theLoop.transition}>
+          {/* SLIDE 3: Absent, Not Blocked */}
+          <section data-transition={absentNotBlocked.transition}>
             <div class='px-8'>
-              <h2 class='text-4xl font-semibold text-white mb-10'>
-                {theLoop.headline}
+              <h2 class='text-4xl font-semibold text-white mb-4'>
+                {absentNotBlocked.headline}
               </h2>
-              <div class='space-y-4'>
-                {theLoop.stages.map((stage) => (
-                  <div key={stage.step} class='flex items-center gap-4'>
-                    <span class='h-8 w-8 rounded-full bg-gradient-to-br from-neon-purple-500 to-neon-cyan-500 flex items-center justify-center text-white font-bold text-sm'>
-                      {stage.step}
-                    </span>
-                    <div>
-                      <span class='font-semibold text-white'>
-                        {stage.label}
-                      </span>
-                      <span class='text-white/50 ml-2 text-sm'>
-                        — {stage.detail}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* SLIDE 7: Web App */}
-          <section data-transition={webApp.transition}>
-            <div class='px-8'>
-              <h2 class='text-4xl font-semibold text-white mb-6'>
-                {webApp.headline}
-              </h2>
-              <p class='text-white/60 mb-8'>{webApp.description}</p>
-              <div class='grid grid-cols-3 gap-4 mb-8'>
-                {webApp.screens.map((screen) => (
-                  <div
-                    key={screen.name}
-                    class='rounded-xl border border-white/10 bg-white/5 p-4 text-center'
-                  >
-                    <h3 class='text-sm font-bold uppercase tracking-wider text-neon-purple-400 mb-2'>
-                      {screen.name}
-                    </h3>
-                    <p class='text-sm text-white/60'>{screen.detail}</p>
-                  </div>
-                ))}
-              </div>
-              <div class='rounded-xl border border-neon-cyan-500/30 bg-neon-cyan-500/10 p-6 text-center'>
-                <p class='text-lg text-neon-cyan-300 italic'>
-                  {webApp.pivotMoment}
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* SLIDE 8: Alternatives */}
-          <section data-transition={alternatives.transition}>
-            <div class='px-8'>
-              <h2 class='text-4xl font-semibold text-white mb-6'>
-                {alternatives.headline}
-              </h2>
-              <div class='space-y-3'>
-                {alternatives.options.map((option) => (
-                  <div
-                    key={option.name}
-                    class={`flex items-center justify-between p-4 rounded-lg border ${
-                      option.highlight
-                        ? 'border-neon-cyan-500/50 bg-neon-cyan-500/10'
-                        : 'border-white/10 bg-white/5'
-                    }`}
-                  >
-                    <span
-                      class={`font-semibold ${
-                        option.highlight ? 'text-neon-cyan-400' : 'text-white'
-                      }`}
-                    >
-                      {option.name}
-                    </span>
-                    <div class='flex gap-8 text-sm'>
-                      <span class='text-white/50'>{option.cost}</span>
-                      <span class='text-white/50'>{option.time}</span>
-                      <span
-                        class={option.flaw === '—'
-                          ? 'text-neon-cyan-400'
-                          : 'text-red-400'}
-                      >
-                        {option.flaw}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* SLIDE 9: Pilot */}
-          <section data-transition={pilot.transition}>
-            <div class='px-8'>
-              <h2 class='text-4xl font-semibold text-white mb-6'>
-                {pilot.headline}
-              </h2>
-              <p class='text-white/60 mb-6'>{pilot.scope}</p>
-              <div class='space-y-2 mb-8'>
-                {pilot.deliverables.map((d) => (
-                  <div key={d} class='flex items-center gap-3'>
-                    <span class='text-neon-cyan-400'>✓</span>
-                    <span class='text-white/80 text-sm'>{d}</span>
-                  </div>
-                ))}
-              </div>
-              <div class='rounded-xl border border-neon-purple-500/30 bg-neon-purple-500/10 p-6 text-center'>
-                <p class='text-lg text-white/70 italic'>{pilot.guarantee}</p>
-              </div>
-            </div>
-          </section>
-
-          {/* SLIDE 10: De-Risk */}
-          <section data-transition={derisk.transition}>
-            <div class='px-8'>
-              <h2 class='text-4xl font-semibold text-white mb-10'>
-                {derisk.headline}
-              </h2>
-              <div class='grid grid-cols-2 gap-6'>
-                {derisk.statements.map((s) => (
-                  <div
-                    key={s.claim}
-                    class='rounded-xl border border-white/10 bg-white/5 p-6'
-                  >
-                    <h3 class='font-semibold text-neon-purple-400 mb-2'>
-                      {s.claim}
-                    </h3>
-                    <p class='text-white/60 text-sm'>{s.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* SLIDE 11: CTA */}
-          <section data-transition={cta.transition}>
-            <div class='px-8 text-center'>
-              <h2 class='text-5xl font-semibold mb-8'>
-                <span class='bg-gradient-to-r from-neon-purple-400 to-neon-cyan-400 bg-clip-text text-transparent'>
-                  {cta.headline}
-                </span>
-              </h2>
-              <div class='flex justify-center gap-4 mb-8'>
-                <span class='px-6 py-3 rounded-full bg-gradient-to-r from-neon-purple-500 to-neon-cyan-500 text-white font-semibold'>
-                  {cta.primary}
-                </span>
-                <span class='px-6 py-3 rounded-full border border-white/20 text-white/70'>
-                  {cta.secondary}
-                </span>
-              </div>
-              <p class='text-xl text-white/60 italic mb-6'>
-                {cta.tagline}
+              <p class='text-white/70 mb-8 max-w-3xl mx-auto'>
+                {absentNotBlocked.description}
               </p>
-              <div class='inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-neon-purple-500/20 to-neon-cyan-500/20 px-6 py-3 text-lg font-semibold text-neon-purple-400'>
-                {cta.contact}
+              <div class='grid grid-cols-2 gap-4 max-w-3xl mx-auto'>
+                {absentNotBlocked.examples.map((ex) => (
+                  <div class='bg-white/5 rounded-lg p-4 text-left'>
+                    <p class='text-neon-purple-300 font-semibold text-sm mb-2'>
+                      {ex.role}
+                    </p>
+                    <p class='text-white/70 text-xs mb-1'>
+                      <span class='text-neon-cyan-400'>Sees:</span> {ex.sees}
+                    </p>
+                    <p class='text-white/40 text-xs'>
+                      <span class='text-red-400/70'>Hidden:</span>{' '}
+                      {ex.doesNotSee}
+                    </p>
+                  </div>
+                ))}
               </div>
-              <p class='text-sm text-white/40 mt-4'>{cta.compliance}</p>
+            </div>
+          </section>
+
+          {/* SLIDE 4: Sample Manager — Workflow */}
+          <section data-transition={sampleManagerWorkflow.transition}>
+            <div class='px-8'>
+              <span class='persona-divider'>
+                {sampleManagerWorkflow.persona} · {sampleManagerWorkflow.role}
+              </span>
+              <h2 class='text-4xl font-semibold text-white mb-4'>
+                {sampleManagerWorkflow.headline}
+              </h2>
+              <p class='text-lg text-neon-cyan-400 mb-6'>
+                {sampleManagerWorkflow.why}
+              </p>
+              <ol class='text-left space-y-3 max-w-3xl mx-auto'>
+                {sampleManagerWorkflow.steps.map((step, i) => (
+                  <li class='flex gap-3'>
+                    <span class='flex-shrink-0 w-7 h-7 rounded-full bg-neon-purple-500/30 text-neon-purple-300 flex items-center justify-center text-sm font-semibold'>
+                      {i + 1}
+                    </span>
+                    <span class='text-white/80 text-sm'>{step}</span>
+                  </li>
+                ))}
+              </ol>
+              {sampleManagerWorkflow.scottQuote && (
+                <p class='mt-8 text-white/50 italic text-sm'>
+                  {sampleManagerWorkflow.scottQuote}
+                </p>
+              )}
+            </div>
+          </section>
+
+          {/* SLIDE 5: Sample Reception — Screen */}
+          <section data-transition={receiveScreen.transition}>
+            <div class='px-8'>
+              <h2 class='text-4xl font-semibold text-white mb-2'>
+                {receiveScreen.headline}
+              </h2>
+              <p class='font-mono text-neon-cyan-400 text-sm mb-4'>
+                {receiveScreen.path}
+              </p>
+              <p class='text-white/70 mb-6 max-w-3xl mx-auto'>
+                {receiveScreen.description}
+              </p>
+              <ul class='text-left space-y-2 max-w-2xl mx-auto mb-8'>
+                {receiveScreen.highlights.map((h) => (
+                  <li class='flex gap-2'>
+                    <span class='text-neon-cyan-400'>→</span>
+                    <span class='text-white/70 text-sm'>{h}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={receiveScreen.link.href}
+                target='_blank'
+                class='deck-page-link'
+              >
+                {receiveScreen.link.label} →
+              </a>
+            </div>
+          </section>
+
+          {/* SLIDE 6: Reconciliation — Screen */}
+          <section data-transition={reconciliationScreen.transition}>
+            <div class='px-8'>
+              <h2 class='text-4xl font-semibold text-white mb-2'>
+                {reconciliationScreen.headline}
+              </h2>
+              <p class='font-mono text-neon-cyan-400 text-sm mb-4'>
+                {reconciliationScreen.path}
+              </p>
+              <p class='text-white/70 mb-6 max-w-3xl mx-auto'>
+                {reconciliationScreen.description}
+              </p>
+              <ul class='text-left space-y-2 max-w-2xl mx-auto mb-8'>
+                {reconciliationScreen.highlights.map((h) => (
+                  <li class='flex gap-2'>
+                    <span class='text-neon-cyan-400'>→</span>
+                    <span class='text-white/70 text-sm'>{h}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={reconciliationScreen.link.href}
+                target='_blank'
+                class='deck-page-link'
+              >
+                {reconciliationScreen.link.label} →
+              </a>
+            </div>
+          </section>
+
+          {/* SLIDE 7: Lab Manager — Workflow */}
+          <section data-transition={labManagerWorkflow.transition}>
+            <div class='px-8'>
+              <span class='persona-divider'>
+                {labManagerWorkflow.persona} · {labManagerWorkflow.role}
+              </span>
+              <h2 class='text-4xl font-semibold text-white mb-4'>
+                {labManagerWorkflow.headline}
+              </h2>
+              <p class='text-lg text-neon-cyan-400 mb-6'>
+                {labManagerWorkflow.why}
+              </p>
+              <ol class='text-left space-y-3 max-w-3xl mx-auto'>
+                {labManagerWorkflow.steps.map((step, i) => (
+                  <li class='flex gap-3'>
+                    <span class='flex-shrink-0 w-7 h-7 rounded-full bg-neon-purple-500/30 text-neon-purple-300 flex items-center justify-center text-sm font-semibold'>
+                      {i + 1}
+                    </span>
+                    <span class='text-white/80 text-sm'>{step}</span>
+                  </li>
+                ))}
+              </ol>
+              {labManagerWorkflow.scottQuote && (
+                <p class='mt-8 text-white/50 italic text-sm'>
+                  {labManagerWorkflow.scottQuote}
+                </p>
+              )}
+            </div>
+          </section>
+
+          {/* SLIDE 8: Dashboard — Screen */}
+          <section data-transition={dashboardScreen.transition}>
+            <div class='px-8'>
+              <h2 class='text-4xl font-semibold text-white mb-2'>
+                {dashboardScreen.headline}
+              </h2>
+              <p class='font-mono text-neon-cyan-400 text-sm mb-4'>
+                {dashboardScreen.path}
+              </p>
+              <p class='text-white/70 mb-6 max-w-3xl mx-auto'>
+                {dashboardScreen.description}
+              </p>
+              <ul class='text-left space-y-2 max-w-2xl mx-auto mb-8'>
+                {dashboardScreen.highlights.map((h) => (
+                  <li class='flex gap-2'>
+                    <span class='text-neon-cyan-400'>→</span>
+                    <span class='text-white/70 text-sm'>{h}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={dashboardScreen.link.href}
+                target='_blank'
+                class='deck-page-link'
+              >
+                {dashboardScreen.link.label} →
+              </a>
+            </div>
+          </section>
+
+          {/* SLIDE 9: Transfer Management — Screen */}
+          <section data-transition={transferScreen.transition}>
+            <div class='px-8'>
+              <h2 class='text-4xl font-semibold text-white mb-2'>
+                {transferScreen.headline}
+              </h2>
+              <p class='font-mono text-neon-cyan-400 text-sm mb-4'>
+                {transferScreen.path}
+              </p>
+              <p class='text-white/70 mb-6 max-w-3xl mx-auto'>
+                {transferScreen.description}
+              </p>
+              <ul class='text-left space-y-2 max-w-2xl mx-auto mb-8'>
+                {transferScreen.highlights.map((h) => (
+                  <li class='flex gap-2'>
+                    <span class='text-neon-cyan-400'>→</span>
+                    <span class='text-white/70 text-sm'>{h}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={transferScreen.link.href}
+                target='_blank'
+                class='deck-page-link'
+              >
+                {transferScreen.link.label} →
+              </a>
+            </div>
+          </section>
+
+          {/* SLIDE 10: Scientist — Workflow */}
+          <section data-transition={scientistWorkflow.transition}>
+            <div class='px-8'>
+              <span class='persona-divider'>
+                {scientistWorkflow.persona} · {scientistWorkflow.role}
+              </span>
+              <h2 class='text-4xl font-semibold text-white mb-4'>
+                {scientistWorkflow.headline}
+              </h2>
+              <p class='text-lg text-neon-cyan-400 mb-6'>
+                {scientistWorkflow.why}
+              </p>
+              <ol class='text-left space-y-3 max-w-3xl mx-auto'>
+                {scientistWorkflow.steps.map((step, i) => (
+                  <li class='flex gap-3'>
+                    <span class='flex-shrink-0 w-7 h-7 rounded-full bg-neon-purple-500/30 text-neon-purple-300 flex items-center justify-center text-sm font-semibold'>
+                      {i + 1}
+                    </span>
+                    <span class='text-white/80 text-sm'>{step}</span>
+                  </li>
+                ))}
+              </ol>
+              {scientistWorkflow.scottQuote && (
+                <p class='mt-8 text-white/50 italic text-sm'>
+                  {scientistWorkflow.scottQuote}
+                </p>
+              )}
+            </div>
+          </section>
+
+          {/* SLIDE 11: Return Requests — Screen */}
+          <section data-transition={returnScreen.transition}>
+            <div class='px-8'>
+              <h2 class='text-4xl font-semibold text-white mb-2'>
+                {returnScreen.headline}
+              </h2>
+              <p class='font-mono text-neon-cyan-400 text-sm mb-4'>
+                {returnScreen.path}
+              </p>
+              <p class='text-white/70 mb-6 max-w-3xl mx-auto'>
+                {returnScreen.description}
+              </p>
+              <ul class='text-left space-y-2 max-w-2xl mx-auto mb-8'>
+                {returnScreen.highlights.map((h) => (
+                  <li class='flex gap-2'>
+                    <span class='text-neon-cyan-400'>→</span>
+                    <span class='text-white/70 text-sm'>{h}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={returnScreen.link.href}
+                target='_blank'
+                class='deck-page-link'
+              >
+                {returnScreen.link.label} →
+              </a>
+            </div>
+          </section>
+
+          {/* SLIDE 12: Custodian — Workflow */}
+          <section data-transition={custodianWorkflow.transition}>
+            <div class='px-8'>
+              <span class='persona-divider'>
+                {custodianWorkflow.persona} · {custodianWorkflow.role}
+              </span>
+              <h2 class='text-4xl font-semibold text-white mb-4'>
+                {custodianWorkflow.headline}
+              </h2>
+              <p class='text-lg text-neon-cyan-400 mb-6'>
+                {custodianWorkflow.why}
+              </p>
+              <ol class='text-left space-y-3 max-w-3xl mx-auto'>
+                {custodianWorkflow.steps.map((step, i) => (
+                  <li class='flex gap-3'>
+                    <span class='flex-shrink-0 w-7 h-7 rounded-full bg-neon-purple-500/30 text-neon-purple-300 flex items-center justify-center text-sm font-semibold'>
+                      {i + 1}
+                    </span>
+                    <span class='text-white/80 text-sm'>{step}</span>
+                  </li>
+                ))}
+              </ol>
+              {custodianWorkflow.scottQuote && (
+                <p class='mt-8 text-white/50 italic text-sm'>
+                  {custodianWorkflow.scottQuote}
+                </p>
+              )}
+            </div>
+          </section>
+
+          {/* SLIDE 13: Disposition Management — Screen */}
+          <section data-transition={dispositionScreen.transition}>
+            <div class='px-8'>
+              <h2 class='text-4xl font-semibold text-white mb-2'>
+                {dispositionScreen.headline}
+              </h2>
+              <p class='font-mono text-neon-cyan-400 text-sm mb-4'>
+                {dispositionScreen.path}
+              </p>
+              <p class='text-white/70 mb-6 max-w-3xl mx-auto'>
+                {dispositionScreen.description}
+              </p>
+              <ul class='text-left space-y-2 max-w-2xl mx-auto mb-8'>
+                {dispositionScreen.highlights.map((h) => (
+                  <li class='flex gap-2'>
+                    <span class='text-neon-cyan-400'>→</span>
+                    <span class='text-white/70 text-sm'>{h}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={dispositionScreen.link.href}
+                target='_blank'
+                class='deck-page-link'
+              >
+                {dispositionScreen.link.label} →
+              </a>
+            </div>
+          </section>
+
+          {/* SLIDE 14: QA Auditor — Workflow */}
+          <section data-transition={qaAuditorWorkflow.transition}>
+            <div class='px-8'>
+              <span class='persona-divider'>
+                {qaAuditorWorkflow.persona} · {qaAuditorWorkflow.role}
+              </span>
+              <h2 class='text-4xl font-semibold text-white mb-4'>
+                {qaAuditorWorkflow.headline}
+              </h2>
+              <p class='text-lg text-neon-cyan-400 mb-6'>
+                {qaAuditorWorkflow.why}
+              </p>
+              <ol class='text-left space-y-3 max-w-3xl mx-auto'>
+                {qaAuditorWorkflow.steps.map((step, i) => (
+                  <li class='flex gap-3'>
+                    <span class='flex-shrink-0 w-7 h-7 rounded-full bg-neon-purple-500/30 text-neon-purple-300 flex items-center justify-center text-sm font-semibold'>
+                      {i + 1}
+                    </span>
+                    <span class='text-white/80 text-sm'>{step}</span>
+                  </li>
+                ))}
+              </ol>
+              {qaAuditorWorkflow.scottQuote && (
+                <p class='mt-8 text-white/50 italic text-sm'>
+                  {qaAuditorWorkflow.scottQuote}
+                </p>
+              )}
+            </div>
+          </section>
+
+          {/* SLIDE 15: Audit Trail — Screen */}
+          <section data-transition={auditTrailScreen.transition}>
+            <div class='px-8'>
+              <h2 class='text-4xl font-semibold text-white mb-2'>
+                {auditTrailScreen.headline}
+              </h2>
+              <p class='font-mono text-neon-cyan-400 text-sm mb-4'>
+                {auditTrailScreen.path}
+              </p>
+              <p class='text-white/70 mb-6 max-w-3xl mx-auto'>
+                {auditTrailScreen.description}
+              </p>
+              <ul class='text-left space-y-2 max-w-2xl mx-auto mb-8'>
+                {auditTrailScreen.highlights.map((h) => (
+                  <li class='flex gap-2'>
+                    <span class='text-neon-cyan-400'>→</span>
+                    <span class='text-white/70 text-sm'>{h}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={auditTrailScreen.link.href}
+                target='_blank'
+                class='deck-page-link'
+              >
+                {auditTrailScreen.link.label} →
+              </a>
+            </div>
+          </section>
+
+          {/* SLIDE 16: Study Coordinator — Workflow */}
+          <section data-transition={studyCoordinatorWorkflow.transition}>
+            <div class='px-8'>
+              <span class='persona-divider'>
+                {studyCoordinatorWorkflow.persona} ·{' '}
+                {studyCoordinatorWorkflow.role}
+              </span>
+              <h2 class='text-4xl font-semibold text-white mb-4'>
+                {studyCoordinatorWorkflow.headline}
+              </h2>
+              <p class='text-lg text-neon-cyan-400 mb-6'>
+                {studyCoordinatorWorkflow.why}
+              </p>
+              <ol class='text-left space-y-3 max-w-3xl mx-auto'>
+                {studyCoordinatorWorkflow.steps.map((step, i) => (
+                  <li class='flex gap-3'>
+                    <span class='flex-shrink-0 w-7 h-7 rounded-full bg-neon-purple-500/30 text-neon-purple-300 flex items-center justify-center text-sm font-semibold'>
+                      {i + 1}
+                    </span>
+                    <span class='text-white/80 text-sm'>{step}</span>
+                  </li>
+                ))}
+              </ol>
+              {studyCoordinatorWorkflow.scottQuote && (
+                <p class='mt-8 text-white/50 italic text-sm'>
+                  {studyCoordinatorWorkflow.scottQuote}
+                </p>
+              )}
+            </div>
+          </section>
+
+          {/* SLIDE 17: Sample Tracking — Screen */}
+          <section data-transition={trackSamplesScreen.transition}>
+            <div class='px-8'>
+              <h2 class='text-4xl font-semibold text-white mb-2'>
+                {trackSamplesScreen.headline}
+              </h2>
+              <p class='font-mono text-neon-cyan-400 text-sm mb-4'>
+                {trackSamplesScreen.path}
+              </p>
+              <p class='text-white/70 mb-6 max-w-3xl mx-auto'>
+                {trackSamplesScreen.description}
+              </p>
+              <ul class='text-left space-y-2 max-w-2xl mx-auto mb-8'>
+                {trackSamplesScreen.highlights.map((h) => (
+                  <li class='flex gap-2'>
+                    <span class='text-neon-cyan-400'>→</span>
+                    <span class='text-white/70 text-sm'>{h}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={trackSamplesScreen.link.href}
+                target='_blank'
+                class='deck-page-link'
+              >
+                {trackSamplesScreen.link.label} →
+              </a>
+            </div>
+          </section>
+
+          {/* SLIDE 18: CSV Group Head — Workflow */}
+          <section data-transition={csvGroupHeadWorkflow.transition}>
+            <div class='px-8'>
+              <span class='persona-divider'>
+                {csvGroupHeadWorkflow.persona} · {csvGroupHeadWorkflow.role}
+              </span>
+              <h2 class='text-4xl font-semibold text-white mb-4'>
+                {csvGroupHeadWorkflow.headline}
+              </h2>
+              <p class='text-lg text-neon-cyan-400 mb-6'>
+                {csvGroupHeadWorkflow.why}
+              </p>
+              <ol class='text-left space-y-3 max-w-3xl mx-auto'>
+                {csvGroupHeadWorkflow.steps.map((step, i) => (
+                  <li class='flex gap-3'>
+                    <span class='flex-shrink-0 w-7 h-7 rounded-full bg-neon-purple-500/30 text-neon-purple-300 flex items-center justify-center text-sm font-semibold'>
+                      {i + 1}
+                    </span>
+                    <span class='text-white/80 text-sm'>{step}</span>
+                  </li>
+                ))}
+              </ol>
+              {csvGroupHeadWorkflow.scottQuote && (
+                <p class='mt-8 text-white/50 italic text-sm'>
+                  {csvGroupHeadWorkflow.scottQuote}
+                </p>
+              )}
+            </div>
+          </section>
+
+          {/* SLIDE 19: Admin Dashboard — Screen */}
+          <section data-transition={adminDashboardScreen.transition}>
+            <div class='px-8'>
+              <h2 class='text-4xl font-semibold text-white mb-2'>
+                {adminDashboardScreen.headline}
+              </h2>
+              <p class='font-mono text-neon-cyan-400 text-sm mb-4'>
+                {adminDashboardScreen.path}
+              </p>
+              <p class='text-white/70 mb-6 max-w-3xl mx-auto'>
+                {adminDashboardScreen.description}
+              </p>
+              <ul class='text-left space-y-2 max-w-2xl mx-auto mb-8'>
+                {adminDashboardScreen.highlights.map((h) => (
+                  <li class='flex gap-2'>
+                    <span class='text-neon-cyan-400'>→</span>
+                    <span class='text-white/70 text-sm'>{h}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={adminDashboardScreen.link.href}
+                target='_blank'
+                class='deck-page-link'
+              >
+                {adminDashboardScreen.link.label} →
+              </a>
+            </div>
+          </section>
+
+          {/* SLIDE 20: Built vs Next */}
+          <section data-transition={builtVsNext.transition}>
+            <div class='px-8'>
+              <h2 class='text-4xl font-semibold text-white mb-4'>
+                {builtVsNext.headline}
+              </h2>
+              <p class='text-white/60 mb-6'>{builtVsNext.description}</p>
+              <table class='w-full text-left text-sm'>
+                <thead>
+                  <tr class='border-b border-white/20'>
+                    <th class='py-2 text-neon-purple-300 font-semibold'>
+                      Screen
+                    </th>
+                    <th class='py-2 text-neon-purple-300 font-semibold'>
+                      Status
+                    </th>
+                    <th class='py-2 text-neon-purple-300 font-semibold'>
+                      Personas
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {builtVsNext.matrix.map((row) => (
+                    <tr class='border-b border-white/10'>
+                      <td class='py-1.5 text-white/80'>{row.screen}</td>
+                      <td class='py-1.5'>
+                        <span
+                          class={`px-2 py-0.5 rounded text-xs font-medium ${
+                            row.status === 'seeded'
+                              ? 'bg-blue-500/20 text-blue-300'
+                              : row.status === 'live'
+                              ? 'bg-green-500/20 text-green-300'
+                              : 'bg-white/10 text-white/50'
+                          }`}
+                        >
+                          {row.status}
+                        </span>
+                      </td>
+                      <td class='py-1.5 text-white/60 text-xs'>
+                        {row.personas}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* SLIDE 21: Discussion */}
+          <section data-transition={discussion.transition}>
+            <div class='px-8'>
+              <h2 class='text-4xl font-semibold text-white mb-8'>
+                {discussion.headline}
+              </h2>
+              <ul class='space-y-4 max-w-2xl mx-auto mb-10'>
+                {discussion.prompts.map((prompt) => (
+                  <li class='text-xl text-white/80'>• {prompt}</li>
+                ))}
+              </ul>
+              <p class='text-white/50 text-sm italic'>
+                {discussion.closingNote}
+              </p>
             </div>
           </section>
         </div>

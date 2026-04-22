@@ -1,139 +1,212 @@
-export interface ProblemItem {
-  title: string;
-  description: string;
+export interface PersonaSummary {
+  name: string;
+  role: string;
+  responsibility: string;
+  landingPage: string;
 }
-export interface SolutionItem {
-  title: string;
-  description: string;
+
+export interface WorkflowSummary {
+  persona: string;
+  workflow: string;
+  pages: string[];
+  status: 'live' | 'seeded' | 'planned';
 }
-export interface HowItWorksSteps {
-  step1: string;
-  step2: string;
-  step3: string;
-  step4: string;
+
+export interface BuiltFromScott {
+  quote: string;
+  source: string;
+  feature: string;
 }
-export interface PilotDetails {
-  investment: string;
-  duration: string;
-  environment: string;
-  scope: string;
-  outcome: string;
+
+export interface OpenQuestion {
+  question: string;
+  context: string;
 }
-export interface WhyUsItem {
-  title: string;
-  description: string;
-}
-export interface CategoryStatement {
-  statement: string;
-  contrast: string;
-}
-export interface NextStep {
-  headline: string;
-  description: string;
-}
-export interface OnePagerContent {
+
+export interface DiscoverySummaryContent {
   eyebrow: string;
   headline: string;
-  theProblem: ProblemItem[];
-  theSolution: SolutionItem[];
-  howItWorks: HowItWorksSteps;
-  pilot: PilotDetails;
-  whyUs: WhyUsItem[];
-  theCategory: CategoryStatement;
-  nextStep: NextStep;
-  closingQuote: string;
+  personas: PersonaSummary[];
+  workflows: WorkflowSummary[];
+  builtFromScott: BuiltFromScott[];
+  openQuestions: OpenQuestion[];
+  closingNote: string;
 }
 
-export const sampleMgmtOnePagerContent: OnePagerContent = {
-  eyebrow: 'OI SAMPLE MANAGEMENT PILOT',
-  headline: 'Manifest Intake Chain-of-Custody — ALCOA+ by Construction',
+export const sampleMgmtDiscoverySummary: DiscoverySummaryContent = {
+  eyebrow: 'OI SAMPLE MANAGEMENT — DISCOVERY',
+  headline: 'GSK Human Biological Sample Management — Discovery Summary',
 
-  theProblem: [
+  personas: [
     {
-      title: 'The Manifest Gap',
-      description:
-        'Receiving labs find out about incoming samples when the courier walks in. The chain-of-custody record is reconstructed after arrival — violating ALCOA Contemporaneous at the moment of receipt.',
+      name: 'Dr. Liora Vasquez',
+      role: 'Sample Manager',
+      responsibility:
+        'Receives shipments, scans barcodes, validates manifests, resolves discrepancies',
+      landingPage: '/receive',
     },
     {
-      title: 'The 3x Tax',
-      description:
-        'Labs that upgraded to digital systems saw sample processing time triple. Faster data entry + no governance = more deviation reports, more QA time, not less.',
+      name: 'Dr. Priya Lindqvist',
+      role: 'Lab Manager',
+      responsibility:
+        'Monitors team capacity, tracks exceptions, reviews compliance, answers "when do I need another FTE?"',
+      landingPage: '/ (dashboard)',
     },
     {
-      title: 'The Validation Burden',
-      description:
-        '25–40% of LIMS implementation budgets go to validation, not development. Compliance-by-configuration requires re-validation every time the system changes.',
+      name: 'Dr. Tobias Nakamura',
+      role: 'Scientist',
+      responsibility:
+        'Requests returns, submits work lists — does NOT see operational surfaces',
+      landingPage: '/return',
+    },
+    {
+      name: 'Declan Okafor',
+      role: 'HBSM Custodian',
+      responsibility:
+        'Per-study chain-of-custody owner — approves dispositions, transfers, authorizes returns',
+      landingPage: '/disposition',
+    },
+    {
+      name: 'Annika Desrosiers',
+      role: 'QA Auditor',
+      responsibility:
+        'Audit trail inspection, reconstruction verification — "show me what happened to sample X"',
+      landingPage: '/report/audit-trail',
+    },
+    {
+      name: 'Renata Solberg',
+      role: 'Study Coordinator',
+      responsibility:
+        'Monitors sample locations and status for specific studies — "where is my sample?"',
+      landingPage: '/track/samples',
+    },
+    {
+      name: 'Dr. Emile Kowalczyk',
+      role: 'CSV Group Head',
+      responsibility:
+        'Receives escalated reviews, manages system configuration — Scott\'s "any idea I have I throw by him"',
+      landingPage: '/ (dashboard, admin)',
     },
   ],
 
-  theSolution: [
+  workflows: [
     {
-      title: 'Governance by Construction',
-      description:
-        'ALCOA+ is in the node architecture — not added at validation. The audit-log node captures attribution and timestamp at every execution. No backdating is architecturally possible.',
+      persona: 'Dr. Liora Vasquez',
+      workflow: 'Morning at the Bench',
+      pages: ['/receive', '/reconciliation'],
+      status: 'seeded',
     },
     {
-      title: 'Customer-Owned Compliance',
-      description:
-        'EaC configurations are YAML/JSON you own. Your QA team reads them. Your validation team reviews them. The system runs whether or not OI exists.',
+      persona: 'Dr. Priya Lindqvist',
+      workflow: "Manager's Morning Briefing",
+      pages: ['/ (dashboard)', '/transfer'],
+      status: 'seeded',
     },
     {
-      title: 'IoT-Native Receipt',
-      description:
-        'The barcode scanner fires an event at the moment of physical scan — not after documentation. Contemporaneous is structural, not procedural.',
-    },
-  ],
-
-  howItWorks: {
-    step1:
-      'Manifest arrives digitally before shipment — lab is staged and ready',
-    step2:
-      'Courier arrives — barcode scanner fires IoT event at moment of receipt',
-    step3:
-      'ALCOA+ record created: timestamp, operator ID, sample IDs — captured, not reconstructed',
-    step4:
-      'QA team reviews EaC compliance pack — 9-principle ALCOA+ mapping from node architecture',
-  },
-
-  pilot: {
-    investment: '$15,000',
-    duration: '4 weeks',
-    environment: 'One governed workflow',
-    scope:
-      'Manifest intake chain-of-custody — pre-arrival to barcode receipt scan',
-    outcome:
-      'ALCOA+ compliance pack + EaC configs you own + "fire us and keep running" runbook',
-  },
-
-  whyUs: [
-    {
-      title: 'Nobody else does governance this way',
-      description:
-        'Veeva, ServiceNow, and SAP add compliance as configuration. OI builds it into node architecture. The difference: you validate a design, not a configuration.',
+      persona: 'Dr. Tobias Nakamura',
+      workflow: 'Scientist Needs Samples Back',
+      pages: ['/return'],
+      status: 'seeded',
     },
     {
-      title: 'SAP knows what left — OI knows what arrived',
-      description:
-        'SAP manages lab consumables, not patient biospecimen samples. OI fills the chain-of-custody gap between SAP inventory and lab receipt — without a new SAP module.',
+      persona: 'Declan Okafor',
+      workflow: 'Custody Governance',
+      pages: ['/disposition', '/report/custody'],
+      status: 'seeded',
     },
     {
-      title: 'One workflow in 4 weeks',
-      description:
-        'Not a platform migration. Not a full LIMS replacement. One governed workflow that proves the architecture — then you decide what comes next.',
+      persona: 'Annika Desrosiers',
+      workflow: 'Compliance Deep Dive',
+      pages: [
+        '/report/audit-trail',
+        '/report/ethics-approval',
+        '/report/custody',
+      ],
+      status: 'seeded',
+    },
+    {
+      persona: 'Renata Solberg',
+      workflow: 'Tracking My Studies',
+      pages: ['/track/samples', '/report/custody'],
+      status: 'seeded',
+    },
+    {
+      persona: 'Dr. Emile Kowalczyk',
+      workflow: 'System Architect Reviews',
+      pages: ['/ (dashboard)', '/reconciliation'],
+      status: 'seeded',
     },
   ],
 
-  theCategory: {
-    statement: 'Governance-by-construction for regulated data',
-    contrast:
-      'Not a LIMS replacement — a different category. The validation argument is architectural, not documentary.',
-  },
+  builtFromScott: [
+    {
+      quote: 'Receptions are the most labor intensive thing we do',
+      source: 'L141',
+      feature:
+        '4-tab reception page with manifest upload, barcode scanning, temp logs, parcel reception',
+    },
+    {
+      quote: "Where's the breaking point that I need another sample manager",
+      source: 'L134',
+      feature:
+        'Management overlay with effort tracking and capacity forecast (breakpoint bar)',
+    },
+    {
+      quote: "I'd want to see tiles or panes",
+      source: 'L112',
+      feature:
+        '5 activity panes: Incoming, Transfers, Returns, Reconciliations, Dispositions',
+    },
+    {
+      quote:
+        'TurboTax. Go back this, go look, you look at this, this one still needs attention',
+      source: 'L116',
+      feature:
+        '4-state triage on every item: Ready (green), Attention (amber), Volume Hold (blue), Problem (red)',
+    },
+    {
+      quote: 'I need a signed off form from the custodian',
+      source: 'L101',
+      feature:
+        'HBSM Custodian role with custody:approve right — digital, timestamped, exportable signoff',
+    },
+    {
+      quote: "You can't have duplications. You can't have duplicate barcodes",
+      source: 'L181',
+      feature:
+        'Reconciliation page with barcode-conflict discrepancy type and duplicate detection',
+    },
+    {
+      quote: 'Any idea I have I throw by him and he starts to make it true',
+      source: 'L171',
+      feature:
+        'CSV Group Head escalation chain: submitted → escalated → approved, zero email',
+    },
+  ],
 
-  nextStep: {
-    headline: 'Start with the manifest workflow',
-    description:
-      '4 weeks. One workflow. ALCOA+ at every step. Your QA team reviews the design. You own the output.',
-  },
+  openQuestions: [
+    {
+      question: 'Are these the right 7 roles for your team?',
+      context:
+        'We designed from your testimony — are there roles we missed or combined incorrectly?',
+    },
+    {
+      question: 'Which workflows matter most for day one?',
+      context:
+        'All 7 are designed but we want to prioritize the demo flows you care about most.',
+    },
+    {
+      question: 'What does the disposition workflow look like in practice?',
+      context:
+        'We have destroy/retain/deplete — are there other decision types?',
+    },
+    {
+      question: 'How should the escalation chain work?',
+      context:
+        'Currently: Sample Manager → Lab Manager → CSV Group Head. Is this right?',
+    },
+  ],
 
-  closingQuote: '"Fire us and keep running. That\'s the pilot-level promise."',
+  closingNote:
+    'This summary maps what you told us to what we built. The deck walks through each role and screen. Your feedback shapes what we finalize.',
 };

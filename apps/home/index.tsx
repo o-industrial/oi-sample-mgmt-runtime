@@ -192,7 +192,10 @@ export const handler: EaCRuntimeHandlerSet<
 
     const PERSONA_DISPLAY: Record<string, { name: string; role: string }> = {
       'liora.vasquez': { name: 'Dr. Liora Vasquez', role: 'Sample Manager' },
-      'dr.priya.lindqvist': { name: 'Dr. Priya Lindqvist', role: 'Lab Manager' },
+      'dr.priya.lindqvist': {
+        name: 'Dr. Priya Lindqvist',
+        role: 'Lab Manager',
+      },
       'dr.tobias.nakamura': { name: 'Dr. Tobias Nakamura', role: 'Scientist' },
       'declan.okafor': { name: 'Declan Okafor', role: 'HBSM Custodian' },
       'annika.desrosiers': { name: 'Annika Desrosiers', role: 'QA Auditor' },
