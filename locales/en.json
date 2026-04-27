@@ -332,6 +332,8 @@
   "report.custody.event.depleted": "Depleted",
   "report.custody.event.disposed": "Disposed",
   "report.custody.event.reconciled": "Reconciled",
+  "report.custody.event.audit": "Audited",
+  "report.custody.event.statusupdate": "Status Updated",
   "report.custody.exportPdf": "Export PDF",
   "report.custody.eventCount": "events",
   "track.samples.viewReport": "View Report",

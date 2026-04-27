@@ -1,6 +1,6 @@
-import { EaCRuntimeHandlers } from '@fathym/eac/runtime/pipelines';
-import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
-import { getWorkflowHooks } from '../../../src/data/hooks.ts';
+import { EaCRuntimeHandlers } from "@fathym/eac/runtime/pipelines";
+import { OISampleMgmtWebState } from "../../../src/state/OISampleMgmtWebState.ts";
+import { getWorkflowHooks } from "../../../src/data/hooks.ts";
 
 export default {
   async GET(_req, _ctx) {
@@ -16,7 +16,7 @@ export default {
 
     const hooks = await getWorkflowHooks();
 
-    if (action === 'create') {
+    if (action === "create") {
       const {
         SampleIds,
         Destination,
@@ -32,7 +32,7 @@ export default {
         return Response.json(
           {
             error:
-              'SampleIds, Destination, Reason, RequestedBy, PackagingInstructions, and StudyRef are required',
+              "SampleIds, Destination, Reason, RequestedBy, PackagingInstructions, and StudyRef are required",
           },
           { status: 400 },
         );
@@ -48,11 +48,11 @@ export default {
       return Response.json(ret, { status: 201 });
     }
 
-    if (action === 'update-status') {
+    if (action === "update-status") {
       const { ReturnId, Status, UserId, Outcome, DepletionContext } = body;
       if (!ReturnId || !Status || !UserId) {
         return Response.json(
-          { error: 'ReturnId, Status, and UserId are required' },
+          { error: "ReturnId, Status, and UserId are required" },
           { status: 400 },
         );
       }

@@ -1,11 +1,11 @@
-import { EaCRuntimeHandlers } from '@fathym/eac/runtime/pipelines';
-import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
-import { getWorkflowHooks } from '../../../src/data/hooks.ts';
+import { EaCRuntimeHandlers } from "@fathym/eac/runtime/pipelines";
+import { OISampleMgmtWebState } from "../../../src/state/OISampleMgmtWebState.ts";
+import { getWorkflowHooks } from "../../../src/data/hooks.ts";
 
 export default {
   async GET(req, _ctx) {
     const url = new URL(req.url);
-    const status = url.searchParams.get('status') || undefined;
+    const status = url.searchParams.get("status") || undefined;
 
     const hooks = await getWorkflowHooks();
     const reviews = await hooks.ListReviews(
@@ -21,7 +21,7 @@ export default {
 
     if (!ReviewId || !Decision || !UserId) {
       return Response.json(
-        { error: 'ReviewId, Decision, and UserId are required' },
+        { error: "ReviewId, Decision, and UserId are required" },
         { status: 400 },
       );
     }

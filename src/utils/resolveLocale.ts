@@ -1,4 +1,4 @@
-const SUPPORTED_LOCALES = ['en', 'fr'] as const;
+const SUPPORTED_LOCALES = ["en", "fr"] as const;
 export type AppLocale = (typeof SUPPORTED_LOCALES)[number];
 
 export function isValidLocale(value: string): value is AppLocale {
@@ -7,7 +7,7 @@ export function isValidLocale(value: string): value is AppLocale {
 
 export function resolveLocale(req: Request): AppLocale {
   // 1. sm-locale cookie (persistent user preference)
-  const cookieHeader = req.headers.get('cookie');
+  const cookieHeader = req.headers.get("cookie");
   if (cookieHeader) {
     const match = cookieHeader.match(/(?:^|;\s*)sm-locale=([^;]+)/);
     if (match && isValidLocale(match[1])) {
@@ -17,13 +17,13 @@ export function resolveLocale(req: Request): AppLocale {
 
   // 2. ?locale= query param (demo/dev override)
   const url = new URL(req.url);
-  const param = url.searchParams.get('locale');
+  const param = url.searchParams.get("locale");
   if (param && isValidLocale(param)) {
     return param;
   }
 
   // 3. Accept-Language header
-  const accept = req.headers.get('accept-language');
+  const accept = req.headers.get("accept-language");
   if (accept) {
     for (const locale of SUPPORTED_LOCALES) {
       if (accept.toLowerCase().includes(locale)) return locale;
@@ -31,5 +31,5 @@ export function resolveLocale(req: Request): AppLocale {
   }
 
   // 4. Default
-  return 'en';
+  return "en";
 }

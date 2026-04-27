@@ -1,19 +1,19 @@
-import { EaCRuntimeHandlers } from '@fathym/eac/runtime/pipelines';
-import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
-import { getOIHooks, getWorkflowHooks } from '../../../src/data/hooks.ts';
+import { EaCRuntimeHandlers } from "@fathym/eac/runtime/pipelines";
+import { OISampleMgmtWebState } from "../../../src/state/OISampleMgmtWebState.ts";
+import { getOIHooks, getWorkflowHooks } from "../../../src/data/hooks.ts";
 import type {
   CustodyEvent,
   CustodyTimelineRecord,
-} from '../../../src/data/types/CustodyTimelineRecord.ts';
+} from "../../../src/data/types/CustodyTimelineRecord.ts";
 
 export default {
   async GET(req, _ctx) {
     const url = new URL(req.url);
-    const sampleId = url.searchParams.get('sampleId') || undefined;
+    const sampleId = url.searchParams.get("sampleId") || undefined;
 
     if (!sampleId) {
       return Response.json(
-        { error: 'sampleId query parameter required' },
+        { error: "sampleId query parameter required" },
         { status: 400 },
       );
     }
@@ -38,11 +38,11 @@ export default {
     events.push({
       EventId: `custody-received-${sample.SampleId}`,
       Timestamp: sample.ReceivedAt,
-      EventType: 'received',
+      EventType: "received",
       Description: `Sample received from ${sample.OriginSite}`,
-      PerformedBy: 'system',
+      PerformedBy: "system",
       EvidenceLinks: [],
-      AlcoaPrinciples: ['Contemporaneous', 'Original'],
+      AlcoaPrinciples: ["Contemporaneous", "Original"],
     });
 
     // 2. Audit events matching this sample (filter by EntityId)
@@ -70,12 +70,12 @@ export default {
         events.push({
           EventId: `custody-transfer-${t.TransferId}`,
           Timestamp: t.RequestedAt,
-          EventType: 'transferred',
+          EventType: "transferred",
           Description:
             `${t.Type} transfer: ${t.Source} \u2192 ${t.Destination}`,
           PerformedBy: t.RequestedBy,
           EvidenceLinks: [],
-          AlcoaPrinciples: ['Attributable', 'Contemporaneous'],
+          AlcoaPrinciples: ["Attributable", "Contemporaneous"],
         });
       }
     }
@@ -85,7 +85,7 @@ export default {
 
     for (const r of returns) {
       if (r.SampleIds.includes(sampleId)) {
-        const eventType = r.Outcome === 'depleted' ? 'depleted' : 'returned';
+        const eventType = r.Outcome === "depleted" ? "depleted" : "returned";
 
         events.push({
           EventId: `custody-return-${r.ReturnId}`,
@@ -94,7 +94,7 @@ export default {
           Description: r.Reason,
           PerformedBy: r.RequestedBy,
           EvidenceLinks: [],
-          AlcoaPrinciples: ['Attributable', 'Contemporaneous'],
+          AlcoaPrinciples: ["Attributable", "Contemporaneous"],
         });
       }
     }
@@ -107,11 +107,11 @@ export default {
         events.push({
           EventId: `custody-disposition-${d.DispositionId}`,
           Timestamp: d.CustodianSignoff?.SignedAt ?? d.FinalReportDate,
-          EventType: 'disposed',
+          EventType: "disposed",
           Description: `Disposition: ${d.Decision} \u2014 ${d.LastAction}`,
-          PerformedBy: d.CustodianSignoff?.SignedBy ?? 'pending',
+          PerformedBy: d.CustodianSignoff?.SignedBy ?? "pending",
           EvidenceLinks: d.EvidenceDocuments.map((e) => e.Url),
-          AlcoaPrinciples: ['Attributable', 'Complete'],
+          AlcoaPrinciples: ["Attributable", "Complete"],
         });
       }
     }

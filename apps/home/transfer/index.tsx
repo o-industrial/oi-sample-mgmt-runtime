@@ -1,14 +1,14 @@
-import { PageProps } from '@fathym/eac-applications/preact';
-import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
-import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
-import { useTranslation } from '../../../src/utils/useTranslation.ts';
-import TransferTable from '../../components/TransferTable.tsx';
-import { createClientFromRequest } from '../../../src/client/createClientFromRequest.ts';
+import { PageProps } from "@fathym/eac-applications/preact";
+import { EaCRuntimeHandlerSet } from "@fathym/eac/runtime/pipelines";
+import { OISampleMgmtWebState } from "../../../src/state/OISampleMgmtWebState.ts";
+import { useTranslation } from "../../../src/utils/useTranslation.ts";
+import TransferTable from "../../components/TransferTable.tsx";
+import { createClientFromRequest } from "../../../src/client/createClientFromRequest.ts";
 
 // --- Types (TitleCase for server data — C4) ---
 
-type TransferType = 'inter-freezer' | 'inter-site' | 'inter-study';
-type TurboTaxStatus = 'ready' | 'attention' | 'volume-hold' | 'problem';
+type TransferType = "inter-freezer" | "inter-site" | "inter-study";
+type TurboTaxStatus = "ready" | "attention" | "volume-hold" | "problem";
 
 type TransferItem = {
   TransferId: string;
@@ -58,12 +58,12 @@ type TransferPageData = {
 
 function typeKey(type: string): string {
   switch (type) {
-    case 'inter-freezer':
-      return 'interFreezer';
-    case 'inter-site':
-      return 'interSite';
-    case 'inter-study':
-      return 'interStudy';
+    case "inter-freezer":
+      return "interFreezer";
+    case "inter-site":
+      return "interSite";
+    case "inter-study":
+      return "interStudy";
     default:
       return type;
   }
@@ -76,8 +76,8 @@ export const handler: EaCRuntimeHandlerSet<
   TransferPageData
 > = {
   GET: async (req, ctx) => {
-    if (!ctx.State.AccessRights.includes('samples:receive')) {
-      return new Response('Forbidden', { status: 403 });
+    if (!ctx.State.AccessRights.includes("samples:receive")) {
+      return new Response("Forbidden", { status: 403 });
     }
 
     const { t } = useTranslation(ctx.State.Strings);
@@ -96,7 +96,7 @@ export const handler: EaCRuntimeHandlerSet<
       Status: tr.Status as TurboTaxStatus,
       StatusLabel: t(
         `transfer.status.${
-          tr.Status === 'volume-hold' ? 'volumeHold' : tr.Status
+          tr.Status === "volume-hold" ? "volumeHold" : tr.Status
         }`,
       ),
       StatusReason: tr.StatusReason,
@@ -105,68 +105,68 @@ export const handler: EaCRuntimeHandlerSet<
     }));
 
     const statusCounts = {
-      ready: transfers.filter((t) => t.Status === 'ready').length,
-      attention: transfers.filter((t) => t.Status === 'attention').length,
-      volumeHold: transfers.filter((t) => t.Status === 'volume-hold').length,
-      problem: transfers.filter((t) => t.Status === 'problem').length,
+      ready: transfers.filter((t) => t.Status === "ready").length,
+      attention: transfers.filter((t) => t.Status === "attention").length,
+      volumeHold: transfers.filter((t) => t.Status === "volume-hold").length,
+      problem: transfers.filter((t) => t.Status === "problem").length,
     };
 
     return ctx.Render({
       ...ctx.Data,
-      Heading: t('transfer.heading'),
-      Subtitle: t('transfer.subtitle'),
-      SearchPlaceholder: t('transfer.search.placeholder'),
+      Heading: t("transfer.heading"),
+      Subtitle: t("transfer.subtitle"),
+      SearchPlaceholder: t("transfer.search.placeholder"),
       StatusCards: [
-        { Label: t('transfer.card.total'), Count: transfers.length },
-        { Label: t('transfer.card.ready'), Count: statusCounts.ready },
+        { Label: t("transfer.card.total"), Count: transfers.length },
+        { Label: t("transfer.card.ready"), Count: statusCounts.ready },
         {
-          Label: t('transfer.card.attention'),
+          Label: t("transfer.card.attention"),
           Count: statusCounts.attention,
         },
         {
-          Label: t('transfer.card.volumeHold'),
+          Label: t("transfer.card.volumeHold"),
           Count: statusCounts.volumeHold,
         },
-        { Label: t('transfer.card.problem'), Count: statusCounts.problem },
+        { Label: t("transfer.card.problem"), Count: statusCounts.problem },
       ],
       ColumnHeaders: {
-        TransferId: t('transfer.col.transferId'),
-        Type: t('transfer.col.type'),
-        Source: t('transfer.col.source'),
-        Destination: t('transfer.col.destination'),
-        SampleCount: t('transfer.col.sampleCount'),
-        Status: t('transfer.col.status'),
-        SlaDeadline: t('transfer.col.slaDeadline'),
-        LastAction: t('transfer.col.lastAction'),
-        Actions: t('transfer.col.actions'),
+        TransferId: t("transfer.col.transferId"),
+        Type: t("transfer.col.type"),
+        Source: t("transfer.col.source"),
+        Destination: t("transfer.col.destination"),
+        SampleCount: t("transfer.col.sampleCount"),
+        Status: t("transfer.col.status"),
+        SlaDeadline: t("transfer.col.slaDeadline"),
+        LastAction: t("transfer.col.lastAction"),
+        Actions: t("transfer.col.actions"),
       },
       FilterLabels: {
-        AllTypes: t('transfer.filter.allTypes'),
-        AllStatuses: t('transfer.filter.allStatuses'),
+        AllTypes: t("transfer.filter.allTypes"),
+        AllStatuses: t("transfer.filter.allStatuses"),
         Types: [
           {
-            Value: 'inter-freezer',
-            Label: t('transfer.type.interFreezer'),
+            Value: "inter-freezer",
+            Label: t("transfer.type.interFreezer"),
           },
-          { Value: 'inter-site', Label: t('transfer.type.interSite') },
-          { Value: 'inter-study', Label: t('transfer.type.interStudy') },
+          { Value: "inter-site", Label: t("transfer.type.interSite") },
+          { Value: "inter-study", Label: t("transfer.type.interStudy") },
         ],
         Statuses: [
-          { Value: 'ready', Label: t('transfer.status.ready') },
-          { Value: 'attention', Label: t('transfer.status.attention') },
+          { Value: "ready", Label: t("transfer.status.ready") },
+          { Value: "attention", Label: t("transfer.status.attention") },
           {
-            Value: 'volume-hold',
-            Label: t('transfer.status.volumeHold'),
+            Value: "volume-hold",
+            Label: t("transfer.status.volumeHold"),
           },
-          { Value: 'problem', Label: t('transfer.status.problem') },
+          { Value: "problem", Label: t("transfer.status.problem") },
         ],
       },
       Transfers: transfers,
       TotalCount: transfers.length,
-      ApproveLabel: t('transfer.approve'),
-      EmptyNoTransfers: t('transfer.emptyNoTransfers'),
-      EmptyNoMatch: t('transfer.emptyNoMatch'),
-      CanApprove: rights.includes('custody:approve'),
+      ApproveLabel: t("transfer.approve"),
+      EmptyNoTransfers: t("transfer.emptyNoTransfers"),
+      EmptyNoMatch: t("transfer.emptyNoMatch"),
+      CanApprove: rights.includes("custody:approve"),
     });
   },
 };
@@ -179,22 +179,22 @@ export default function Transfer(
   const d = Data!;
 
   return (
-    <div class='space-y-6'>
+    <div class="space-y-6">
       {/* Header */}
       <div>
-        <h1 class='text-xl font-bold text-primary'>{d.Heading}</h1>
-        <p class='text-sm text-on-surface-secondary mt-1'>{d.Subtitle}</p>
+        <h1 class="text-xl font-bold text-primary">{d.Heading}</h1>
+        <p class="text-sm text-on-surface-secondary mt-1">{d.Subtitle}</p>
       </div>
 
       {/* Status summary cards */}
-      <div class='grid grid-cols-5 gap-4'>
+      <div class="grid grid-cols-5 gap-4">
         {d.StatusCards.map((card) => (
           <div
             key={card.Label}
-            class='rounded-lg border border-border bg-surface-card p-4'
+            class="rounded-lg border border-border bg-surface-card p-4"
           >
-            <p class='text-sm text-on-surface-secondary'>{card.Label}</p>
-            <p class='text-3xl font-bold mt-1 text-on-surface'>
+            <p class="text-sm text-on-surface-secondary">{card.Label}</p>
+            <p class="text-3xl font-bold mt-1 text-on-surface">
               {card.Count}
             </p>
           </div>
@@ -245,7 +245,7 @@ export default function Transfer(
         emptyNoTransfers={d.EmptyNoTransfers}
         emptyNoMatch={d.EmptyNoMatch}
         canApprove={d.CanApprove}
-        apiBase=''
+        apiBase=""
       />
     </div>
   );

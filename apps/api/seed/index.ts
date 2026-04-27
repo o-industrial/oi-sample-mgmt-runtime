@@ -1,6 +1,6 @@
-import { EaCRuntimeHandlers } from '@fathym/eac/runtime/pipelines';
-import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
-import { getOIHooks, getWorkflowHooks } from '../../../src/data/hooks.ts';
+import { EaCRuntimeHandlers } from "@fathym/eac/runtime/pipelines";
+import { OISampleMgmtWebState } from "../../../src/state/OISampleMgmtWebState.ts";
+import { getOIHooks, getWorkflowHooks } from "../../../src/data/hooks.ts";
 
 export default {
   async POST(_req, _ctx) {

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * TurboTax exception triage state — every item on every pane carries one of these.
@@ -9,12 +9,12 @@ import { z } from 'zod';
  * - `problem`: Escalation with full context. Nobody starts from scratch.
  */
 export const TurboTaxStatusSchema = z.enum([
-  'ready',
-  'attention',
-  'volume-hold',
-  'problem',
+  "ready",
+  "attention",
+  "volume-hold",
+  "problem",
 ]).describe(
-  'TurboTax exception triage state: ready (green), attention (amber), volume-hold (blue), problem (red)',
+  "TurboTax exception triage state: ready (green), attention (amber), volume-hold (blue), problem (red)",
 );
 
 export type TurboTaxStatus = z.infer<typeof TurboTaxStatusSchema>;

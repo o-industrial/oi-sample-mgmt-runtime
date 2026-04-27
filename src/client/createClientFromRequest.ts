@@ -1,12 +1,12 @@
-import { loadJwtConfig } from '@fathym/common/jwt';
-import { SampleMgmtAPIClient } from './SampleMgmtAPIClient.ts';
+import { loadJwtConfig } from "@fathym/common/jwt";
+import { SampleMgmtAPIClient } from "./SampleMgmtAPIClient.ts";
 
 export async function createClientFromRequest(
   req: Request,
   username?: string,
 ): Promise<SampleMgmtAPIClient> {
   const jwt = await loadJwtConfig().Create({
-    Username: username ?? 'system',
+    Username: username ?? "system",
   });
 
   return new SampleMgmtAPIClient({

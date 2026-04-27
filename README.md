@@ -12,12 +12,12 @@ Opens at [http://localhost:5418](http://localhost:5418).
 
 ## Tasks
 
-| Task | Description |
-|------|-------------|
-| `deno task dev` | Start dev server with file watching |
-| `deno task build` | Format, lint, publish check, test |
-| `deno task start` | Start production server |
-| `deno task test` | Run tests |
+| Task              | Description                         |
+| ----------------- | ----------------------------------- |
+| `deno task dev`   | Start dev server with file watching |
+| `deno task build` | Format, lint, publish check, test   |
+| `deno task start` | Start production server             |
+| `deno task test`  | Run tests                           |
 
 ## Project Structure
 
@@ -54,4 +54,5 @@ Switch themes via `?theme=` query parameter:
 
 Switch roles via `?demo_role=` query parameter:
 
-`sample_manager` · `qa_auditor` · `lab_manager` · `study_coordinator` · `read_only` · `hbsm_custodian` · `study_lead` · `csv_group_head` · `scientist`
+`sample_manager` · `qa_auditor` · `lab_manager` · `study_coordinator` ·
+`read_only` · `hbsm_custodian` · `study_lead` · `csv_group_head` · `scientist`

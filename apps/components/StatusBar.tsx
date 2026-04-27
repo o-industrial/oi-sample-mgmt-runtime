@@ -10,24 +10,24 @@ export default function StatusBar(
   { ready, attention, volumeHold, problem, total }: StatusBarProps,
 ) {
   if (total === 0) {
-    return <div class='h-2 rounded-full bg-surface-inset' />;
+    return <div class="h-2 rounded-full bg-surface-inset" />;
   }
 
   const pct = (n: number) => `${(n / total) * 100}%`;
 
   return (
-    <div class='flex h-2 rounded-full overflow-hidden bg-surface-inset'>
+    <div class="flex h-2 rounded-full overflow-hidden bg-surface-inset">
       {ready > 0 && (
-        <div class='bg-status-ready' style={{ width: pct(ready) }} />
+        <div class="bg-status-ready" style={{ width: pct(ready) }} />
       )}
       {attention > 0 && (
-        <div class='bg-status-attention' style={{ width: pct(attention) }} />
+        <div class="bg-status-attention" style={{ width: pct(attention) }} />
       )}
       {volumeHold > 0 && (
-        <div class='bg-status-hold' style={{ width: pct(volumeHold) }} />
+        <div class="bg-status-hold" style={{ width: pct(volumeHold) }} />
       )}
       {problem > 0 && (
-        <div class='bg-status-problem' style={{ width: pct(problem) }} />
+        <div class="bg-status-problem" style={{ width: pct(problem) }} />
       )}
     </div>
   );

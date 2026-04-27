@@ -1,4 +1,4 @@
-import StatusBar from './StatusBar.tsx';
+import StatusBar from "./StatusBar.tsx";
 
 export const IsIsland = true;
 
@@ -35,16 +35,16 @@ function StatusSlot(
   return (
     <div
       class={`flex items-center gap-1.5 text-sm ${
-        isZero ? 'text-on-surface-muted' : ''
+        isZero ? "text-on-surface-muted" : ""
       }`}
     >
       <span
         class={`inline-block w-2.5 h-2.5 rounded-full ${
-          isZero ? 'bg-surface-inset' : colorClass
+          isZero ? "bg-surface-inset" : colorClass
         }`}
       />
-      <span class={isZero ? '' : 'font-semibold'}>{count}</span>
-      <span class={isZero ? '' : 'text-on-surface-secondary'}>{label}</span>
+      <span class={isZero ? "" : "font-semibold"}>{count}</span>
+      <span class={isZero ? "" : "text-on-surface-secondary"}>{label}</span>
     </div>
   );
 }
@@ -53,10 +53,10 @@ export default function ActivityPanes(
   { panes, temporalPriority }: ActivityPanesProps,
 ) {
   return (
-    <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4'>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
       {panes.map((pane, i) => {
         const isEmphasized = pane.id === temporalPriority;
-        const spanClass = i < 3 ? 'lg:col-span-2' : 'lg:col-span-3';
+        const spanClass = i < 3 ? "lg:col-span-2" : "lg:col-span-3";
 
         return (
           <a
@@ -65,26 +65,26 @@ export default function ActivityPanes(
             data-eac-bypass-base
             class={`block rounded-lg border p-4 transition-all hover:border-primary ${spanClass} ${
               isEmphasized
-                ? 'border-primary bg-surface-elevated shadow-lg scale-[1.02]'
-                : 'border-border bg-surface-card'
+                ? "border-primary bg-surface-elevated shadow-lg scale-[1.02]"
+                : "border-border bg-surface-card"
             }`}
           >
             {/* Header: name + total */}
-            <div class='flex items-center justify-between mb-3'>
+            <div class="flex items-center justify-between mb-3">
               <h3
                 class={`text-sm font-semibold ${
-                  isEmphasized ? 'text-primary' : 'text-on-surface'
+                  isEmphasized ? "text-primary" : "text-on-surface"
                 }`}
               >
                 {pane.name}
               </h3>
-              <span class='text-2xl font-bold text-on-surface'>
+              <span class="text-2xl font-bold text-on-surface">
                 {pane.total}
               </span>
             </div>
 
             {/* Stacked status bar */}
-            <div class='mb-3'>
+            <div class="mb-3">
               <StatusBar
                 ready={pane.ready}
                 attention={pane.attention}
@@ -95,30 +95,30 @@ export default function ActivityPanes(
             </div>
 
             {/* Fixed 2x2 status grid */}
-            <div class='grid grid-cols-2 gap-x-2 gap-y-2 mb-3'>
+            <div class="grid grid-cols-2 gap-x-2 gap-y-2 mb-3">
               <StatusSlot
                 count={pane.ready}
                 label={pane.readyLabel}
-                colorClass='bg-status-ready'
+                colorClass="bg-status-ready"
               />
               <StatusSlot
                 count={pane.attention}
                 label={pane.attentionLabel}
-                colorClass='bg-status-attention'
+                colorClass="bg-status-attention"
               />
               <StatusSlot
                 count={pane.volumeHold}
                 label={pane.volumeHoldLabel}
-                colorClass='bg-status-hold'
+                colorClass="bg-status-hold"
               />
               <StatusSlot
                 count={pane.problem}
                 label={pane.problemLabel}
-                colorClass='bg-status-problem'
+                colorClass="bg-status-problem"
               />
             </div>
 
-            <span class='text-xs text-link hover:underline'>
+            <span class="text-xs text-link hover:underline">
               {pane.viewAllLabel} →
             </span>
           </a>

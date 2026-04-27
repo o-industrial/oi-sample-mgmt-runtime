@@ -1,13 +1,13 @@
-import { PageProps } from '@fathym/eac-applications/preact';
-import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
-import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
-import { useTranslation } from '../../../src/utils/useTranslation.ts';
-import ReturnTable from '../../components/ReturnTable.tsx';
-import { createClientFromRequest } from '../../../src/client/createClientFromRequest.ts';
+import { PageProps } from "@fathym/eac-applications/preact";
+import { EaCRuntimeHandlerSet } from "@fathym/eac/runtime/pipelines";
+import { OISampleMgmtWebState } from "../../../src/state/OISampleMgmtWebState.ts";
+import { useTranslation } from "../../../src/utils/useTranslation.ts";
+import ReturnTable from "../../components/ReturnTable.tsx";
+import { createClientFromRequest } from "../../../src/client/createClientFromRequest.ts";
 
 // --- Types (TitleCase for server data — C4) ---
 
-type TurboTaxStatus = 'ready' | 'attention' | 'volume-hold' | 'problem';
+type TurboTaxStatus = "ready" | "attention" | "volume-hold" | "problem";
 
 type ReturnItem = {
   ReturnId: string;
@@ -59,8 +59,8 @@ export const handler: EaCRuntimeHandlerSet<
   ReturnPageData
 > = {
   GET: async (req, ctx) => {
-    if (!ctx.State.AccessRights.includes('samples:view')) {
-      return new Response('Forbidden', { status: 403 });
+    if (!ctx.State.AccessRights.includes("samples:view")) {
+      return new Response("Forbidden", { status: 403 });
     }
 
     const { t } = useTranslation(ctx.State.Strings);
@@ -70,7 +70,7 @@ export const handler: EaCRuntimeHandlerSet<
     const rawReturns = await client.Returns.List();
 
     const returns: ReturnItem[] = rawReturns.map((r) => {
-      const outcome = r.Outcome ?? 'pending';
+      const outcome = r.Outcome ?? "pending";
       return {
         ReturnId: r.ReturnId,
         SampleCount: r.SampleIds.length,
@@ -81,7 +81,7 @@ export const handler: EaCRuntimeHandlerSet<
         Status: r.Status as TurboTaxStatus,
         StatusLabel: t(
           `return.status.${
-            r.Status === 'volume-hold' ? 'volumeHold' : r.Status
+            r.Status === "volume-hold" ? "volumeHold" : r.Status
           }`,
         ),
         PackagingInstructions: r.PackagingInstructions,
@@ -92,59 +92,59 @@ export const handler: EaCRuntimeHandlerSet<
     });
 
     const statusCounts = {
-      ready: returns.filter((r) => r.Status === 'ready').length,
-      attention: returns.filter((r) => r.Status === 'attention').length,
-      volumeHold: returns.filter((r) => r.Status === 'volume-hold').length,
-      problem: returns.filter((r) => r.Status === 'problem').length,
+      ready: returns.filter((r) => r.Status === "ready").length,
+      attention: returns.filter((r) => r.Status === "attention").length,
+      volumeHold: returns.filter((r) => r.Status === "volume-hold").length,
+      problem: returns.filter((r) => r.Status === "problem").length,
     };
 
     return ctx.Render({
       ...ctx.Data,
-      Heading: t('return.heading'),
-      Subtitle: t('return.subtitle'),
-      SearchPlaceholder: t('return.search.placeholder'),
+      Heading: t("return.heading"),
+      Subtitle: t("return.subtitle"),
+      SearchPlaceholder: t("return.search.placeholder"),
       StatusCards: [
-        { Label: t('return.card.total'), Count: returns.length },
-        { Label: t('return.card.ready'), Count: statusCounts.ready },
+        { Label: t("return.card.total"), Count: returns.length },
+        { Label: t("return.card.ready"), Count: statusCounts.ready },
         {
-          Label: t('return.card.attention'),
+          Label: t("return.card.attention"),
           Count: statusCounts.attention,
         },
         {
-          Label: t('return.card.volumeHold'),
+          Label: t("return.card.volumeHold"),
           Count: statusCounts.volumeHold,
         },
-        { Label: t('return.card.problem'), Count: statusCounts.problem },
+        { Label: t("return.card.problem"), Count: statusCounts.problem },
       ],
       ColumnHeaders: {
-        ReturnId: t('return.col.returnId'),
-        Destination: t('return.col.destination'),
-        SampleCount: t('return.col.sampleCount'),
-        RequestedBy: t('return.col.requestedBy'),
-        RequestedAt: t('return.col.requestedAt'),
-        Status: t('return.col.status'),
-        Packaging: t('return.col.packaging'),
-        Outcome: t('return.col.outcome'),
-        Actions: t('return.col.actions'),
+        ReturnId: t("return.col.returnId"),
+        Destination: t("return.col.destination"),
+        SampleCount: t("return.col.sampleCount"),
+        RequestedBy: t("return.col.requestedBy"),
+        RequestedAt: t("return.col.requestedAt"),
+        Status: t("return.col.status"),
+        Packaging: t("return.col.packaging"),
+        Outcome: t("return.col.outcome"),
+        Actions: t("return.col.actions"),
       },
       FilterLabels: {
-        AllStatuses: t('return.filter.allStatuses'),
+        AllStatuses: t("return.filter.allStatuses"),
         Statuses: [
-          { Value: 'ready', Label: t('return.status.ready') },
-          { Value: 'attention', Label: t('return.status.attention') },
+          { Value: "ready", Label: t("return.status.ready") },
+          { Value: "attention", Label: t("return.status.attention") },
           {
-            Value: 'volume-hold',
-            Label: t('return.status.volumeHold'),
+            Value: "volume-hold",
+            Label: t("return.status.volumeHold"),
           },
-          { Value: 'problem', Label: t('return.status.problem') },
+          { Value: "problem", Label: t("return.status.problem") },
         ],
       },
       Returns: returns,
       TotalCount: returns.length,
-      ApproveLabel: t('return.approve'),
-      EmptyNoReturns: t('return.emptyNoReturns'),
-      EmptyNoMatch: t('return.emptyNoMatch'),
-      CanApprove: rights.includes('custody:approve'),
+      ApproveLabel: t("return.approve"),
+      EmptyNoReturns: t("return.emptyNoReturns"),
+      EmptyNoMatch: t("return.emptyNoMatch"),
+      CanApprove: rights.includes("custody:approve"),
     });
   },
 };
@@ -157,22 +157,22 @@ export default function Return(
   const d = Data!;
 
   return (
-    <div class='space-y-6'>
+    <div class="space-y-6">
       {/* Header */}
       <div>
-        <h1 class='text-xl font-bold text-primary'>{d.Heading}</h1>
-        <p class='text-sm text-on-surface-secondary mt-1'>{d.Subtitle}</p>
+        <h1 class="text-xl font-bold text-primary">{d.Heading}</h1>
+        <p class="text-sm text-on-surface-secondary mt-1">{d.Subtitle}</p>
       </div>
 
       {/* Status summary cards */}
-      <div class='grid grid-cols-5 gap-4'>
+      <div class="grid grid-cols-5 gap-4">
         {d.StatusCards.map((card) => (
           <div
             key={card.Label}
-            class='rounded-lg border border-border bg-surface-card p-4'
+            class="rounded-lg border border-border bg-surface-card p-4"
           >
-            <p class='text-sm text-on-surface-secondary'>{card.Label}</p>
-            <p class='text-3xl font-bold mt-1 text-on-surface'>
+            <p class="text-sm text-on-surface-secondary">{card.Label}</p>
+            <p class="text-3xl font-bold mt-1 text-on-surface">
               {card.Count}
             </p>
           </div>
@@ -219,7 +219,7 @@ export default function Return(
         emptyNoReturns={d.EmptyNoReturns}
         emptyNoMatch={d.EmptyNoMatch}
         canApprove={d.CanApprove}
-        apiBase=''
+        apiBase=""
       />
     </div>
   );

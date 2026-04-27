@@ -27,7 +27,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: 'Login via Azure CLI'
+      - name: "Login via Azure CLI"
         uses: azure/login@v1
         with:
           creds: ${{ env.AZURE_CREDENTIALS }}
