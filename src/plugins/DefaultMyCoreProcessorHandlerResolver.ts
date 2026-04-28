@@ -1,12 +1,12 @@
-import { IoCContainer } from "@fathym/ioc";
-import { DefaultAtomicIconsProcessorHandlerResolver } from "@fathym/atomic-icons/plugin";
+import { IoCContainer } from '@fathym/ioc';
+import { DefaultAtomicIconsProcessorHandlerResolver } from '@fathym/atomic-icons/plugin';
 import {
   DefaultProcessorHandlerResolver,
   ProcessorHandlerResolver,
-} from "@fathym/eac-applications/runtime/processors";
-import { EaCApplicationProcessorConfig } from "@fathym/eac-applications/processors";
-import { EverythingAsCode } from "@fathym/eac";
-import { DefaultMSALProcessorHandlerResolver } from "@fathym/msal";
+} from '@fathym/eac-applications/runtime/processors';
+import { EaCApplicationProcessorConfig } from '@fathym/eac-applications/processors';
+import { EverythingAsCode } from '@fathym/eac';
+import { DefaultMSALProcessorHandlerResolver } from '@fathym/msal';
 
 export class DefaultMyCoreProcessorHandlerResolver
   implements ProcessorHandlerResolver {

@@ -6,20 +6,20 @@
  * Scenes: notification triage, manifest upload, temperature logs,
  *         parcel reception, barcode scanning, reconciliation check
  */
-import { expect, personaTest } from "../fixtures/persona.fixture";
+import { expect, personaTest } from '../fixtures/persona.fixture';
 import {
   NOTIFICATION_BELL,
   NOTIFICATION_PANEL,
   notificationItem,
   sidebarLink,
   tab,
-} from "../helpers/selectors";
+} from '../helpers/selectors';
 
-const test = personaTest("elena");
+const test = personaTest('elena');
 
-test.describe("Sample Manager — Morning at the Bench", () => {
+test.describe('Sample Manager — Morning at the Bench', () => {
   // Scene 1: Notification Triage
-  test("Scene 1: Notification triage", async ({ personaPage: page }) => {
+  test('Scene 1: Notification triage', async ({ personaPage: page }) => {
     // Liora lands on /receive
     await expect(page).toHaveURL(/\/receive/);
 
@@ -28,7 +28,7 @@ test.describe("Sample Manager — Morning at the Bench", () => {
     await expect(bell).toBeVisible();
 
     // Badge shows unread count
-    const badge = bell.locator("span").first();
+    const badge = bell.locator('span').first();
     await expect(badge).toBeVisible();
 
     // Click bell → dropdown opens
@@ -42,57 +42,57 @@ test.describe("Sample Manager — Morning at the Bench", () => {
     );
 
     // Click "Mark read" on NTF-0001
-    const ntf1 = page.locator(notificationItem("NTF-0001"));
+    const ntf1 = page.locator(notificationItem('NTF-0001'));
     await ntf1.getByText(/mark read/i).click();
     await page.waitForTimeout(500);
 
     // Click "View" on NTF-0002 (actionUrl: /disposition)
-    const ntf2 = page.locator(notificationItem("NTF-0002"));
+    const ntf2 = page.locator(notificationItem('NTF-0002'));
     await ntf2.getByText(/view/i).click();
 
     // Should navigate to /disposition via ActionUrl
-    await page.waitForURL("**/disposition");
+    await page.waitForURL('**/disposition');
     await expect(page).toHaveURL(/\/disposition/);
 
     // Pause — disposition table visible
     await page.waitForTimeout(2000);
 
     // Navigate back to /receive via sidebar
-    await page.locator(sidebarLink("/receive")).click();
-    await page.waitForURL("**/receive");
+    await page.locator(sidebarLink('/receive')).click();
+    await page.waitForURL('**/receive');
   });
 
   // Scene 2: Manifest Upload
-  test("Scene 2: Manifest upload", async ({ personaPage: page }) => {
+  test('Scene 2: Manifest upload', async ({ personaPage: page }) => {
     await expect(page).toHaveURL(/\/receive/);
 
     // Tab 1 (Manifest Upload) should be active by default
-    const manifestTab = page.locator(tab("Manifest"));
+    const manifestTab = page.locator(tab('Manifest'));
     await expect(manifestTab).toBeVisible();
     await manifestTab.click();
 
     // Fill manifest form fields
-    await page.getByLabel(/manifest/i).first().fill("MAN-2026-0416");
+    await page.getByLabel(/manifest/i).first().fill('MAN-2026-0416');
 
     // Select study
     const studySelect = page.getByLabel(/study/i).first();
     if (await studySelect.isVisible()) {
-      await studySelect.selectOption({ label: "BEACON-3 Phase III" });
+      await studySelect.selectOption({ label: 'BEACON-3 Phase III' });
     }
 
     // Expected samples
     const expectedField = page.getByLabel(/expected/i).first();
     if (await expectedField.isVisible()) {
-      await expectedField.fill("48");
+      await expectedField.fill('48');
     }
 
     // Fill remaining visible fields
     const fields = [
-      { label: /origin/i, value: "London Clinical Lab" },
-      { label: /destination/i, value: "Collegeville US" },
-      { label: /waybill/i, value: "WB-2026-04-16-001" },
-      { label: /carrier/i, value: "World Courier" },
-      { label: /period/i, value: "Period 3" },
+      { label: /origin/i, value: 'London Clinical Lab' },
+      { label: /destination/i, value: 'Collegeville US' },
+      { label: /waybill/i, value: 'WB-2026-04-16-001' },
+      { label: /carrier/i, value: 'World Courier' },
+      { label: /period/i, value: 'Period 3' },
     ];
 
     for (const { label, value } of fields) {
@@ -103,7 +103,7 @@ test.describe("Sample Manager — Morning at the Bench", () => {
     }
 
     // Submit
-    const submitBtn = page.getByRole("button", { name: /submit|create|save/i });
+    const submitBtn = page.getByRole('button', { name: /submit|create|save/i });
     if (await submitBtn.isVisible()) {
       await submitBtn.click();
       await page.waitForTimeout(1000);
@@ -111,11 +111,11 @@ test.describe("Sample Manager — Morning at the Bench", () => {
   });
 
   // Scene 3: Temperature Logs
-  test("Scene 3: Temperature logs", async ({ personaPage: page }) => {
+  test('Scene 3: Temperature logs', async ({ personaPage: page }) => {
     await expect(page).toHaveURL(/\/receive/);
 
     // Click Tab 3 (Temperature Logs)
-    const tempTab = page.locator(tab("Temperature"));
+    const tempTab = page.locator(tab('Temperature'));
     await expect(tempTab).toBeVisible();
     await tempTab.click();
     await page.waitForTimeout(500);
@@ -130,17 +130,17 @@ test.describe("Sample Manager — Morning at the Bench", () => {
   });
 
   // Scene 4: Parcel Reception
-  test("Scene 4: Parcel reception", async ({ personaPage: page }) => {
+  test('Scene 4: Parcel reception', async ({ personaPage: page }) => {
     await expect(page).toHaveURL(/\/receive/);
 
     // Click Tab 2 (Parcel Reception)
-    const parcelTab = page.locator(tab("Parcel"));
+    const parcelTab = page.locator(tab('Parcel'));
     await expect(parcelTab).toBeVisible();
     await parcelTab.click();
     await page.waitForTimeout(500);
 
     // Check the 4 checklist items
-    const checkboxes = page.getByRole("checkbox");
+    const checkboxes = page.getByRole('checkbox');
     const count = await checkboxes.count();
     for (let i = 0; i < Math.min(count, 4); i++) {
       await checkboxes.nth(i).check();
@@ -149,11 +149,11 @@ test.describe("Sample Manager — Morning at the Bench", () => {
     // Note two-person auth fields
     const verifiedByField = page.getByLabel(/verified/i).first();
     if (await verifiedByField.isVisible().catch(() => false)) {
-      await verifiedByField.fill("Declan Okafor");
+      await verifiedByField.fill('Declan Okafor');
     }
 
     // Click Confirm Receipt
-    const confirmBtn = page.getByRole("button", {
+    const confirmBtn = page.getByRole('button', {
       name: /confirm|receipt/i,
     });
     if (await confirmBtn.isVisible().catch(() => false)) {
@@ -163,11 +163,11 @@ test.describe("Sample Manager — Morning at the Bench", () => {
   });
 
   // Scene 5: Barcode Scanning
-  test("Scene 5: Barcode scanning", async ({ personaPage: page }) => {
+  test('Scene 5: Barcode scanning', async ({ personaPage: page }) => {
     await expect(page).toHaveURL(/\/receive/);
 
     // Click Tab 4 (Barcode Scanning)
-    const barcodeTab = page.locator(tab("Barcode"));
+    const barcodeTab = page.locator(tab('Barcode'));
     await expect(barcodeTab).toBeVisible();
     await barcodeTab.click();
     await page.waitForTimeout(500);
@@ -175,32 +175,32 @@ test.describe("Sample Manager — Morning at the Bench", () => {
     // Type sample ID into scanner input
     const scanInput = page.getByLabel(/barcode|sample|scan/i).first();
     if (await scanInput.isVisible().catch(() => false)) {
-      await scanInput.fill("SMP-2026-88421-001");
-      const scanBtn = page.getByRole("button", { name: /scan/i });
+      await scanInput.fill('SMP-2026-88421-001');
+      const scanBtn = page.getByRole('button', { name: /scan/i });
       if (await scanBtn.isVisible().catch(() => false)) {
         await scanBtn.click();
         await page.waitForTimeout(500);
       }
 
       // Scan 2 more
-      await scanInput.fill("SMP-2026-88421-002");
-      await page.getByRole("button", { name: /scan/i }).click();
+      await scanInput.fill('SMP-2026-88421-002');
+      await page.getByRole('button', { name: /scan/i }).click();
       await page.waitForTimeout(300);
 
-      await scanInput.fill("SMP-2026-87102-001");
-      await page.getByRole("button", { name: /scan/i }).click();
+      await scanInput.fill('SMP-2026-87102-001');
+      await page.getByRole('button', { name: /scan/i }).click();
       await page.waitForTimeout(500);
     }
   });
 
   // Scene 6: Reconciliation Check
-  test("Scene 6: Reconciliation check", async ({ personaPage: page }) => {
+  test('Scene 6: Reconciliation check', async ({ personaPage: page }) => {
     // Navigate to /reconciliation via sidebar
-    await page.locator(sidebarLink("/reconciliation")).click();
-    await page.waitForURL("**/reconciliation");
+    await page.locator(sidebarLink('/reconciliation')).click();
+    await page.waitForURL('**/reconciliation');
 
     // Reconciliation records visible
-    const table = page.locator("table").first();
+    const table = page.locator('table').first();
     await expect(table).toBeVisible();
 
     // Status summary cards visible
@@ -209,12 +209,12 @@ test.describe("Sample Manager — Morning at the Bench", () => {
     // Filter by type → barcode-conflict
     const typeFilter = page.getByLabel(/type/i).first();
     if (await typeFilter.isVisible().catch(() => false)) {
-      await typeFilter.selectOption("barcode-conflict");
+      await typeFilter.selectOption('barcode-conflict');
       await page.waitForTimeout(500);
     }
 
     // REC-2026-0003 should be visible (barcode conflict, problem status)
-    await expect(page.getByText("REC-2026-0003")).toBeVisible();
+    await expect(page.getByText('REC-2026-0003')).toBeVisible();
 
     // Pause on TurboTax color coding
     await page.waitForTimeout(3000);

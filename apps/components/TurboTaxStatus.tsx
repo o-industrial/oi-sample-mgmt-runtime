@@ -1,16 +1,16 @@
 type TurboTaxStatusProps = {
-  status: "ready" | "attention" | "volume-hold" | "problem";
+  status: 'ready' | 'attention' | 'volume-hold' | 'problem';
   label: string;
   count?: number;
 };
 
 const STATUS_CLASSES: Record<string, string> = {
-  ready: "bg-status-ready-bg border-status-ready text-status-ready-text",
+  ready: 'bg-status-ready-bg border-status-ready text-status-ready-text',
   attention:
-    "bg-status-attention-bg border-status-attention text-status-attention-text",
-  "volume-hold": "bg-status-hold-bg border-status-hold text-status-hold-text",
+    'bg-status-attention-bg border-status-attention text-status-attention-text',
+  'volume-hold': 'bg-status-hold-bg border-status-hold text-status-hold-text',
   problem:
-    "bg-status-problem-bg border-status-problem text-status-problem-text",
+    'bg-status-problem-bg border-status-problem text-status-problem-text',
 };
 
 export default function TurboTaxStatus({
@@ -24,7 +24,7 @@ export default function TurboTaxStatus({
         STATUS_CLASSES[status]
       }`}
     >
-      {count !== undefined && <span class="font-bold">{count}</span>}
+      {count !== undefined && <span class='font-bold'>{count}</span>}
       {label}
     </span>
   );

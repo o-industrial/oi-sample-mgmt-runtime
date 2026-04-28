@@ -1,19 +1,19 @@
-import { PageProps } from "@fathym/eac-applications/preact";
-import { EaCRuntimeHandlerSet } from "@fathym/eac/runtime/pipelines";
-import { OISampleMgmtWebState } from "../../../../src/state/OISampleMgmtWebState.ts";
-import { useTranslation } from "../../../../src/utils/useTranslation.ts";
-import SampleTrackingTable from "../../../components/SampleTrackingTable.tsx";
-import { createClientFromRequest } from "../../../../src/client/createClientFromRequest.ts";
+import { PageProps } from '@fathym/eac-applications/preact';
+import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
+import { OISampleMgmtWebState } from '../../../../src/state/OISampleMgmtWebState.ts';
+import { useTranslation } from '../../../../src/utils/useTranslation.ts';
+import SampleTrackingTable from '../../../components/SampleTrackingTable.tsx';
+import { createClientFromRequest } from '../../../../src/client/createClientFromRequest.ts';
 
 // --- Types (TitleCase for server data — C4) ---
 
 type SampleStatus =
-  | "received"
-  | "processing"
-  | "in-storage"
-  | "transferred"
-  | "disposed"
-  | "depleted";
+  | 'received'
+  | 'processing'
+  | 'in-storage'
+  | 'transferred'
+  | 'disposed'
+  | 'depleted';
 
 type SampleRecord = {
   SampleId: string;
@@ -57,8 +57,8 @@ export const handler: EaCRuntimeHandlerSet<
   SampleTrackingData
 > = {
   GET: async (req, ctx) => {
-    if (!ctx.State.AccessRights.includes("samples:view")) {
-      return new Response("Forbidden", { status: 403 });
+    if (!ctx.State.AccessRights.includes('samples:view')) {
+      return new Response('Forbidden', { status: 403 });
     }
 
     const { t } = useTranslation(ctx.State.Strings);
@@ -71,58 +71,58 @@ export const handler: EaCRuntimeHandlerSet<
       ...s,
       StatusLabel: t(
         `track.samples.status.${
-          s.Status === "in-storage" ? "inStorage" : s.Status
+          s.Status === 'in-storage' ? 'inStorage' : s.Status
         }`,
       ),
     }));
 
     const statusCounts = {
-      received: samples.filter((s) => s.Status === "received").length,
-      processing: samples.filter((s) => s.Status === "processing").length,
-      inStorage: samples.filter((s) => s.Status === "in-storage").length,
-      transferred: samples.filter((s) => s.Status === "transferred").length,
+      received: samples.filter((s) => s.Status === 'received').length,
+      processing: samples.filter((s) => s.Status === 'processing').length,
+      inStorage: samples.filter((s) => s.Status === 'in-storage').length,
+      transferred: samples.filter((s) => s.Status === 'transferred').length,
     };
 
     return ctx.Render({
       ...ctx.Data,
-      Heading: t("track.samples.heading"),
-      Subtitle: t("track.samples.subtitle"),
-      SearchPlaceholder: t("track.samples.search.placeholder"),
+      Heading: t('track.samples.heading'),
+      Subtitle: t('track.samples.subtitle'),
+      SearchPlaceholder: t('track.samples.search.placeholder'),
       StatusCards: [
         {
-          Label: t("track.samples.card.totalReceived"),
+          Label: t('track.samples.card.totalReceived'),
           Count: samples.length,
         },
         {
-          Label: t("track.samples.card.inProcessing"),
+          Label: t('track.samples.card.inProcessing'),
           Count: statusCounts.processing,
         },
         {
-          Label: t("track.samples.card.inStorage"),
+          Label: t('track.samples.card.inStorage'),
           Count: statusCounts.inStorage,
         },
         {
-          Label: t("track.samples.card.transferred"),
+          Label: t('track.samples.card.transferred'),
           Count: statusCounts.transferred,
         },
       ],
       ColumnHeaders: {
-        SampleId: t("track.samples.col.sampleId"),
-        Study: t("track.samples.col.study"),
-        OriginSite: t("track.samples.col.originSite"),
-        Received: t("track.samples.col.received"),
-        Status: t("track.samples.col.status"),
-        Storage: t("track.samples.col.storage"),
-        LastAction: t("track.samples.col.lastAction"),
-        Actions: t("track.samples.col.actions"),
+        SampleId: t('track.samples.col.sampleId'),
+        Study: t('track.samples.col.study'),
+        OriginSite: t('track.samples.col.originSite'),
+        Received: t('track.samples.col.received'),
+        Status: t('track.samples.col.status'),
+        Storage: t('track.samples.col.storage'),
+        LastAction: t('track.samples.col.lastAction'),
+        Actions: t('track.samples.col.actions'),
       },
       Samples: samples,
       TotalCount: samples.length,
-      UpdateLabel: t("track.samples.update"),
-      ViewReportLabel: t("track.samples.viewReport"),
-      EmptyNoSamples: t("track.samples.emptyNoSamples"),
-      EmptyNoMatch: t("track.samples.emptyNoMatch"),
-      CanReceive: rights.includes("samples:receive"),
+      UpdateLabel: t('track.samples.update'),
+      ViewReportLabel: t('track.samples.viewReport'),
+      EmptyNoSamples: t('track.samples.emptyNoSamples'),
+      EmptyNoMatch: t('track.samples.emptyNoMatch'),
+      CanReceive: rights.includes('samples:receive'),
     });
   },
 };
@@ -135,22 +135,22 @@ export default function SampleTracking(
   const d = Data!;
 
   return (
-    <div class="space-y-6">
+    <div class='space-y-6'>
       {/* Header */}
       <div>
-        <h1 class="text-xl font-bold text-primary">{d.Heading}</h1>
-        <p class="text-sm text-on-surface-secondary mt-1">{d.Subtitle}</p>
+        <h1 class='text-xl font-bold text-primary'>{d.Heading}</h1>
+        <p class='text-sm text-on-surface-secondary mt-1'>{d.Subtitle}</p>
       </div>
 
       {/* Status summary cards */}
-      <div class="grid grid-cols-4 gap-4">
+      <div class='grid grid-cols-4 gap-4'>
         {d.StatusCards.map((card) => (
           <div
             key={card.Label}
-            class="rounded-lg border border-border bg-surface-card p-4"
+            class='rounded-lg border border-border bg-surface-card p-4'
           >
-            <p class="text-sm text-on-surface-secondary">{card.Label}</p>
-            <p class="text-3xl font-bold mt-1 text-on-surface">{card.Count}</p>
+            <p class='text-sm text-on-surface-secondary'>{card.Label}</p>
+            <p class='text-3xl font-bold mt-1 text-on-surface'>{card.Count}</p>
           </div>
         ))}
       </div>

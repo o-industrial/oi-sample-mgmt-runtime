@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /**
  * Sample lifecycle status — tracks a sample from receipt through end-of-life.
@@ -11,14 +11,14 @@ import { z } from "zod";
  * - `depleted`: Consumed during analytical process — scientist attestation, no custodian needed.
  */
 export const SampleStatusSchema = z.enum([
-  "received",
-  "processing",
-  "in-storage",
-  "transferred",
-  "disposed",
-  "depleted",
+  'received',
+  'processing',
+  'in-storage',
+  'transferred',
+  'disposed',
+  'depleted',
 ]).describe(
-  "Sample lifecycle status from receipt through end-of-life (disposed/depleted are terminal)",
+  'Sample lifecycle status from receipt through end-of-life (disposed/depleted are terminal)',
 );
 
 export type SampleStatus = z.infer<typeof SampleStatusSchema>;

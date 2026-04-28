@@ -1,14 +1,14 @@
-import { EaCApplicationsLoggingProvider } from "@fathym/eac-applications/runtime/logging";
+import { EaCApplicationsLoggingProvider } from '@fathym/eac-applications/runtime/logging';
 
 export class RuntimeLoggingProvider extends EaCApplicationsLoggingProvider {
   constructor() {
     super([
-      "@fathym/common",
-      "@fathym/ioc",
-      "@fathym/msal",
-      "@fathym/steward",
-      "@o-industrial/common",
-      "@o-industrial/sample-management-runtime",
+      '@fathym/common',
+      '@fathym/ioc',
+      '@fathym/msal',
+      '@fathym/steward',
+      '@o-industrial/common',
+      '@o-industrial/sample-management-runtime',
     ]);
 
     // EaCLoggingProvider passes its own import.meta (a JSR https:// URL)

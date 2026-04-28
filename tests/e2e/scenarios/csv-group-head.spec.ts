@@ -7,19 +7,19 @@
  * Scenes: dashboard landing, escalation review queue,
  *         system & compliance authority, notification triage with ActionUrl
  */
-import { expect, personaTest } from "../fixtures/persona.fixture";
+import { expect, personaTest } from '../fixtures/persona.fixture';
 import {
   MANAGEMENT_OVERLAY_TOGGLE,
   NOTIFICATION_BELL,
   NOTIFICATION_PANEL,
   notificationItem,
-} from "../helpers/selectors";
+} from '../helpers/selectors';
 
-const test = personaTest("csvGroupHead");
+const test = personaTest('csvGroupHead');
 
-test.describe("CSV Group Head — The System Architect Reviews", () => {
+test.describe('CSV Group Head — The System Architect Reviews', () => {
   // Scene 1: Dashboard Landing
-  test("Scene 1: Dashboard landing", async ({ personaPage: page }) => {
+  test('Scene 1: Dashboard landing', async ({ personaPage: page }) => {
     // CSV Group Head stays on dashboard (config:admin)
     await expect(page).toHaveURL(/^[^?]*\/$/);
 
@@ -53,7 +53,7 @@ test.describe("CSV Group Head — The System Architect Reviews", () => {
   });
 
   // Scene 2: Escalation Review Queue
-  test("Scene 2: Escalation review queue", async ({ personaPage: page }) => {
+  test('Scene 2: Escalation review queue', async ({ personaPage: page }) => {
     // Scroll to review queue
     const reviewHeading = page.getByText(/review/i).first();
     await reviewHeading.scrollIntoViewIfNeeded();
@@ -61,15 +61,15 @@ test.describe("CSV Group Head — The System Architect Reviews", () => {
 
     // Escalated items visible in queue
     // REV-2026-0005 escalated (from seed data)
-    const rev5 = page.getByText("REV-2026-0005");
+    const rev5 = page.getByText('REV-2026-0005');
     if (await rev5.isVisible().catch(() => false)) {
       await expect(rev5).toBeVisible();
 
       // Click Approve on escalated review
       const row = page.locator('tr, [class*="review"]', {
-        hasText: "REV-2026-0005",
+        hasText: 'REV-2026-0005',
       });
-      const approveBtn = row.getByRole("button", { name: /approve/i });
+      const approveBtn = row.getByRole('button', { name: /approve/i });
       if (await approveBtn.isVisible().catch(() => false)) {
         await approveBtn.click();
         await page.waitForTimeout(2000);
@@ -78,10 +78,10 @@ test.describe("CSV Group Head — The System Architect Reviews", () => {
   });
 
   // Scene 3: System & Compliance Authority
-  test("Scene 3: System and compliance authority", async ({ personaPage: page }) => {
+  test('Scene 3: System and compliance authority', async ({ personaPage: page }) => {
     // Scroll to system status + compliance panels
     await page.evaluate(() => {
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     });
     await page.waitForTimeout(1000);
 
@@ -99,7 +99,7 @@ test.describe("CSV Group Head — The System Architect Reviews", () => {
   });
 
   // Scene 4: Notification Triage with ActionUrl Navigation
-  test("Scene 4: Notification triage with ActionUrl", async ({ personaPage: page }) => {
+  test('Scene 4: Notification triage with ActionUrl', async ({ personaPage: page }) => {
     // Click notification bell
     const bell = page.locator(NOTIFICATION_BELL);
     await bell.click();
@@ -108,27 +108,27 @@ test.describe("CSV Group Head — The System Architect Reviews", () => {
     await expect(panel).toBeVisible();
 
     // NTF-0009: escalation notification for CSV Group Head
-    const ntf9 = page.locator(notificationItem("NTF-0009"));
+    const ntf9 = page.locator(notificationItem('NTF-0009'));
     await expect(ntf9).toBeVisible();
     await expect(ntf9.getByText(/escalat/i)).toBeVisible();
 
     // Click "View" → navigates to /reconciliation via ActionUrl
     await ntf9.getByText(/view/i).click();
-    await page.waitForURL("**/reconciliation");
+    await page.waitForURL('**/reconciliation');
     await expect(page).toHaveURL(/\/reconciliation/);
 
     // Reconciliation page loads with relevant context
     await page.waitForTimeout(2000);
 
     // Navigate back to dashboard
-    await page.goto("/");
+    await page.goto('/');
     await page.waitForTimeout(500);
 
     // Click bell again, mark read on NTF-0009
     await page.locator(NOTIFICATION_BELL).click();
     await expect(page.locator(NOTIFICATION_PANEL)).toBeVisible();
 
-    const ntf9Again = page.locator(notificationItem("NTF-0009"));
+    const ntf9Again = page.locator(notificationItem('NTF-0009'));
     const markReadBtn = ntf9Again.getByText(/mark read/i);
     if (await markReadBtn.isVisible().catch(() => false)) {
       await markReadBtn.click();

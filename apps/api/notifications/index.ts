@@ -1,15 +1,15 @@
-import { EaCRuntimeHandlers } from "@fathym/eac/runtime/pipelines";
-import { OISampleMgmtWebState } from "../../../src/state/OISampleMgmtWebState.ts";
-import { getWorkflowHooks } from "../../../src/data/hooks.ts";
+import { EaCRuntimeHandlers } from '@fathym/eac/runtime/pipelines';
+import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
+import { getWorkflowHooks } from '../../../src/data/hooks.ts';
 
 export default {
   async GET(req, _ctx) {
     const url = new URL(req.url);
-    const userId = url.searchParams.get("userId") || undefined;
+    const userId = url.searchParams.get('userId') || undefined;
 
     if (!userId) {
       return Response.json(
-        { error: "userId query parameter required" },
+        { error: 'userId query parameter required' },
         { status: 400 },
       );
     }
@@ -30,7 +30,7 @@ export default {
     const body = await req.json();
     const { action, NotificationId } = body;
 
-    if (action === "mark-read" && NotificationId) {
+    if (action === 'mark-read' && NotificationId) {
       const hooks = await getWorkflowHooks();
       const updated = await hooks.MarkNotificationAsRead(NotificationId);
       return Response.json(updated);

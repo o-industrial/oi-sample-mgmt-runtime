@@ -1,23 +1,23 @@
 // deno-lint-ignore-file require-await
-import { Capability } from "@fathym/steward/capabilities";
-import { z } from "zod";
-import type { AuditEventRecord } from "./types/AuditEventRecord.ts";
-import type { TransferRecord } from "./types/TransferRecord.ts";
-import type { ReturnRecord } from "./types/ReturnRecord.ts";
-import type { ReconciliationRecord } from "./types/ReconciliationRecord.ts";
-import type { DispositionRecord } from "./types/DispositionRecord.ts";
-import type { ReviewRecord } from "./types/ReviewRecord.ts";
-import type { NotificationRecord } from "./types/NotificationRecord.ts";
-import type { ApprovalRecord } from "./types/ApprovalRecord.ts";
-import type { StudyRoleMappingRecord } from "./types/StudyRoleMappingRecord.ts";
-import { seedWorkflowData } from "./seed.ts";
+import { Capability } from '@fathym/steward/capabilities';
+import { z } from 'zod';
+import type { AuditEventRecord } from './types/AuditEventRecord.ts';
+import type { TransferRecord } from './types/TransferRecord.ts';
+import type { ReturnRecord } from './types/ReturnRecord.ts';
+import type { ReconciliationRecord } from './types/ReconciliationRecord.ts';
+import type { DispositionRecord } from './types/DispositionRecord.ts';
+import type { ReviewRecord } from './types/ReviewRecord.ts';
+import type { NotificationRecord } from './types/NotificationRecord.ts';
+import type { ApprovalRecord } from './types/ApprovalRecord.ts';
+import type { StudyRoleMappingRecord } from './types/StudyRoleMappingRecord.ts';
+import { seedWorkflowData } from './seed.ts';
 
 export type SampleMgmtHooks = {
   ListAuditEvents(
     filter?: { UserId?: string; ActionType?: string },
   ): Promise<AuditEventRecord[]>;
   CreateAuditEvent(
-    data: Omit<AuditEventRecord, "EventId">,
+    data: Omit<AuditEventRecord, 'EventId'>,
   ): Promise<AuditEventRecord>;
   ListTransfers(
     filter?: { Type?: string; Status?: string },
@@ -28,14 +28,14 @@ export type SampleMgmtHooks = {
   ListReviews(filter?: { Status?: string }): Promise<ReviewRecord[]>;
   DecideReview(
     reviewId: string,
-    decision: "approved" | "rejected" | "escalated",
+    decision: 'approved' | 'rejected' | 'escalated',
     userId: string,
     reason?: string,
   ): Promise<ReviewRecord>;
   ListNotifications(userId: string): Promise<NotificationRecord[]>;
   MarkNotificationAsRead(notificationId: string): Promise<NotificationRecord>;
   CreateNotification(
-    data: Omit<NotificationRecord, "NotificationId">,
+    data: Omit<NotificationRecord, 'NotificationId'>,
   ): Promise<NotificationRecord>;
   ListStudyRoleMappings(
     studyId?: string,
@@ -48,7 +48,7 @@ export type SampleMgmtHooks = {
     filter?: { Status?: string; Type?: string },
   ): Promise<ApprovalRecord[]>;
   InitiateApproval(data: {
-    Type: ApprovalRecord["Type"];
+    Type: ApprovalRecord['Type'];
     RecordId: string;
     StudyRef: string;
     InitiatedBy: string;
@@ -56,12 +56,12 @@ export type SampleMgmtHooks = {
   }): Promise<ApprovalRecord>;
   RecordApprovalDecision(
     approvalId: string,
-    decision: "approved" | "rejected" | "escalated",
+    decision: 'approved' | 'rejected' | 'escalated',
     userId: string,
     reason?: string,
   ): Promise<ApprovalRecord>;
   CreateTransfer(data: {
-    Type: TransferRecord["Type"];
+    Type: TransferRecord['Type'];
     SampleIds: string[];
     Source: string;
     Destination: string;
@@ -72,7 +72,7 @@ export type SampleMgmtHooks = {
   }): Promise<TransferRecord>;
   UpdateTransferStatus(
     transferId: string,
-    status: TransferRecord["Status"],
+    status: TransferRecord['Status'],
     statusReason: string,
     userId: string,
   ): Promise<TransferRecord>;
@@ -86,7 +86,7 @@ export type SampleMgmtHooks = {
   }): Promise<ReturnRecord>;
   UpdateReturnStatus(
     returnId: string,
-    status: ReturnRecord["Status"],
+    status: ReturnRecord['Status'],
     userId: string,
     outcome?: string,
     depletionContext?: string,
@@ -110,10 +110,10 @@ export type SampleMgmtHooks = {
 };
 
 export function SampleMgmtCapability() {
-  return Capability("SampleMgmt", "Web-app-owned workflow state")
+  return Capability('SampleMgmt', 'Web-app-owned workflow state')
     .Output(z.custom<SampleMgmtHooks>())
     .Execute(async () => {
-      const kv = await Deno.openKv(Deno.env.get("DATA_DENO_KV_PATH"));
+      const kv = await Deno.openKv(Deno.env.get('DATA_DENO_KV_PATH'));
 
       async function listAll<T>(prefix: string): Promise<T[]> {
         const entries = kv.list<T>({ prefix: [prefix] });
@@ -123,16 +123,16 @@ export function SampleMgmtCapability() {
       }
 
       const APPROVAL_ROLE_MAP: Record<string, string> = {
-        "disposition": "hbsm_custodian",
-        "transfer": "hbsm_custodian",
-        "archive-retrieval": "lab_manager",
-        "manager-review": "lab_manager",
-        "return-confirmation": "study_lead",
+        'disposition': 'hbsm_custodian',
+        'transfer': 'hbsm_custodian',
+        'archive-retrieval': 'lab_manager',
+        'manager-review': 'lab_manager',
+        'return-confirmation': 'study_lead',
       };
 
       return {
         async ListAuditEvents(filter?) {
-          const all = await listAll<AuditEventRecord>("AuditEvents");
+          const all = await listAll<AuditEventRecord>('AuditEvents');
           if (!filter) return all;
           return all.filter((e) => {
             if (filter.UserId && e.UserId !== filter.UserId) return false;
@@ -143,15 +143,15 @@ export function SampleMgmtCapability() {
           });
         },
 
-        async CreateAuditEvent(data: Omit<AuditEventRecord, "EventId">) {
+        async CreateAuditEvent(data: Omit<AuditEventRecord, 'EventId'>) {
           const EventId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
           const record: AuditEventRecord = { EventId, ...data };
-          await kv.set(["AuditEvents", EventId], record);
+          await kv.set(['AuditEvents', EventId], record);
           return record;
         },
 
         async ListTransfers(filter?) {
-          const all = await listAll<TransferRecord>("Transfers");
+          const all = await listAll<TransferRecord>('Transfers');
           if (!filter) return all;
           return all.filter((t) => {
             if (filter.Type && t.Type !== filter.Type) return false;
@@ -161,19 +161,19 @@ export function SampleMgmtCapability() {
         },
 
         async ListReturns() {
-          return listAll<ReturnRecord>("Returns");
+          return listAll<ReturnRecord>('Returns');
         },
 
         async ListReconciliations() {
-          return listAll<ReconciliationRecord>("Reconciliations");
+          return listAll<ReconciliationRecord>('Reconciliations');
         },
 
         async ListDispositions() {
-          return listAll<DispositionRecord>("Dispositions");
+          return listAll<DispositionRecord>('Dispositions');
         },
 
         async ListReviews(filter?) {
-          const all = await listAll<ReviewRecord>("Reviews");
+          const all = await listAll<ReviewRecord>('Reviews');
           if (!filter) return all;
           return all.filter((r) => {
             if (filter.Status && r.Status !== filter.Status) return false;
@@ -183,15 +183,15 @@ export function SampleMgmtCapability() {
 
         async DecideReview(
           reviewId: string,
-          decision: "approved" | "rejected" | "escalated",
+          decision: 'approved' | 'rejected' | 'escalated',
           userId: string,
           reason?: string,
         ) {
-          const entry = await kv.get<ReviewRecord>(["Reviews", reviewId]);
+          const entry = await kv.get<ReviewRecord>(['Reviews', reviewId]);
           if (!entry.value) throw new Error(`Review ${reviewId} not found`);
           const now = new Date().toISOString();
           let lastAction = `${decision} by ${userId}`;
-          if (decision === "rejected" && reason) {
+          if (decision === 'rejected' && reason) {
             lastAction += ` — ${reason}`;
           }
           const updated: ReviewRecord = {
@@ -202,68 +202,68 @@ export function SampleMgmtCapability() {
             ReviewedAt: now,
             LastAction: lastAction,
           };
-          await kv.set(["Reviews", reviewId], updated);
+          await kv.set(['Reviews', reviewId], updated);
 
           // ALCOA+ audit event for every review decision (Attributable + Contemporaneous)
           const auditId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["AuditEvents", auditId], {
+          await kv.set(['AuditEvents', auditId], {
             EventId: auditId,
             Timestamp: now,
             UserId: userId,
-            ActionType: "Approve",
-            EntityType: "Review",
+            ActionType: 'Approve',
+            EntityType: 'Review',
             EntityId: reviewId,
-            AlcoaPrinciple: "Attributable",
-            Status: "success",
+            AlcoaPrinciple: 'Attributable',
+            Status: 'success',
           } as AuditEventRecord);
 
           // Notify the review submitter that their review was decided
           const ntfId = `NTF-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["Notifications", ntfId], {
+          await kv.set(['Notifications', ntfId], {
             NotificationId: ntfId,
             UserId: entry.value.SubmittedBy,
-            Type: "status-change",
-            EntityType: "Review",
+            Type: 'status-change',
+            EntityType: 'Review',
             EntityId: reviewId,
             Message: `Review ${reviewId} ${decision} by ${userId}`,
             Read: false,
             CreatedAt: now,
-            ActionUrl: "/review",
+            ActionUrl: '/review',
           } as NotificationRecord);
 
           return updated;
         },
 
         async ListNotifications(userId: string) {
-          const all = await listAll<NotificationRecord>("Notifications");
+          const all = await listAll<NotificationRecord>('Notifications');
           return all.filter((n) => n.UserId === userId);
         },
 
         async MarkNotificationAsRead(notificationId: string) {
           const entry = await kv.get<NotificationRecord>([
-            "Notifications",
+            'Notifications',
             notificationId,
           ]);
           if (!entry.value) {
             throw new Error(`Notification ${notificationId} not found`);
           }
           const updated: NotificationRecord = { ...entry.value, Read: true };
-          await kv.set(["Notifications", notificationId], updated);
+          await kv.set(['Notifications', notificationId], updated);
           return updated;
         },
 
         async CreateNotification(
-          data: Omit<NotificationRecord, "NotificationId">,
+          data: Omit<NotificationRecord, 'NotificationId'>,
         ) {
           const NotificationId = `NTF-${crypto.randomUUID().slice(0, 8)}`;
           const record: NotificationRecord = { NotificationId, ...data };
-          await kv.set(["Notifications", NotificationId], record);
+          await kv.set(['Notifications', NotificationId], record);
           return record;
         },
 
         async ListStudyRoleMappings(studyId?: string) {
           const all = await listAll<StudyRoleMappingRecord>(
-            "StudyRoleMappings",
+            'StudyRoleMappings',
           );
           if (!studyId) return all;
           return all.filter((m) => m.StudyId === studyId);
@@ -271,7 +271,7 @@ export function SampleMgmtCapability() {
 
         async GetApproversForStudy(studyId: string, role: string) {
           const mappings = await listAll<StudyRoleMappingRecord>(
-            "StudyRoleMappings",
+            'StudyRoleMappings',
           );
           const match = mappings.find(
             (m) => m.StudyId === studyId && m.Role === role,
@@ -280,7 +280,7 @@ export function SampleMgmtCapability() {
         },
 
         async ListApprovals(filter?: { Status?: string; Type?: string }) {
-          const all = await listAll<ApprovalRecord>("Approvals");
+          const all = await listAll<ApprovalRecord>('Approvals');
           if (!filter) return all;
           return all.filter((a) => {
             if (filter.Status && a.Status !== filter.Status) return false;
@@ -291,10 +291,10 @@ export function SampleMgmtCapability() {
 
         async InitiateApproval(data) {
           const now = new Date().toISOString();
-          const requiredRole = APPROVAL_ROLE_MAP[data.Type] ?? "lab_manager";
+          const requiredRole = APPROVAL_ROLE_MAP[data.Type] ?? 'lab_manager';
 
           const mappings = await listAll<StudyRoleMappingRecord>(
-            "StudyRoleMappings",
+            'StudyRoleMappings',
           );
           const match = mappings.find(
             (m) => m.StudyId === data.StudyRef && m.Role === requiredRole,
@@ -310,17 +310,17 @@ export function SampleMgmtCapability() {
             InitiatedBy: data.InitiatedBy,
             InitiatedAt: now,
             AssignedTo: assignedTo,
-            Status: "pending",
+            Status: 'pending',
             Context: data.Context,
           };
-          await kv.set(["Approvals", ApprovalId], record);
+          await kv.set(['Approvals', ApprovalId], record);
 
           for (const userId of assignedTo) {
             const ntfId = `NTF-${crypto.randomUUID().slice(0, 8)}`;
-            await kv.set(["Notifications", ntfId], {
+            await kv.set(['Notifications', ntfId], {
               NotificationId: ntfId,
               UserId: userId,
-              Type: "approval-request",
+              Type: 'approval-request',
               EntityType: data.Type,
               EntityId: data.RecordId,
               Message:
@@ -328,21 +328,21 @@ export function SampleMgmtCapability() {
               Read: false,
               CreatedAt: now,
               ActionUrl: `/${
-                data.Type === "return-confirmation" ? "return" : data.Type
+                data.Type === 'return-confirmation' ? 'return' : data.Type
               }`,
             } as NotificationRecord);
           }
 
           const auditId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["AuditEvents", auditId], {
+          await kv.set(['AuditEvents', auditId], {
             EventId: auditId,
             Timestamp: now,
             UserId: data.InitiatedBy,
-            ActionType: "InitiateApproval",
+            ActionType: 'InitiateApproval',
             EntityType: data.Type,
             EntityId: data.RecordId,
-            AlcoaPrinciple: "Attributable",
-            Status: "success",
+            AlcoaPrinciple: 'Attributable',
+            Status: 'success',
           } as AuditEventRecord);
 
           return record;
@@ -350,12 +350,12 @@ export function SampleMgmtCapability() {
 
         async RecordApprovalDecision(
           approvalId: string,
-          decision: "approved" | "rejected" | "escalated",
+          decision: 'approved' | 'rejected' | 'escalated',
           userId: string,
           reason?: string,
         ) {
           const entry = await kv.get<ApprovalRecord>([
-            "Approvals",
+            'Approvals',
             approvalId,
           ]);
           if (!entry.value) {
@@ -373,13 +373,13 @@ export function SampleMgmtCapability() {
               Timestamp: now,
             },
           };
-          await kv.set(["Approvals", approvalId], updated);
+          await kv.set(['Approvals', approvalId], updated);
 
           const ntfId = `NTF-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["Notifications", ntfId], {
+          await kv.set(['Notifications', ntfId], {
             NotificationId: ntfId,
             UserId: entry.value.InitiatedBy,
-            Type: "status-change",
+            Type: 'status-change',
             EntityType: entry.value.Type,
             EntityId: entry.value.RecordId,
             Message:
@@ -387,14 +387,14 @@ export function SampleMgmtCapability() {
             Read: false,
             CreatedAt: now,
             ActionUrl: `/${
-              entry.value.Type === "return-confirmation"
-                ? "return"
+              entry.value.Type === 'return-confirmation'
+                ? 'return'
                 : entry.value.Type
             }`,
           } as NotificationRecord);
 
           const auditId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["AuditEvents", auditId], {
+          await kv.set(['AuditEvents', auditId], {
             EventId: auditId,
             Timestamp: now,
             UserId: userId,
@@ -403,8 +403,8 @@ export function SampleMgmtCapability() {
             }`,
             EntityType: entry.value.Type,
             EntityId: entry.value.RecordId,
-            AlcoaPrinciple: "Attributable",
-            Status: "success",
+            AlcoaPrinciple: 'Attributable',
+            Status: 'success',
           } as AuditEventRecord);
 
           return updated;
@@ -421,29 +421,29 @@ export function SampleMgmtCapability() {
             Destination: data.Destination,
             RequestedBy: data.RequestedBy,
             RequestedAt: now,
-            Status: "attention",
+            Status: 'attention',
             StatusReason: data.StatusReason,
             SlaDeadline: data.SlaDeadline,
             LastAction: `Created by ${data.RequestedBy}`,
           };
-          await kv.set(["Transfers", TransferId], record);
+          await kv.set(['Transfers', TransferId], record);
 
           const auditId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["AuditEvents", auditId], {
+          await kv.set(['AuditEvents', auditId], {
             EventId: auditId,
             Timestamp: now,
             UserId: data.RequestedBy,
-            ActionType: "Create",
-            EntityType: "Transfer",
+            ActionType: 'Create',
+            EntityType: 'Transfer',
             EntityId: TransferId,
-            AlcoaPrinciple: "Contemporaneous",
-            Status: "success",
+            AlcoaPrinciple: 'Contemporaneous',
+            Status: 'success',
           } as AuditEventRecord);
 
-          const requiredRole = APPROVAL_ROLE_MAP["transfer"] ??
-            "hbsm_custodian";
+          const requiredRole = APPROVAL_ROLE_MAP['transfer'] ??
+            'hbsm_custodian';
           const mappings = await listAll<StudyRoleMappingRecord>(
-            "StudyRoleMappings",
+            'StudyRoleMappings',
           );
           const match = mappings.find(
             (m) => m.StudyId === data.StudyRef && m.Role === requiredRole,
@@ -452,16 +452,16 @@ export function SampleMgmtCapability() {
 
           for (const userId of approvers) {
             const ntfId = `NTF-${crypto.randomUUID().slice(0, 8)}`;
-            await kv.set(["Notifications", ntfId], {
+            await kv.set(['Notifications', ntfId], {
               NotificationId: ntfId,
               UserId: userId,
-              Type: "approval-request",
-              EntityType: "Transfer",
+              Type: 'approval-request',
+              EntityType: 'Transfer',
               EntityId: TransferId,
               Message: `Transfer ${TransferId} requires your approval`,
               Read: false,
               CreatedAt: now,
-              ActionUrl: "/transfer",
+              ActionUrl: '/transfer',
             } as NotificationRecord);
           }
 
@@ -470,7 +470,7 @@ export function SampleMgmtCapability() {
 
         async UpdateTransferStatus(transferId, status, statusReason, userId) {
           const entry = await kv.get<TransferRecord>([
-            "Transfers",
+            'Transfers',
             transferId,
           ]);
           if (!entry.value) {
@@ -483,31 +483,31 @@ export function SampleMgmtCapability() {
             StatusReason: statusReason,
             LastAction: `${status} by ${userId}`,
           };
-          await kv.set(["Transfers", transferId], updated);
+          await kv.set(['Transfers', transferId], updated);
 
           const auditId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["AuditEvents", auditId], {
+          await kv.set(['AuditEvents', auditId], {
             EventId: auditId,
             Timestamp: now,
             UserId: userId,
-            ActionType: "StatusUpdate",
-            EntityType: "Transfer",
+            ActionType: 'StatusUpdate',
+            EntityType: 'Transfer',
             EntityId: transferId,
-            AlcoaPrinciple: "Attributable",
-            Status: "success",
+            AlcoaPrinciple: 'Attributable',
+            Status: 'success',
           } as AuditEventRecord);
 
           const ntfId = `NTF-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["Notifications", ntfId], {
+          await kv.set(['Notifications', ntfId], {
             NotificationId: ntfId,
             UserId: entry.value.RequestedBy,
-            Type: "status-change",
-            EntityType: "Transfer",
+            Type: 'status-change',
+            EntityType: 'Transfer',
             EntityId: transferId,
             Message: `Transfer ${transferId} ${status} by ${userId}`,
             Read: false,
             CreatedAt: now,
-            ActionUrl: "/transfer",
+            ActionUrl: '/transfer',
           } as NotificationRecord);
 
           return updated;
@@ -523,28 +523,28 @@ export function SampleMgmtCapability() {
             Reason: data.Reason,
             RequestedBy: data.RequestedBy,
             RequestedAt: now,
-            Status: "attention",
+            Status: 'attention',
             PackagingInstructions: data.PackagingInstructions,
             LastAction: `Created by ${data.RequestedBy}`,
           };
-          await kv.set(["Returns", ReturnId], record);
+          await kv.set(['Returns', ReturnId], record);
 
           const auditId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["AuditEvents", auditId], {
+          await kv.set(['AuditEvents', auditId], {
             EventId: auditId,
             Timestamp: now,
             UserId: data.RequestedBy,
-            ActionType: "Create",
-            EntityType: "Return",
+            ActionType: 'Create',
+            EntityType: 'Return',
             EntityId: ReturnId,
-            AlcoaPrinciple: "Contemporaneous",
-            Status: "success",
+            AlcoaPrinciple: 'Contemporaneous',
+            Status: 'success',
           } as AuditEventRecord);
 
-          const requiredRole = APPROVAL_ROLE_MAP["return-confirmation"] ??
-            "study_lead";
+          const requiredRole = APPROVAL_ROLE_MAP['return-confirmation'] ??
+            'study_lead';
           const mappings = await listAll<StudyRoleMappingRecord>(
-            "StudyRoleMappings",
+            'StudyRoleMappings',
           );
           const match = mappings.find(
             (m) => m.StudyId === data.StudyRef && m.Role === requiredRole,
@@ -553,16 +553,16 @@ export function SampleMgmtCapability() {
 
           for (const userId of approvers) {
             const ntfId = `NTF-${crypto.randomUUID().slice(0, 8)}`;
-            await kv.set(["Notifications", ntfId], {
+            await kv.set(['Notifications', ntfId], {
               NotificationId: ntfId,
               UserId: userId,
-              Type: "approval-request",
-              EntityType: "Return",
+              Type: 'approval-request',
+              EntityType: 'Return',
               EntityId: ReturnId,
               Message: `Return ${ReturnId} requires your approval`,
               Read: false,
               CreatedAt: now,
-              ActionUrl: "/return",
+              ActionUrl: '/return',
             } as NotificationRecord);
           }
 
@@ -576,7 +576,7 @@ export function SampleMgmtCapability() {
           outcome?,
           depletionContext?,
         ) {
-          const entry = await kv.get<ReturnRecord>(["Returns", returnId]);
+          const entry = await kv.get<ReturnRecord>(['Returns', returnId]);
           if (!entry.value) {
             throw new Error(`Return ${returnId} not found`);
           }
@@ -588,31 +588,31 @@ export function SampleMgmtCapability() {
             DepletionContext: depletionContext ?? entry.value.DepletionContext,
             LastAction: `${status} by ${userId}`,
           };
-          await kv.set(["Returns", returnId], updated);
+          await kv.set(['Returns', returnId], updated);
 
           const auditId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["AuditEvents", auditId], {
+          await kv.set(['AuditEvents', auditId], {
             EventId: auditId,
             Timestamp: now,
             UserId: userId,
-            ActionType: "StatusUpdate",
-            EntityType: "Return",
+            ActionType: 'StatusUpdate',
+            EntityType: 'Return',
             EntityId: returnId,
-            AlcoaPrinciple: "Attributable",
-            Status: "success",
+            AlcoaPrinciple: 'Attributable',
+            Status: 'success',
           } as AuditEventRecord);
 
           const ntfId = `NTF-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["Notifications", ntfId], {
+          await kv.set(['Notifications', ntfId], {
             NotificationId: ntfId,
             UserId: entry.value.RequestedBy,
-            Type: "status-change",
-            EntityType: "Return",
+            Type: 'status-change',
+            EntityType: 'Return',
             EntityId: returnId,
             Message: `Return ${returnId} ${status} by ${userId}`,
             Read: false,
             CreatedAt: now,
-            ActionUrl: "/return",
+            ActionUrl: '/return',
           } as NotificationRecord);
 
           return updated;
@@ -628,22 +628,22 @@ export function SampleMgmtCapability() {
             ExpectedCount: data.ExpectedCount,
             ActualCount: data.ActualCount,
             MissingFields: data.MissingFields,
-            Status: "attention",
+            Status: 'attention',
             SlaDeadline: data.SlaDeadline,
             LastAction: `Created by ${data.UserId}`,
           };
-          await kv.set(["Reconciliations", ReconciliationId], record);
+          await kv.set(['Reconciliations', ReconciliationId], record);
 
           const auditId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["AuditEvents", auditId], {
+          await kv.set(['AuditEvents', auditId], {
             EventId: auditId,
             Timestamp: now,
             UserId: data.UserId,
-            ActionType: "Create",
-            EntityType: "Reconciliation",
+            ActionType: 'Create',
+            EntityType: 'Reconciliation',
             EntityId: ReconciliationId,
-            AlcoaPrinciple: "Contemporaneous",
-            Status: "success",
+            AlcoaPrinciple: 'Contemporaneous',
+            Status: 'success',
           } as AuditEventRecord);
 
           return record;
@@ -657,11 +657,11 @@ export function SampleMgmtCapability() {
         ) {
           if (!correctionReason || correctionReason.trim().length === 0) {
             throw new Error(
-              "CorrectionReason is required for reconciliation resolution (GxP)",
+              'CorrectionReason is required for reconciliation resolution (GxP)',
             );
           }
           const entry = await kv.get<ReconciliationRecord>([
-            "Reconciliations",
+            'Reconciliations',
             reconciliationId,
           ]);
           if (!entry.value) {
@@ -672,25 +672,25 @@ export function SampleMgmtCapability() {
           const now = new Date().toISOString();
           const updated: ReconciliationRecord = {
             ...entry.value,
-            Status: "ready",
+            Status: 'ready',
             Resolution: resolution,
             ResolvedBy: userId,
             ResolvedAt: now,
             CorrectionReason: correctionReason,
             LastAction: `Resolved by ${userId}`,
           };
-          await kv.set(["Reconciliations", reconciliationId], updated);
+          await kv.set(['Reconciliations', reconciliationId], updated);
 
           const auditId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
-          await kv.set(["AuditEvents", auditId], {
+          await kv.set(['AuditEvents', auditId], {
             EventId: auditId,
             Timestamp: now,
             UserId: userId,
-            ActionType: "Resolve",
-            EntityType: "Reconciliation",
+            ActionType: 'Resolve',
+            EntityType: 'Reconciliation',
             EntityId: reconciliationId,
-            AlcoaPrinciple: "Attributable",
-            Status: "success",
+            AlcoaPrinciple: 'Attributable',
+            Status: 'success',
           } as AuditEventRecord);
 
           return updated;

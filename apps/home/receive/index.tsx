@@ -1,13 +1,13 @@
-import { PageProps } from "@fathym/eac-applications/preact";
-import { EaCRuntimeHandlerSet } from "@fathym/eac/runtime/pipelines";
-import { OISampleMgmtWebState } from "../../../src/state/OISampleMgmtWebState.ts";
-import { useTranslation } from "../../../src/utils/useTranslation.ts";
-import ReceptionTabs from "../../components/ReceptionTabs.tsx";
-import { createClientFromRequest } from "../../../src/client/createClientFromRequest.ts";
+import { PageProps } from '@fathym/eac-applications/preact';
+import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
+import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
+import { useTranslation } from '../../../src/utils/useTranslation.ts';
+import ReceptionTabs from '../../components/ReceptionTabs.tsx';
+import { createClientFromRequest } from '../../../src/client/createClientFromRequest.ts';
 
 // --- Types (TitleCase for server data) ---
 
-type GateStatus = "ready" | "attention" | "volume-hold" | "problem";
+type GateStatus = 'ready' | 'attention' | 'volume-hold' | 'problem';
 
 type RecentManifestItem = {
   ManifestId: string;
@@ -86,8 +86,8 @@ export const handler: EaCRuntimeHandlerSet<
   ReceiveData
 > = {
   GET: async (req, ctx) => {
-    if (!ctx.State.AccessRights.includes("samples:receive")) {
-      return new Response("Forbidden", { status: 403 });
+    if (!ctx.State.AccessRights.includes('samples:receive')) {
+      return new Response('Forbidden', { status: 403 });
     }
 
     const { t } = useTranslation(ctx.State.Strings);
@@ -100,47 +100,47 @@ export const handler: EaCRuntimeHandlerSet<
 
     return ctx.Render({
       ...ctx.Data,
-      Heading: t("receive.heading"),
+      Heading: t('receive.heading'),
 
       TabLabels: [
-        t("receive.tab.manifestUpload"),
-        t("receive.tab.parcelReception"),
-        t("receive.tab.temperatureLogs"),
-        t("receive.tab.barcodeScanning"),
+        t('receive.tab.manifestUpload'),
+        t('receive.tab.parcelReception'),
+        t('receive.tab.temperatureLogs'),
+        t('receive.tab.barcodeScanning'),
       ],
 
       ManifestForm: {
-        ManifestIdLabel: t("receive.form.manifestId"),
-        ManifestIdPlaceholder: t("receive.form.manifestIdPlaceholder"),
-        StudyLabel: t("receive.form.study"),
-        StudyPlaceholder: t("receive.form.studyPlaceholder"),
+        ManifestIdLabel: t('receive.form.manifestId'),
+        ManifestIdPlaceholder: t('receive.form.manifestIdPlaceholder'),
+        StudyLabel: t('receive.form.study'),
+        StudyPlaceholder: t('receive.form.studyPlaceholder'),
         StudyOptions: studies.map((s) => ({
           Value: s.StudyId,
           Label: s.Label,
         })),
-        ShipmentIdLabel: t("receive.form.shipmentId"),
-        ShipmentIdPlaceholder: t("receive.form.shipmentIdPlaceholder"),
-        ExpectedSamplesLabel: t("receive.form.expectedSamples"),
+        ShipmentIdLabel: t('receive.form.shipmentId'),
+        ShipmentIdPlaceholder: t('receive.form.shipmentIdPlaceholder'),
+        ExpectedSamplesLabel: t('receive.form.expectedSamples'),
         ExpectedSamplesPlaceholder: t(
-          "receive.form.expectedSamplesPlaceholder",
+          'receive.form.expectedSamplesPlaceholder',
         ),
-        OriginSiteLabel: t("receive.form.originSite"),
-        OriginSitePlaceholder: t("receive.form.originSitePlaceholder"),
-        DestinationSiteLabel: t("receive.form.destinationSite"),
+        OriginSiteLabel: t('receive.form.originSite'),
+        OriginSitePlaceholder: t('receive.form.originSitePlaceholder'),
+        DestinationSiteLabel: t('receive.form.destinationSite'),
         DestinationSitePlaceholder: t(
-          "receive.form.destinationSitePlaceholder",
+          'receive.form.destinationSitePlaceholder',
         ),
-        WaybillNumberLabel: t("receive.form.waybillNumber"),
-        WaybillNumberPlaceholder: t("receive.form.waybillNumberPlaceholder"),
-        CarrierLabel: t("receive.form.carrier"),
-        CarrierPlaceholder: t("receive.form.carrierPlaceholder"),
-        PeriodLabel: t("receive.form.period"),
-        PeriodPlaceholder: t("receive.form.periodPlaceholder"),
-        SubmitLabel: t("receive.form.submit"),
+        WaybillNumberLabel: t('receive.form.waybillNumber'),
+        WaybillNumberPlaceholder: t('receive.form.waybillNumberPlaceholder'),
+        CarrierLabel: t('receive.form.carrier'),
+        CarrierPlaceholder: t('receive.form.carrierPlaceholder'),
+        PeriodLabel: t('receive.form.period'),
+        PeriodPlaceholder: t('receive.form.periodPlaceholder'),
+        SubmitLabel: t('receive.form.submit'),
       },
 
       RecentManifests: {
-        Heading: t("receive.recentManifests.heading"),
+        Heading: t('receive.recentManifests.heading'),
         Items: manifests.map((m) => ({
           ManifestId: m.ManifestId,
           Study: m.StudyId,
@@ -148,57 +148,57 @@ export const handler: EaCRuntimeHandlerSet<
           Status: m.Status as GateStatus,
           StatusLabel: t(
             `receive.status.${
-              m.Status === "volume-hold" ? "volumeHold" : m.Status
+              m.Status === 'volume-hold' ? 'volumeHold' : m.Status
             }`,
           ),
           ReceivedAt: m.ReceivedAt,
-          SamplesLabel: t("receive.recentManifests.samples"),
+          SamplesLabel: t('receive.recentManifests.samples'),
         })),
-        EmptyLabel: t("receive.recentManifests.empty"),
+        EmptyLabel: t('receive.recentManifests.empty'),
       },
 
       ParcelReception: {
-        Heading: t("receive.parcel.heading"),
+        Heading: t('receive.parcel.heading'),
         Checklist: [
           {
-            Id: "sample-condition",
-            Label: t("receive.parcel.sampleCondition"),
+            Id: 'sample-condition',
+            Label: t('receive.parcel.sampleCondition'),
           },
-          { Id: "seal-intact", Label: t("receive.parcel.sealIntact") },
-          { Id: "temp-indicator", Label: t("receive.parcel.tempIndicator") },
-          { Id: "courier-name", Label: t("receive.parcel.courierName") },
+          { Id: 'seal-intact', Label: t('receive.parcel.sealIntact') },
+          { Id: 'temp-indicator', Label: t('receive.parcel.tempIndicator') },
+          { Id: 'courier-name', Label: t('receive.parcel.courierName') },
         ],
-        ConfirmReceiptLabel: t("receive.parcel.confirmReceipt"),
-        ScannedByLabel: t("receive.parcel.scannedBy"),
-        ScannedByValue: "Dr. Liora Vasquez",
-        VerifiedByLabel: t("receive.parcel.verifiedBy"),
-        VerifiedByPlaceholder: t("receive.parcel.verifiedByPlaceholder"),
+        ConfirmReceiptLabel: t('receive.parcel.confirmReceipt'),
+        ScannedByLabel: t('receive.parcel.scannedBy'),
+        ScannedByValue: 'Dr. Liora Vasquez',
+        VerifiedByLabel: t('receive.parcel.verifiedBy'),
+        VerifiedByPlaceholder: t('receive.parcel.verifiedByPlaceholder'),
       },
 
       TemperatureLogs: {
-        Heading: t("receive.temp.heading"),
-        DateRangeLabel: t("receive.temp.dateRange"),
+        Heading: t('receive.temp.heading'),
+        DateRangeLabel: t('receive.temp.dateRange'),
         Columns: {
-          Col1: t("receive.temp.col.timestamp"),
-          Col2: t("receive.temp.col.sensorId"),
-          Col3: t("receive.temp.col.temperature"),
-          Col4: t("receive.temp.col.thresholdStatus"),
+          Col1: t('receive.temp.col.timestamp'),
+          Col2: t('receive.temp.col.sensorId'),
+          Col3: t('receive.temp.col.temperature'),
+          Col4: t('receive.temp.col.thresholdStatus'),
         },
-        EmptyLabel: t("receive.temp.empty"),
+        EmptyLabel: t('receive.temp.empty'),
       },
 
       BarcodeScanning: {
-        Heading: t("receive.scan.heading"),
-        ScannerPlaceholder: t("receive.scan.scannerPlaceholder"),
-        ScanButtonLabel: t("receive.scan.scanButton"),
-        StartBatchLabel: t("receive.scan.startBatch"),
+        Heading: t('receive.scan.heading'),
+        ScannerPlaceholder: t('receive.scan.scannerPlaceholder'),
+        ScanButtonLabel: t('receive.scan.scanButton'),
+        StartBatchLabel: t('receive.scan.startBatch'),
         Columns: {
-          Col1: t("receive.scan.col.sampleId"),
-          Col2: t("receive.scan.col.timestamp"),
-          Col3: t("receive.scan.col.operator"),
-          Col4: t("receive.scan.col.status"),
+          Col1: t('receive.scan.col.sampleId'),
+          Col2: t('receive.scan.col.timestamp'),
+          Col3: t('receive.scan.col.operator'),
+          Col4: t('receive.scan.col.status'),
         },
-        EmptyLabel: t("receive.scan.empty"),
+        EmptyLabel: t('receive.scan.empty'),
       },
     });
   },
@@ -210,9 +210,9 @@ export default function Receive({ Data }: PageProps<ReceiveData>) {
   const d = Data!;
 
   return (
-    <div class="space-y-6">
+    <div class='space-y-6'>
       <div>
-        <h1 class="text-xl font-bold text-primary">{d.Heading}</h1>
+        <h1 class='text-xl font-bold text-primary'>{d.Heading}</h1>
       </div>
 
       <ReceptionTabs

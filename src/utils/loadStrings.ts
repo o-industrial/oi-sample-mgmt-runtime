@@ -1,4 +1,4 @@
-import type { AppLocale } from "./resolveLocale.ts";
+import type { AppLocale } from './resolveLocale.ts';
 
 const cache = new Map<string, Record<string, string>>();
 

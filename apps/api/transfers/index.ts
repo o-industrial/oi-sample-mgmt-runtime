@@ -1,12 +1,12 @@
-import { EaCRuntimeHandlers } from "@fathym/eac/runtime/pipelines";
-import { OISampleMgmtWebState } from "../../../src/state/OISampleMgmtWebState.ts";
-import { getWorkflowHooks } from "../../../src/data/hooks.ts";
+import { EaCRuntimeHandlers } from '@fathym/eac/runtime/pipelines';
+import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
+import { getWorkflowHooks } from '../../../src/data/hooks.ts';
 
 export default {
   async GET(req, _ctx) {
     const url = new URL(req.url);
-    const type = url.searchParams.get("type") || undefined;
-    const status = url.searchParams.get("status") || undefined;
+    const type = url.searchParams.get('type') || undefined;
+    const status = url.searchParams.get('status') || undefined;
 
     const hooks = await getWorkflowHooks();
     const transfers = await hooks.ListTransfers(
@@ -22,7 +22,7 @@ export default {
 
     const hooks = await getWorkflowHooks();
 
-    if (action === "create") {
+    if (action === 'create') {
       const {
         Type,
         SampleIds,
@@ -40,7 +40,7 @@ export default {
         return Response.json(
           {
             error:
-              "Type, SampleIds, Source, Destination, RequestedBy, StudyRef, and SlaDeadline are required",
+              'Type, SampleIds, Source, Destination, RequestedBy, StudyRef, and SlaDeadline are required',
           },
           { status: 400 },
         );
@@ -52,24 +52,24 @@ export default {
         Destination,
         RequestedBy,
         StudyRef,
-        StatusReason: StatusReason ?? "",
+        StatusReason: StatusReason ?? '',
         SlaDeadline,
       });
       return Response.json(transfer, { status: 201 });
     }
 
-    if (action === "update-status") {
+    if (action === 'update-status') {
       const { TransferId, Status, StatusReason, UserId } = body;
       if (!TransferId || !Status || !UserId) {
         return Response.json(
-          { error: "TransferId, Status, and UserId are required" },
+          { error: 'TransferId, Status, and UserId are required' },
           { status: 400 },
         );
       }
       const updated = await hooks.UpdateTransferStatus(
         TransferId,
         Status,
-        StatusReason ?? "",
+        StatusReason ?? '',
         UserId,
       );
       return Response.json(updated);

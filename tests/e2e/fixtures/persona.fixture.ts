@@ -1,23 +1,23 @@
-import { expect, Page, test as base } from "@playwright/test";
-import { resetSeedData } from "../helpers/seed-reset";
+import { expect, Page, test as base } from '@playwright/test';
+import { resetSeedData } from '../helpers/seed-reset';
 
 export type PersonaKey =
-  | "elena"
-  | "labManager"
-  | "scientist"
-  | "custodian"
-  | "qaAuditor"
-  | "studyCoordinator"
-  | "csvGroupHead";
+  | 'elena'
+  | 'labManager'
+  | 'scientist'
+  | 'custodian'
+  | 'qaAuditor'
+  | 'studyCoordinator'
+  | 'csvGroupHead';
 
 export const PERSONA_LANDING: Record<PersonaKey, string> = {
-  elena: "/receive",
-  labManager: "/",
-  scientist: "/return",
-  custodian: "/disposition",
-  qaAuditor: "/report/audit-trail",
-  studyCoordinator: "/track/samples",
-  csvGroupHead: "/",
+  elena: '/receive',
+  labManager: '/',
+  scientist: '/return',
+  custodian: '/disposition',
+  qaAuditor: '/report/audit-trail',
+  studyCoordinator: '/track/samples',
+  csvGroupHead: '/',
 };
 
 export function personaTest(persona: PersonaKey) {
@@ -29,19 +29,19 @@ export function personaTest(persona: PersonaKey) {
       // Set persona cookie
       await context.addCookies([
         {
-          name: "demo_persona",
+          name: 'demo_persona',
           value: persona,
-          domain: "localhost",
-          path: "/",
+          domain: 'localhost',
+          path: '/',
         },
       ]);
 
       // Navigate to root — middleware will redirect based on persona's access rights
-      await page.goto("/");
+      await page.goto('/');
 
       // Wait for role-based redirect to settle
       const landing = PERSONA_LANDING[persona];
-      if (landing !== "/") {
+      if (landing !== '/') {
         await page.waitForURL(`**${landing}`);
       }
 

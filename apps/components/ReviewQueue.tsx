@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useState } from 'preact/hooks';
 
 export const IsIsland = true;
 
@@ -52,12 +52,12 @@ export default function ReviewQueue({
 
   async function handleDecide(
     reviewId: string,
-    decision: "approved" | "rejected" | "escalated",
+    decision: 'approved' | 'rejected' | 'escalated',
   ) {
     let reason: string | undefined;
 
-    if (decision === "rejected") {
-      const input = globalThis.prompt("Rejection reason:");
+    if (decision === 'rejected') {
+      const input = globalThis.prompt('Rejection reason:');
       if (input === null) return;
       reason = input;
     }
@@ -66,12 +66,12 @@ export default function ReviewQueue({
 
     try {
       const res = await fetch(`${apiBase}/api/reviews`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ReviewId: reviewId,
           Decision: decision,
-          UserId: "current-user",
+          UserId: 'current-user',
           Reason: reason,
         }),
       });
@@ -85,38 +85,38 @@ export default function ReviewQueue({
   }
 
   function validationColor(result: string): string {
-    if (result === "passed") return "text-status-ready-text";
-    if (result === "warnings") return "text-status-attention-text";
-    return "text-status-problem-text";
+    if (result === 'passed') return 'text-status-ready-text';
+    if (result === 'warnings') return 'text-status-attention-text';
+    return 'text-status-problem-text';
   }
 
   if (reviews.length === 0) {
     return (
-      <div class="rounded-lg border border-border bg-surface-card p-4">
-        <h3 class="text-sm font-semibold text-on-surface mb-1">{heading}</h3>
-        <p class="text-xs text-on-surface-muted">{emptyLabel}</p>
+      <div class='rounded-lg border border-border bg-surface-card p-4'>
+        <h3 class='text-sm font-semibold text-on-surface mb-1'>{heading}</h3>
+        <p class='text-xs text-on-surface-muted'>{emptyLabel}</p>
       </div>
     );
   }
 
   return (
-    <div class="rounded-lg border border-border bg-surface-card p-4">
-      <div class="mb-4">
-        <h3 class="text-sm font-semibold text-on-surface">{heading}</h3>
-        <p class="text-xs text-on-surface-secondary mt-1">{subtitle}</p>
+    <div class='rounded-lg border border-border bg-surface-card p-4'>
+      <div class='mb-4'>
+        <h3 class='text-sm font-semibold text-on-surface'>{heading}</h3>
+        <p class='text-xs text-on-surface-secondary mt-1'>{subtitle}</p>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
+      <div class='overflow-x-auto'>
+        <table class='w-full text-sm'>
           <thead>
-            <tr class="border-b border-border text-left text-xs text-on-surface-secondary">
-              <th class="pb-2 pr-3">{columnHeaders.type}</th>
-              <th class="pb-2 pr-3">{columnHeaders.entityId}</th>
-              <th class="pb-2 pr-3">{columnHeaders.submittedBy}</th>
-              <th class="pb-2 pr-3">{columnHeaders.submittedAt}</th>
-              <th class="pb-2 pr-3">{columnHeaders.validation}</th>
-              <th class="pb-2 pr-3">{columnHeaders.exceptions}</th>
-              <th class="pb-2">{columnHeaders.actions}</th>
+            <tr class='border-b border-border text-left text-xs text-on-surface-secondary'>
+              <th class='pb-2 pr-3'>{columnHeaders.type}</th>
+              <th class='pb-2 pr-3'>{columnHeaders.entityId}</th>
+              <th class='pb-2 pr-3'>{columnHeaders.submittedBy}</th>
+              <th class='pb-2 pr-3'>{columnHeaders.submittedAt}</th>
+              <th class='pb-2 pr-3'>{columnHeaders.validation}</th>
+              <th class='pb-2 pr-3'>{columnHeaders.exceptions}</th>
+              <th class='pb-2'>{columnHeaders.actions}</th>
             </tr>
           </thead>
           <tbody>
@@ -124,18 +124,18 @@ export default function ReviewQueue({
               <tr
                 key={r.reviewId}
                 class={`border-b border-border/50 ${
-                  r.overdue ? "bg-status-attention/10" : ""
+                  r.overdue ? 'bg-status-attention/10' : ''
                 }`}
               >
-                <td class="py-2 pr-3">
-                  <span class="text-xs font-medium">{r.typeLabel}</span>
+                <td class='py-2 pr-3'>
+                  <span class='text-xs font-medium'>{r.typeLabel}</span>
                 </td>
-                <td class="py-2 pr-3 font-mono text-xs">{r.entityId}</td>
-                <td class="py-2 pr-3">{r.submittedBy}</td>
-                <td class="py-2 pr-3 text-xs">
+                <td class='py-2 pr-3 font-mono text-xs'>{r.entityId}</td>
+                <td class='py-2 pr-3'>{r.submittedBy}</td>
+                <td class='py-2 pr-3 text-xs'>
                   {r.submittedAt}
                   {r.overdue && (
-                    <span class="ml-1 text-status-attention-text font-medium">
+                    <span class='ml-1 text-status-attention-text font-medium'>
                       {overdueLabel}
                     </span>
                   )}
@@ -147,34 +147,34 @@ export default function ReviewQueue({
                 >
                   {r.validationLabel}
                 </td>
-                <td class="py-2 pr-3">
-                  <span class="text-xs">
-                    {r.exceptionFlags.join("; ")}
+                <td class='py-2 pr-3'>
+                  <span class='text-xs'>
+                    {r.exceptionFlags.join('; ')}
                   </span>
                 </td>
-                <td class="py-2">
-                  <div class="flex gap-1">
+                <td class='py-2'>
+                  <div class='flex gap-1'>
                     <button
-                      type="button"
+                      type='button'
                       disabled={acting === r.reviewId}
-                      onClick={() => handleDecide(r.reviewId, "approved")}
-                      class="px-2 py-1 text-xs rounded bg-status-ready text-white hover:opacity-80 disabled:opacity-50"
+                      onClick={() => handleDecide(r.reviewId, 'approved')}
+                      class='px-2 py-1 text-xs rounded bg-status-ready text-white hover:opacity-80 disabled:opacity-50'
                     >
                       {actionLabels.approve}
                     </button>
                     <button
-                      type="button"
+                      type='button'
                       disabled={acting === r.reviewId}
-                      onClick={() => handleDecide(r.reviewId, "rejected")}
-                      class="px-2 py-1 text-xs rounded bg-status-problem text-white hover:opacity-80 disabled:opacity-50"
+                      onClick={() => handleDecide(r.reviewId, 'rejected')}
+                      class='px-2 py-1 text-xs rounded bg-status-problem text-white hover:opacity-80 disabled:opacity-50'
                     >
                       {actionLabels.reject}
                     </button>
                     <button
-                      type="button"
+                      type='button'
                       disabled={acting === r.reviewId}
-                      onClick={() => handleDecide(r.reviewId, "escalated")}
-                      class="px-2 py-1 text-xs rounded bg-status-attention text-white hover:opacity-80 disabled:opacity-50"
+                      onClick={() => handleDecide(r.reviewId, 'escalated')}
+                      class='px-2 py-1 text-xs rounded bg-status-attention text-white hover:opacity-80 disabled:opacity-50'
                     >
                       {actionLabels.escalate}
                     </button>

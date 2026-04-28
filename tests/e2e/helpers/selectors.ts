@@ -13,7 +13,7 @@ export const notificationItem = (id: string) =>
   `[data-testid="notification-${id}"]`;
 
 // --- Navigation ---
-export const SIDEBAR_NAV = "nav";
+export const SIDEBAR_NAV = 'nav';
 export const sidebarLink = (href: string) => `nav a[href="${href}"]`;
 
 // --- TurboTax Status ---

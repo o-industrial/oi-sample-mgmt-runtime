@@ -1,14 +1,14 @@
-import { PageProps } from "@fathym/eac-applications/preact";
-import { EaCRuntimeHandlerSet } from "@fathym/eac/runtime/pipelines";
-import { OISampleMgmtWebState } from "../../../src/state/OISampleMgmtWebState.ts";
-import { useTranslation } from "../../../src/utils/useTranslation.ts";
-import { getTemporalPriority } from "../../../src/utils/getTemporalPriority.ts";
-import ActivityPanes from "../../components/ActivityPanes.tsx";
-import ManagementOverlay from "../../components/ManagementOverlay.tsx";
-import ReviewQueue from "../../components/ReviewQueue.tsx";
-import { createClientFromRequest } from "../../../src/client/createClientFromRequest.ts";
-import type { ManagementOverlayData } from "../../../src/data/types/ManagementOverlayData.ts";
-import type { PaneViewData } from "../../../src/data/types/PaneViewData.ts";
+import { PageProps } from '@fathym/eac-applications/preact';
+import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
+import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
+import { useTranslation } from '../../../src/utils/useTranslation.ts';
+import { getTemporalPriority } from '../../../src/utils/getTemporalPriority.ts';
+import ActivityPanes from '../../components/ActivityPanes.tsx';
+import ManagementOverlay from '../../components/ManagementOverlay.tsx';
+import ReviewQueue from '../../components/ReviewQueue.tsx';
+import { createClientFromRequest } from '../../../src/client/createClientFromRequest.ts';
+import type { ManagementOverlayData } from '../../../src/data/types/ManagementOverlayData.ts';
+import type { PaneViewData } from '../../../src/data/types/PaneViewData.ts';
 
 // --- View types (extend data types with display-layer fields) ---
 
@@ -35,7 +35,7 @@ type DashboardData = {
   SystemStatus: Array<{
     ComponentId: string;
     Label: string;
-    Status: "online" | "connecting" | "offline";
+    Status: 'online' | 'connecting' | 'offline';
     Note?: string;
   }>;
   SystemHeading: string;
@@ -94,40 +94,40 @@ export const handler: EaCRuntimeHandlerSet<
   DashboardData
 > = {
   GET: async (req, ctx) => {
-    if (!ctx.State.AccessRights.includes("samples:view")) {
-      return new Response("Forbidden", { status: 403 });
+    if (!ctx.State.AccessRights.includes('samples:view')) {
+      return new Response('Forbidden', { status: 403 });
     }
 
     const { t } = useTranslation(ctx.State.Strings);
 
     // Management overlay gating
     const rights = ctx.State.AccessRights;
-    const showFullOverlay = rights.includes("admin:access") ||
-      rights.includes("config:admin");
-    const showEffortOnly = rights.includes("study:view") && !showFullOverlay;
+    const showFullOverlay = rights.includes('admin:access') ||
+      rights.includes('config:admin');
+    const showEffortOnly = rights.includes('study:view') && !showFullOverlay;
     const showOverlay = showFullOverlay || showEffortOnly;
-    const showReviewQueue = rights.includes("review:approve");
+    const showReviewQueue = rights.includes('review:approve');
 
     const client = await createClientFromRequest(req);
     const dashboardData = await client.Dashboard.Load();
 
     const paneRoutes: Record<string, string> = {
-      incoming: "/receive",
-      transfers: "/transfer",
-      returns: "/return",
-      reconciliations: "/reconciliation",
-      dispositions: "/disposition",
+      incoming: '/receive',
+      transfers: '/transfer',
+      returns: '/return',
+      reconciliations: '/reconciliation',
+      dispositions: '/disposition',
     };
 
     const panes: DashboardPane[] = dashboardData.Panes.map((p) => ({
       ...p,
       Name: t(`dashboard.pane.${p.Id}`),
-      Route: paneRoutes[p.Id] ?? "/",
+      Route: paneRoutes[p.Id] ?? '/',
     }));
 
     let reviews: DashboardReview[] = [];
     if (showReviewQueue) {
-      const pendingReviews = await client.Reviews.List({ Status: "pending" });
+      const pendingReviews = await client.Reviews.List({ Status: 'pending' });
       const now = Date.now();
       reviews = pendingReviews.map((r) => ({
         ReviewId: r.ReviewId,
@@ -144,115 +144,115 @@ export const handler: EaCRuntimeHandlerSet<
     }
 
     const PERSONA_DISPLAY: Record<string, { name: string; role: string }> = {
-      "liora.vasquez": { name: "Dr. Liora Vasquez", role: "Sample Manager" },
-      "dr.priya.lindqvist": {
-        name: "Dr. Priya Lindqvist",
-        role: "Lab Manager",
+      'liora.vasquez': { name: 'Dr. Liora Vasquez', role: 'Sample Manager' },
+      'dr.priya.lindqvist': {
+        name: 'Dr. Priya Lindqvist',
+        role: 'Lab Manager',
       },
-      "dr.tobias.nakamura": { name: "Dr. Tobias Nakamura", role: "Scientist" },
-      "declan.okafor": { name: "Declan Okafor", role: "HBSM Custodian" },
-      "annika.desrosiers": { name: "Annika Desrosiers", role: "QA Auditor" },
-      "renata.solberg": { name: "Renata Solberg", role: "Study Coordinator" },
-      "dr.emile.kowalczyk": {
-        name: "Dr. Emile Kowalczyk",
-        role: "CSV Group Head",
+      'dr.tobias.nakamura': { name: 'Dr. Tobias Nakamura', role: 'Scientist' },
+      'declan.okafor': { name: 'Declan Okafor', role: 'HBSM Custodian' },
+      'annika.desrosiers': { name: 'Annika Desrosiers', role: 'QA Auditor' },
+      'renata.solberg': { name: 'Renata Solberg', role: 'Study Coordinator' },
+      'dr.emile.kowalczyk': {
+        name: 'Dr. Emile Kowalczyk',
+        role: 'CSV Group Head',
       },
     };
     const personaInfo: { name: string; role: string } =
       (ctx.State.Username ? PERSONA_DISPLAY[ctx.State.Username] : undefined) ??
-        { name: "Dr. Liora Vasquez", role: "Sample Manager" };
+        { name: 'Dr. Liora Vasquez', role: 'Sample Manager' };
 
     return ctx.Render({
       ...ctx.Data,
-      Heading: t("dashboard.heading"),
+      Heading: t('dashboard.heading'),
       UserName: personaInfo.name,
       UserRole: personaInfo.role,
       Panes: panes,
       TemporalPriority: getTemporalPriority(),
       SystemStatus: [
         {
-          ComponentId: "temp-monitoring",
-          Label: t("dashboard.system.tempMonitoring"),
-          Status: "online" as const,
+          ComponentId: 'temp-monitoring',
+          Label: t('dashboard.system.tempMonitoring'),
+          Status: 'online' as const,
         },
         {
-          ComponentId: "barcode-tracking",
-          Label: t("dashboard.system.barcodeTracking"),
-          Status: "online" as const,
+          ComponentId: 'barcode-tracking',
+          Label: t('dashboard.system.barcodeTracking'),
+          Status: 'online' as const,
         },
         {
-          ComponentId: "lims-integration",
-          Label: t("dashboard.system.limsIntegration"),
-          Status: "connecting" as const,
+          ComponentId: 'lims-integration',
+          Label: t('dashboard.system.limsIntegration'),
+          Status: 'connecting' as const,
         },
         {
-          ComponentId: "backup-status",
-          Label: t("dashboard.system.backupStatus"),
-          Status: "offline" as const,
-          Note: t("dashboard.system.backupNote"),
+          ComponentId: 'backup-status',
+          Label: t('dashboard.system.backupStatus'),
+          Status: 'offline' as const,
+          Note: t('dashboard.system.backupNote'),
         },
       ],
-      SystemHeading: t("dashboard.system.heading"),
-      OnlineLabel: t("dashboard.system.online"),
-      ConnectingLabel: t("dashboard.system.connecting"),
+      SystemHeading: t('dashboard.system.heading'),
+      OnlineLabel: t('dashboard.system.online'),
+      ConnectingLabel: t('dashboard.system.connecting'),
       ComplianceStatus: [
         {
-          StandardId: "21-cfr-11",
-          Label: t("dashboard.compliance.cfr"),
+          StandardId: '21-cfr-11',
+          Label: t('dashboard.compliance.cfr'),
           Compliant: true,
         },
         {
-          StandardId: "gxp",
-          Label: t("dashboard.compliance.gxp"),
+          StandardId: 'gxp',
+          Label: t('dashboard.compliance.gxp'),
           Compliant: true,
         },
         {
-          StandardId: "ich-gcp",
-          Label: t("dashboard.compliance.ichgcp"),
+          StandardId: 'ich-gcp',
+          Label: t('dashboard.compliance.ichgcp'),
           Compliant: true,
         },
       ],
-      ComplianceHeading: t("dashboard.compliance.heading"),
-      ComplianceLabel: t("dashboard.compliance.compliant"),
+      ComplianceHeading: t('dashboard.compliance.heading'),
+      ComplianceLabel: t('dashboard.compliance.compliant'),
       ManagementOverlay: showOverlay ? dashboardData.ManagementOverlay : null,
       StatusLabels: {
-        Ready: t("dashboard.status.ready"),
-        Attention: t("dashboard.status.attention"),
-        VolumeHold: t("dashboard.status.volumeHold"),
-        Problem: t("dashboard.status.problem"),
+        Ready: t('dashboard.status.ready'),
+        Attention: t('dashboard.status.attention'),
+        VolumeHold: t('dashboard.status.volumeHold'),
+        Problem: t('dashboard.status.problem'),
       },
       ManagementLabels: showOverlay
         ? {
-          Toggle: t("dashboard.management.toggle"),
-          Show: t("dashboard.management.show"),
-          Hide: t("dashboard.management.hide"),
-          Effort: t("dashboard.management.effort"),
-          Capacity: t("dashboard.management.capacity"),
+          Toggle: t('dashboard.management.toggle'),
+          Show: t('dashboard.management.show'),
+          Hide: t('dashboard.management.hide'),
+          Effort: t('dashboard.management.effort'),
+          Capacity: t('dashboard.management.capacity'),
         }
         : null,
-      ViewAllLabel: t("dashboard.pane.viewAll"),
+      ViewAllLabel: t('dashboard.pane.viewAll'),
       Reviews: reviews,
       ShowReviewQueue: showReviewQueue,
       ReviewLabels: showReviewQueue
         ? {
-          Heading: t("review.queue.heading"),
-          Subtitle: t("review.queue.subtitle"),
+          Heading: t('review.queue.heading'),
+          Subtitle: t('review.queue.subtitle'),
           ColumnHeaders: {
-            Type: t("review.col.type"),
-            EntityId: t("review.col.entityId"),
-            SubmittedBy: t("review.col.submittedBy"),
-            SubmittedAt: t("review.col.submittedAt"),
-            Validation: t("review.col.validation"),
-            Exceptions: t("review.col.exceptions"),
-            Actions: t("review.col.actions"),
+            Type: t('review.col.type'),
+            EntityId: t('review.col.entityId'),
+            SubmittedBy: t('review.col.submittedBy'),
+            SubmittedAt: t('review.col.submittedAt'),
+            Validation: t('review.col.validation'),
+            Exceptions: t('review.col.exceptions'),
+            Actions: t('review.col.actions'),
           },
           ActionLabels: {
-            Approve: t("review.action.approve"),
-            Reject: t("review.action.reject"),
-            Escalate: t("review.action.escalate"),
+            Approve: t('review.action.approve'),
+            Reject: t('review.action.reject'),
+            Escalate: t('review.action.escalate'),
           },
-          EmptyLabel: t("review.empty"),
-          OverdueLabel: t("review.overdue"),
+          EmptyLabel: t('review.empty'),
+          OverdueLabel: t('review.overdue'),
         }
         : null,
     });
@@ -262,24 +262,24 @@ export const handler: EaCRuntimeHandlerSet<
 // --- Component ---
 
 function StatusDot(
-  { status }: { status: "online" | "connecting" | "offline" },
+  { status }: { status: 'online' | 'connecting' | 'offline' },
 ) {
-  if (status === "online") {
-    return <span class="text-status-ready">●</span>;
+  if (status === 'online') {
+    return <span class='text-status-ready'>●</span>;
   }
-  if (status === "connecting") {
-    return <span class="text-status-attention">◌</span>;
+  if (status === 'connecting') {
+    return <span class='text-status-attention'>◌</span>;
   }
-  return <span class="text-on-surface-muted">●</span>;
+  return <span class='text-on-surface-muted'>●</span>;
 }
 
 function StatusLabel({ status, onlineLabel, connectingLabel }: {
-  status: "online" | "connecting" | "offline";
+  status: 'online' | 'connecting' | 'offline';
   onlineLabel: string;
   connectingLabel: string;
 }) {
-  if (status === "online") return <>{onlineLabel}</>;
-  if (status === "connecting") return <>{connectingLabel}</>;
+  if (status === 'online') return <>{onlineLabel}</>;
+  if (status === 'connecting') return <>{connectingLabel}</>;
   return null;
 }
 
@@ -287,11 +287,11 @@ export default function Dashboard({ Data }: PageProps<DashboardData>) {
   const d = Data!;
 
   return (
-    <div class="space-y-6">
+    <div class='space-y-6'>
       {/* Header */}
       <div>
-        <h1 class="text-xl font-bold text-primary">{d.Heading}</h1>
-        <p class="text-sm text-on-surface-secondary">
+        <h1 class='text-xl font-bold text-primary'>{d.Heading}</h1>
+        <p class='text-sm text-on-surface-secondary'>
           {d.UserName} — {d.UserRole}
         </p>
       </div>
@@ -328,7 +328,7 @@ export default function Dashboard({ Data }: PageProps<DashboardData>) {
           }}
           emptyLabel={d.ReviewLabels.EmptyLabel}
           overdueLabel={d.ReviewLabels.OverdueLabel}
-          apiBase=""
+          apiBase=''
         />
       )}
 
@@ -373,21 +373,21 @@ export default function Dashboard({ Data }: PageProps<DashboardData>) {
       )}
 
       {/* Bottom panels */}
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
         {/* System Status */}
-        <div class="rounded-lg border border-border bg-surface-card p-4">
-          <h3 class="text-sm font-semibold text-on-surface mb-3">
+        <div class='rounded-lg border border-border bg-surface-card p-4'>
+          <h3 class='text-sm font-semibold text-on-surface mb-3'>
             {d.SystemHeading}
           </h3>
-          <div class="space-y-2 text-sm">
+          <div class='space-y-2 text-sm'>
             {d.SystemStatus.map((item) => (
-              <div key={item.Label} class="flex justify-between items-center">
-                <span class="text-on-surface-secondary">{item.Label}</span>
-                <span class="flex items-center gap-1">
+              <div key={item.Label} class='flex justify-between items-center'>
+                <span class='text-on-surface-secondary'>{item.Label}</span>
+                <span class='flex items-center gap-1'>
                   <StatusDot status={item.Status} />
                   {item.Note
                     ? (
-                      <span class="text-on-surface-muted text-xs">
+                      <span class='text-on-surface-muted text-xs'>
                         {item.Note}
                       </span>
                     )
@@ -405,22 +405,22 @@ export default function Dashboard({ Data }: PageProps<DashboardData>) {
         </div>
 
         {/* Compliance Status */}
-        <div class="rounded-lg border border-border bg-surface-card p-4">
-          <h3 class="text-sm font-semibold text-on-surface mb-3">
+        <div class='rounded-lg border border-border bg-surface-card p-4'>
+          <h3 class='text-sm font-semibold text-on-surface mb-3'>
             {d.ComplianceHeading}
           </h3>
-          <div class="space-y-2 text-sm">
+          <div class='space-y-2 text-sm'>
             {d.ComplianceStatus.map((item) => (
-              <div key={item.Label} class="flex justify-between items-center">
-                <span class="text-on-surface-secondary">{item.Label}</span>
+              <div key={item.Label} class='flex justify-between items-center'>
+                <span class='text-on-surface-secondary'>{item.Label}</span>
                 <span
                   class={`font-medium ${
                     item.Compliant
-                      ? "text-status-ready-text"
-                      : "text-status-problem-text"
+                      ? 'text-status-ready-text'
+                      : 'text-status-problem-text'
                   }`}
                 >
-                  {d.ComplianceLabel} {item.Compliant ? "✓" : "✗"}
+                  {d.ComplianceLabel} {item.Compliant ? '✓' : '✗'}
                 </span>
               </div>
             ))}

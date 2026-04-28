@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* === OI Dark-Neon (default) === */
-:root, [data-theme="oi"] {
+:root, [data-theme='oi'] {
   --sm-surface: #0a0f1e;
   --sm-surface-card: rgba(23, 23, 23, 0.5);
   --sm-surface-elevated: #1c1c1c;
@@ -33,11 +33,11 @@
   --sm-status-problem: #ef4444;
   --sm-status-problem-bg: rgba(239, 68, 68, 0.1);
   --sm-status-problem-text: #fca5a5;
-  --sm-font-sans: "Sora", sans-serif;
+  --sm-font-sans: 'Sora', sans-serif;
 }
 
 /* === GSK Branded === */
-[data-theme="gsk"] {
+[data-theme='gsk'] {
   --sm-surface: #f8f9fa;
   --sm-surface-card: #ffffff;
   --sm-surface-elevated: #ffffff;
@@ -67,11 +67,11 @@
   --sm-status-problem: #dc2626;
   --sm-status-problem-bg: #fef2f2;
   --sm-status-problem-text: #b91c1c;
-  --sm-font-sans: "Inter", "Segoe UI", sans-serif;
+  --sm-font-sans: 'Inter', 'Segoe UI', sans-serif;
 }
 
 /* === Fathym Light === */
-[data-theme="fathym-light"] {
+[data-theme='fathym-light'] {
   --sm-surface: #f9fafb;
   --sm-surface-card: #ffffff;
   --sm-surface-elevated: #ffffff;
@@ -101,7 +101,7 @@
   --sm-status-problem: #dc2626;
   --sm-status-problem-bg: #fef2f2;
   --sm-status-problem-text: #b91c1c;
-  --sm-font-sans: "Sora", sans-serif;
+  --sm-font-sans: 'Sora', sans-serif;
 }
 
 /* === Base Resets === */

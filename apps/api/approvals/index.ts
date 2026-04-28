@@ -1,12 +1,12 @@
-import { EaCRuntimeHandlers } from "@fathym/eac/runtime/pipelines";
-import { OISampleMgmtWebState } from "../../../src/state/OISampleMgmtWebState.ts";
-import { getWorkflowHooks } from "../../../src/data/hooks.ts";
+import { EaCRuntimeHandlers } from '@fathym/eac/runtime/pipelines';
+import { OISampleMgmtWebState } from '../../../src/state/OISampleMgmtWebState.ts';
+import { getWorkflowHooks } from '../../../src/data/hooks.ts';
 
 export default {
   async GET(req, _ctx) {
     const url = new URL(req.url);
-    const status = url.searchParams.get("status") || undefined;
-    const type = url.searchParams.get("type") || undefined;
+    const status = url.searchParams.get('status') || undefined;
+    const type = url.searchParams.get('type') || undefined;
 
     const hooks = await getWorkflowHooks();
     const filter = (status || type)
@@ -23,11 +23,11 @@ export default {
 
     const hooks = await getWorkflowHooks();
 
-    if (action === "initiate") {
+    if (action === 'initiate') {
       const { Type, RecordId, StudyRef, InitiatedBy, Context } = body;
       if (!Type || !RecordId || !StudyRef || !InitiatedBy) {
         return Response.json(
-          { error: "Type, RecordId, StudyRef, and InitiatedBy are required" },
+          { error: 'Type, RecordId, StudyRef, and InitiatedBy are required' },
           { status: 400 },
         );
       }
@@ -41,11 +41,11 @@ export default {
       return Response.json(approval, { status: 201 });
     }
 
-    if (action === "decide") {
+    if (action === 'decide') {
       const { ApprovalId, Decision, UserId, Reason } = body;
       if (!ApprovalId || !Decision || !UserId) {
         return Response.json(
-          { error: "ApprovalId, Decision, and UserId are required" },
+          { error: 'ApprovalId, Decision, and UserId are required' },
           { status: 400 },
         );
       }
