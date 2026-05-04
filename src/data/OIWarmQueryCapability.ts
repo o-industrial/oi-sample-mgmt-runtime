@@ -25,6 +25,7 @@ export type OIWarmQueryHooks = {
     id: string,
     status: SampleStatus,
     lastAction: string,
+    storageLocation?: string,
   ): Promise<SampleRecord>;
   CreateManifest(
     data: Omit<ManifestRecord, 'ManifestId'>,
@@ -48,6 +49,12 @@ export function OIWarmQueryCapability() {
         for await (const entry of entries) results.push(entry.value);
         return results;
       }
+
+      const VALID_TRANSITIONS: Record<string, string[]> = {
+        received: ['processing'],
+        processing: ['in-storage'],
+        'in-storage': ['transferred', 'disposed', 'depleted'],
+      };
 
       return {
         async LIMSDataSync() {
@@ -103,15 +110,40 @@ export function OIWarmQueryCapability() {
           id: string,
           status: SampleStatus,
           lastAction: string,
+          storageLocation?: string,
         ) {
           const entry = await kv.get<SampleRecord>(['Samples', id]);
           if (!entry.value) throw new Error(`Sample ${id} not found`);
+
+          const validNext = VALID_TRANSITIONS[entry.value.Status];
+          if (!validNext || !validNext.includes(status)) {
+            throw new Error(
+              `Invalid transition: ${entry.value.Status} → ${status}`,
+            );
+          }
+
           const updated: SampleRecord = {
             ...entry.value,
             Status: status,
             LastAction: lastAction,
+            StorageLocation: status === 'in-storage' && storageLocation
+              ? storageLocation
+              : entry.value.StorageLocation,
           };
           await kv.set(['Samples', id], updated);
+
+          const auditId = `EVT-${crypto.randomUUID().slice(0, 8)}`;
+          await kv.set(['AuditEvents', auditId], {
+            EventId: auditId,
+            Timestamp: new Date().toISOString(),
+            UserId: 'current-user',
+            ActionType: 'StatusUpdate',
+            EntityType: 'Sample',
+            EntityId: id,
+            AlcoaPrinciple: 'Contemporaneous',
+            Status: 'success',
+          });
+
           return updated;
         },
 

@@ -106,7 +106,7 @@ export const sampleMgmtDeck = {
       'Temperature Logs — cold chain monitoring with date-range filter and ALCOA+ Contemporaneous badges',
       'Parcel Reception — 4-item checklist (condition, seal, temp indicator, courier) with two-person auth',
       'Barcode Scanning — rapid scan with timestamp + operator captured at moment of scan (Contemporaneous)',
-      'Reconciliation — navigate to resolve discrepancies: count mismatch, metadata gap, barcode conflict',
+      'Reconciliation — inline resolution panel with type selection (duplicate, count correction, metadata update), ALCOA+ audit sealed on resolve',
     ],
     scottQuote: '"It just looks like they were shucking clams all day long."',
     transition: 'slide',
@@ -131,12 +131,13 @@ export const sampleMgmtDeck = {
     headline: 'Reconciliation',
     path: '/reconciliation',
     description:
-      'Discrepancy resolution for manifest intake. 4 discrepancy types: count mismatch, metadata gap, barcode conflict, format error. TurboTax triage drives resolution priority.',
+      'Discrepancy detection AND resolution for manifest intake. 4 discrepancy types, inline resolution panel (Mark Duplicate, Correct Count, Update Metadata, Other) with GxP correction reason. TurboTax triage drives priority.',
     highlights: [
       'Expected vs. Actual counts at a glance',
       'Missing fields flagged by name',
       'SLA deadline tracking with overdue highlighting',
       'Barcode conflict detection — "You can\'t have duplicate barcodes"',
+      'Inline resolution — select type, add note + correction reason, ALCOA+ audit event sealed automatically',
     ],
     link: {
       label: 'Open Reconciliation',
@@ -333,13 +334,13 @@ export const sampleMgmtDeck = {
     headline: 'Sample Tracking',
     path: '/track/samples',
     description:
-      'Searchable sample table with study filter. Status cards show lifecycle distribution. Drill-through to custody reports. Self-service access eliminates phone + email chains to sample managers.',
+      'Searchable sample table with study filter and inline status transitions. Status cards show lifecycle distribution. State machine enforced transitions with ALCOA+ audit. Drill-through to custody reports.',
     highlights: [
       '4 status cards: Total Received, In Processing, In Storage, Transferred',
       'Search by study name — instant filtering',
       'Columns: SampleId, Study, OriginSite, Received, Status, Storage, LastAction',
       'View Report link → custody timeline with ALCOA+ badges',
-      'No operational actions — read-only tracking',
+      'Update Status action — state machine enforced transitions (received → processing → in-storage → terminal) with ALCOA+ audit on every change',
     ],
     link: {
       label: 'Open Sample Tracking',

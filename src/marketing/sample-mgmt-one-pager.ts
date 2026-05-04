@@ -128,7 +128,7 @@ export const sampleMgmtDiscoverySummary: DiscoverySummaryContent = {
       persona: 'Renata Solberg',
       workflow: 'Tracking My Studies',
       pages: ['/track/samples', '/report/custody'],
-      status: 'seeded',
+      status: 'live',
     },
     {
       persona: 'Dr. Emile Kowalczyk',

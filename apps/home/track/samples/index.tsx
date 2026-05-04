@@ -48,6 +48,14 @@ type SampleTrackingData = {
   EmptyNoSamples: string;
   EmptyNoMatch: string;
   CanReceive: boolean;
+  StatusTransitionLabels: {
+    StatusLabel: string;
+    Statuses: Array<{ Value: string; Label: string }>;
+    NoteLabel: string;
+    StorageLabel: string;
+    SubmitLabel: string;
+    CancelLabel: string;
+  };
 };
 
 // --- Handler ---
@@ -123,6 +131,21 @@ export const handler: EaCRuntimeHandlerSet<
       EmptyNoSamples: t('track.samples.emptyNoSamples'),
       EmptyNoMatch: t('track.samples.emptyNoMatch'),
       CanReceive: rights.includes('samples:receive'),
+      StatusTransitionLabels: {
+        StatusLabel: t('track.samples.statusTransition.label'),
+        Statuses: [
+          { Value: 'received', Label: t('track.samples.statusTransition.received') },
+          { Value: 'processing', Label: t('track.samples.statusTransition.processing') },
+          { Value: 'in-storage', Label: t('track.samples.statusTransition.inStorage') },
+          { Value: 'transferred', Label: t('track.samples.statusTransition.transferred') },
+          { Value: 'disposed', Label: t('track.samples.statusTransition.disposed') },
+          { Value: 'depleted', Label: t('track.samples.statusTransition.depleted') },
+        ],
+        NoteLabel: t('track.samples.statusTransition.noteLabel'),
+        StorageLabel: t('track.samples.statusTransition.storageLabel'),
+        SubmitLabel: t('track.samples.statusTransition.submit'),
+        CancelLabel: t('track.samples.statusTransition.cancel'),
+      },
     });
   },
 };
@@ -184,6 +207,18 @@ export default function SampleTracking(
         emptyNoSamples={d.EmptyNoSamples}
         emptyNoMatch={d.EmptyNoMatch}
         canReceive={d.CanReceive}
+        apiBase=''
+        statusTransitionLabels={{
+          statusLabel: d.StatusTransitionLabels.StatusLabel,
+          statuses: d.StatusTransitionLabels.Statuses.map((s) => ({
+            value: s.Value,
+            label: s.Label,
+          })),
+          noteLabel: d.StatusTransitionLabels.NoteLabel,
+          storageLabel: d.StatusTransitionLabels.StorageLabel,
+          submitLabel: d.StatusTransitionLabels.SubmitLabel,
+          cancelLabel: d.StatusTransitionLabels.CancelLabel,
+        }}
       />
     </div>
   );

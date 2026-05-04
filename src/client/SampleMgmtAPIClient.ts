@@ -13,6 +13,7 @@ import type { CustodyTimelineRecord } from '../data/types/CustodyTimelineRecord.
 import type { NotificationRecord } from '../data/types/NotificationRecord.ts';
 import type { ApprovalRecord } from '../data/types/ApprovalRecord.ts';
 import type { StudyRoleMappingRecord } from '../data/types/StudyRoleMappingRecord.ts';
+import type { ClaimRecord } from '../data/types/ClaimRecord.ts';
 import type { PaneViewData } from '../data/types/PaneViewData.ts';
 import type { ManagementOverlayData } from '../data/types/ManagementOverlayData.ts';
 
@@ -74,6 +75,28 @@ export class SampleMgmtAPIClient extends EaCBaseClient {
       List: async (): Promise<SampleRecord[]> => {
         const res = await fetch(this.loadClientUrl('/api/samples'), {
           headers: this.loadHeaders(),
+        });
+        return this.json(res);
+      },
+      UpdateStatus: async (
+        sampleId: string,
+        status: string,
+        note: string,
+        storageLocation?: string,
+      ): Promise<SampleRecord> => {
+        const res = await fetch(this.loadClientUrl('/api/samples'), {
+          method: 'POST',
+          headers: {
+            ...this.loadHeaders(),
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'update-status',
+            SampleId: sampleId,
+            Status: status,
+            Note: note,
+            StorageLocation: storageLocation,
+          }),
         });
         return this.json(res);
       },
@@ -445,6 +468,63 @@ export class SampleMgmtAPIClient extends EaCBaseClient {
           : '/api/study-role-mappings';
         const res = await fetch(this.loadClientUrl(path), {
           headers: this.loadHeaders(),
+        });
+        return this.json(res);
+      },
+    };
+  }
+
+  public get Claims() {
+    return {
+      ListByUser: async (userId: string): Promise<ClaimRecord[]> => {
+        const res = await fetch(
+          this.loadClientUrl(
+            `/api/claims?userId=${encodeURIComponent(userId)}`,
+          ),
+          { headers: this.loadHeaders() },
+        );
+        return this.json(res);
+      },
+      Create: async (data: {
+        ItemId: string;
+        ActivityType: string;
+        UserId: string;
+      }): Promise<ClaimRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/claims'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ action: 'create', ...data }),
+        });
+        return this.json(res);
+      },
+      UpdateStatus: async (
+        claimId: string,
+        status: string,
+        userId: string,
+      ): Promise<ClaimRecord> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/claims'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            action: 'update-status',
+            ClaimId: claimId,
+            Status: status,
+            UserId: userId,
+          }),
+        });
+        return this.json(res);
+      },
+      GetActive: async (itemId: string): Promise<ClaimRecord | null> => {
+        const headers = new Headers(this.loadHeaders());
+        headers.set('Content-Type', 'application/json');
+        const res = await fetch(this.loadClientUrl('/api/claims'), {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ action: 'get-active', ItemId: itemId }),
         });
         return this.json(res);
       },

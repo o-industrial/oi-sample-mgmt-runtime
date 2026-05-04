@@ -46,6 +46,14 @@ type ReconciliationTableProps = {
   emptyNoMatch: string;
   canResolve: boolean;
   apiBase: string;
+  resolutionLabels: {
+    resolutionTypeLabel: string;
+    resolutionTypes: Array<{ value: string; label: string }>;
+    noteLabel: string;
+    correctionReasonLabel: string;
+    submitLabel: string;
+    cancelLabel: string;
+  };
 };
 
 // --- Status badge semantic token map (C5) ---
@@ -77,34 +85,47 @@ export default function ReconciliationTable({
   emptyNoMatch,
   canResolve,
   apiBase,
+  resolutionLabels,
 }: ReconciliationTableProps) {
   const [reconciliations, setReconciliations] = useState(
     initialReconciliations,
   );
-  const [acting, setActing] = useState<string | null>(null);
+  const [expandedRow, setExpandedRow] = useState<string | null>(null);
+  const [resolutionType, setResolutionType] = useState('');
+  const [resolutionNote, setResolutionNote] = useState('');
+  const [correctionReason, setCorrectionReason] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
 
-  async function handleResolve(reconciliationId: string) {
-    const resolution = globalThis.prompt('Resolution:');
-    if (resolution === null) return;
-    const correctionReason = globalThis.prompt(
-      'Correction reason (required for GxP):',
-    );
-    if (correctionReason === null || correctionReason.trim().length === 0) {
-      return;
+  function togglePanel(reconciliationId: string) {
+    if (expandedRow === reconciliationId) {
+      setExpandedRow(null);
+    } else {
+      setExpandedRow(reconciliationId);
+      setResolutionType('');
+      setResolutionNote('');
+      setCorrectionReason('');
     }
+  }
 
-    setActing(reconciliationId);
+  async function handleSubmitResolve(reconciliationId: string) {
+    if (!resolutionType || !correctionReason.trim()) return;
+    setSubmitting(true);
+
     try {
+      const composedResolution = resolutionNote.trim()
+        ? `[${resolutionType}] ${resolutionNote.trim()}`
+        : `[${resolutionType}]`;
+
       const res = await fetch(`${apiBase}/api/reconciliations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'resolve',
           ReconciliationId: reconciliationId,
-          Resolution: resolution,
+          Resolution: composedResolution,
           CorrectionReason: correctionReason,
           UserId: 'current-user',
         }),
@@ -113,9 +134,10 @@ export default function ReconciliationTable({
         setReconciliations((prev) =>
           prev.filter((r) => r.reconciliationId !== reconciliationId)
         );
+        setExpandedRow(null);
       }
     } finally {
-      setActing(null);
+      setSubmitting(false);
     }
   }
 
@@ -225,77 +247,160 @@ export default function ReconciliationTable({
               : filtered.map((r) => {
                 const delta = r.actualCount - r.expectedCount;
                 return (
-                  <tr
-                    key={r.reconciliationId}
-                    class='hover:bg-surface-elevated'
-                  >
-                    <td class='px-4 py-3 font-mono text-xs font-medium text-on-surface'>
-                      {r.reconciliationId}
-                    </td>
-                    <td class='px-4 py-3 font-mono text-xs text-on-surface-secondary'>
-                      {r.manifestId}
-                    </td>
-                    <td class='px-4 py-3'>
-                      <span
-                        class={`px-2 py-1 rounded text-xs font-medium ${
-                          DISCREPANCY_CLASSES[r.discrepancyType] ??
-                            'bg-surface-inset text-on-surface-muted'
-                        }`}
-                      >
-                        {r.discrepancyLabel}
-                      </span>
-                    </td>
-                    <td class='px-4 py-3 text-right text-on-surface tabular-nums'>
-                      {r.expectedCount}
-                    </td>
-                    <td
-                      class={`px-4 py-3 text-right tabular-nums font-medium ${
-                        delta !== 0
-                          ? 'text-status-problem-text'
-                          : 'text-on-surface'
-                      }`}
+                  <>
+                    <tr
+                      key={r.reconciliationId}
+                      class='hover:bg-surface-elevated'
                     >
-                      {r.actualCount}
-                      {delta !== 0 && (
-                        <span class='ml-1 text-xs'>({delta})</span>
-                      )}
-                    </td>
-                    <td class='px-4 py-3 text-xs text-on-surface-muted max-w-[160px] truncate'>
-                      {r.missingFieldsLabel || '\u2014'}
-                    </td>
-                    <td class='px-4 py-3'>
-                      <span
-                        class={`px-2 py-1 rounded text-xs font-semibold ${
-                          STATUS_CLASSES[r.status] ??
-                            'bg-surface-inset text-on-surface-muted'
-                        }`}
-                        title={r.lastAction}
-                      >
-                        {r.statusLabel}
-                      </span>
-                    </td>
-                    <td
-                      class={`px-4 py-3 font-mono text-xs ${
-                        isOverdue(r.slaDeadline)
-                          ? 'text-status-problem-text font-semibold'
-                          : 'text-on-surface-muted'
-                      }`}
-                    >
-                      {r.slaDeadline}
-                    </td>
-                    {canResolve && (
-                      <td class='px-4 py-3'>
-                        <button
-                          type='button'
-                          disabled={acting === r.reconciliationId}
-                          onClick={() => handleResolve(r.reconciliationId)}
-                          class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors disabled:opacity-50'
-                        >
-                          {resolveLabel}
-                        </button>
+                      <td class='px-4 py-3 font-mono text-xs font-medium text-on-surface'>
+                        {r.reconciliationId}
                       </td>
+                      <td class='px-4 py-3 font-mono text-xs text-on-surface-secondary'>
+                        {r.manifestId}
+                      </td>
+                      <td class='px-4 py-3'>
+                        <span
+                          class={`px-2 py-1 rounded text-xs font-medium ${
+                            DISCREPANCY_CLASSES[r.discrepancyType] ??
+                              'bg-surface-inset text-on-surface-muted'
+                          }`}
+                        >
+                          {r.discrepancyLabel}
+                        </span>
+                      </td>
+                      <td class='px-4 py-3 text-right text-on-surface tabular-nums'>
+                        {r.expectedCount}
+                      </td>
+                      <td
+                        class={`px-4 py-3 text-right tabular-nums font-medium ${
+                          delta !== 0
+                            ? 'text-status-problem-text'
+                            : 'text-on-surface'
+                        }`}
+                      >
+                        {r.actualCount}
+                        {delta !== 0 && (
+                          <span class='ml-1 text-xs'>({delta})</span>
+                        )}
+                      </td>
+                      <td class='px-4 py-3 text-xs text-on-surface-muted max-w-[160px] truncate'>
+                        {r.missingFieldsLabel || '\u2014'}
+                      </td>
+                      <td class='px-4 py-3'>
+                        <span
+                          class={`px-2 py-1 rounded text-xs font-semibold ${
+                            STATUS_CLASSES[r.status] ??
+                              'bg-surface-inset text-on-surface-muted'
+                          }`}
+                          title={r.lastAction}
+                        >
+                          {r.statusLabel}
+                        </span>
+                      </td>
+                      <td
+                        class={`px-4 py-3 font-mono text-xs ${
+                          isOverdue(r.slaDeadline)
+                            ? 'text-status-problem-text font-semibold'
+                            : 'text-on-surface-muted'
+                        }`}
+                      >
+                        {r.slaDeadline}
+                      </td>
+                      {canResolve && (
+                        <td class='px-4 py-3'>
+                          <button
+                            type='button'
+                            disabled={submitting &&
+                              expandedRow === r.reconciliationId}
+                            onClick={() => togglePanel(r.reconciliationId)}
+                            class='px-3 py-1 border border-border rounded text-xs text-on-surface hover:bg-surface-elevated transition-colors disabled:opacity-50'
+                          >
+                            {expandedRow === r.reconciliationId
+                              ? resolutionLabels.cancelLabel
+                              : resolveLabel}
+                          </button>
+                        </td>
+                      )}
+                    </tr>
+                    {expandedRow === r.reconciliationId && canResolve && (
+                      <tr key={`${r.reconciliationId}-panel`}>
+                        <td
+                          colSpan={colCount}
+                          class='px-4 py-4 bg-surface-elevated border-t border-border'
+                        >
+                          <div class='space-y-3 max-w-xl'>
+                            <div>
+                              <label class='block text-xs font-medium text-on-surface-secondary mb-1'>
+                                {resolutionLabels.resolutionTypeLabel}
+                              </label>
+                              <select
+                                value={resolutionType}
+                                onChange={(e) =>
+                                  setResolutionType(
+                                    (e.target as HTMLSelectElement).value,
+                                  )}
+                                class='w-full border border-border-input bg-surface rounded-md px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-focus'
+                              >
+                                <option value=''>{'\u2014'}</option>
+                                {resolutionLabels.resolutionTypes.map((rt) => (
+                                  <option key={rt.value} value={rt.value}>
+                                    {rt.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div>
+                              <label class='block text-xs font-medium text-on-surface-secondary mb-1'>
+                                {resolutionLabels.noteLabel}
+                              </label>
+                              <textarea
+                                value={resolutionNote}
+                                onInput={(e) =>
+                                  setResolutionNote(
+                                    (e.target as HTMLTextAreaElement).value,
+                                  )}
+                                class='w-full border border-border-input bg-surface rounded-md px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-focus'
+                                rows={2}
+                              />
+                            </div>
+                            <div>
+                              <label class='block text-xs font-medium text-on-surface-secondary mb-1'>
+                                {resolutionLabels.correctionReasonLabel}
+                              </label>
+                              <input
+                                type='text'
+                                value={correctionReason}
+                                onInput={(e) =>
+                                  setCorrectionReason(
+                                    (e.target as HTMLInputElement).value,
+                                  )}
+                                class='w-full border border-border-input bg-surface rounded-md px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-focus'
+                              />
+                            </div>
+                            <div class='flex gap-3'>
+                              <button
+                                type='button'
+                                disabled={submitting || !resolutionType ||
+                                  !correctionReason.trim()}
+                                onClick={() =>
+                                  handleSubmitResolve(r.reconciliationId)}
+                                class='px-4 py-2 rounded bg-primary text-on-primary text-sm font-medium hover:opacity-80 disabled:opacity-50'
+                              >
+                                {resolutionLabels.submitLabel}
+                              </button>
+                              <button
+                                type='button'
+                                onClick={() => setExpandedRow(null)}
+                                class='px-4 py-2 rounded border border-border text-sm text-on-surface hover:bg-surface-elevated disabled:opacity-50'
+                              >
+                                {resolutionLabels.cancelLabel}
+                              </button>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
                     )}
-                  </tr>
+                  </>
                 );
               })}
           </tbody>

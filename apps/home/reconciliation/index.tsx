@@ -52,6 +52,14 @@ type ReconciliationPageData = {
   EmptyNoReconciliations: string;
   EmptyNoMatch: string;
   CanResolve: boolean;
+  ResolutionLabels: {
+    ResolutionTypeLabel: string;
+    ResolutionTypes: Array<{ Value: string; Label: string }>;
+    NoteLabel: string;
+    CorrectionReasonLabel: string;
+    SubmitLabel: string;
+    CancelLabel: string;
+  };
   ComparisonData: {
     ReconciliationId: string;
     ManifestId: string;
@@ -237,6 +245,19 @@ export const handler: EaCRuntimeHandlerSet<
       EmptyNoReconciliations: t('reconciliation.emptyNoReconciliations'),
       EmptyNoMatch: t('reconciliation.emptyNoMatch'),
       CanResolve: rights.includes('samples:receive'),
+      ResolutionLabels: {
+        ResolutionTypeLabel: t('reconciliation.resolutionType.label'),
+        ResolutionTypes: [
+          { Value: 'Mark Duplicate', Label: t('reconciliation.resolutionType.markDuplicate') },
+          { Value: 'Correct Count', Label: t('reconciliation.resolutionType.correctCount') },
+          { Value: 'Update Metadata', Label: t('reconciliation.resolutionType.updateMetadata') },
+          { Value: 'Other', Label: t('reconciliation.resolutionType.other') },
+        ],
+        NoteLabel: t('reconciliation.resolutionNote.label'),
+        CorrectionReasonLabel: t('reconciliation.correctionReason.label'),
+        SubmitLabel: t('reconciliation.submit'),
+        CancelLabel: t('reconciliation.cancel'),
+      },
       ComparisonData: comparisonData,
       ComparisonLabels: {
         Heading: t('manifestComparison.heading'),
@@ -330,6 +351,17 @@ export default function Reconciliation(
         emptyNoMatch={d.EmptyNoMatch}
         canResolve={d.CanResolve}
         apiBase=''
+        resolutionLabels={{
+          resolutionTypeLabel: d.ResolutionLabels.ResolutionTypeLabel,
+          resolutionTypes: d.ResolutionLabels.ResolutionTypes.map((rt) => ({
+            value: rt.Value,
+            label: rt.Label,
+          })),
+          noteLabel: d.ResolutionLabels.NoteLabel,
+          correctionReasonLabel: d.ResolutionLabels.CorrectionReasonLabel,
+          submitLabel: d.ResolutionLabels.SubmitLabel,
+          cancelLabel: d.ResolutionLabels.CancelLabel,
+        }}
       />
 
       {d.ComparisonData && (
